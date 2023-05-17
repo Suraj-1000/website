@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>References</title>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    padding: 20px;
+    text-align: left;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.hero{
+    position:relative;
+    width: 100%;
+    height:100vh;
+    background: #eff4fd;
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(1.png);
+    background-size: cover;
+    background-position: center;
+    min-height: 100px;
+
+}
+
+nav{
+    display: flex;
+    width: 100%;
+    margin: auto;
+    padding: 30px 0 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 10px 30px;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    
+}
+
+nav ul li a:hover{
+    color: red;
+}
+.content{
+    margin-left:8%;
+    margin-top: 9%;
+}
+
+.content h2{
+    font-size: 50px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.content p{
+    color: orange;
+    margin-bottom: 30px;
+    font-size: 25px;
+}
+
+.content li{
+    font-size: 20px;
+    color: white;
+    margin-bottom: 60px;
+    margin-left: 2%;
+}
+
+.content li a{
+    font-size: 20px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.about{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.about h4{
+    color:black;
+    margin-top: 4%;
+}
+
+.social-media-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;    
+}
+
+.social-media-icons a {
+    margin: 0 10px;
+    justify-content: center;
+}
+  
+.social-media-icons img {
+    width: 30px;
+    height: 30px;
+    margin:20px;
+}
+  
+.social-media-icons img:hover {
+    opacity: 0.8;
+}
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: black;
+    height:3%;
+    font-weight: bold;
+}
+  
+footer p {
+margin: 0;
+}
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <nav>
+            <img src="suraj.jpg" height="100px" width="100px"
+            style="border-radius: 100%;" alt="Logo">
+            <!-- <header><p>Suraj Kanwar</p></header> -->
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="Hobbies.html">HOBBIES</a></li>
+                <li><a href="Family.html">FAMILY</a></li>
+                <li><a href="Education.html">EDUCATION</a></li>
+                <li><a href="Travel.html">TRAVEL</a></li>  
+                <li><a href="References.html">REFERENCES</a></li> 
+            </ul>
+       </nav>
+       <div class="content">
+        <h2>References</h2>
+        <p>On this page you will get some websites where you will learn. </p>
+        <ul>
+            <li>Reference 1: <a href="https://www.programiz.com/html">programiz</a></li>
+            <li>Reference 2: <a href="https://www.codecademy.com/">Code Academy</a></li>
+            <li>Reference 3: <a href="https://www.w3schools.com/">W3School</a></li>
+        </ul>
+       </div> 
+       <div class="about">
+        <h4>About Me</h4>
+    </div>
+    <div class="social-media-icons">
+        <a href="https://www.facebook.com/surajkanwar.143/" target="_blank">
+            <img src="facebook logo.png" alt="Facebook">
+        </a>
+        <a href="https://www.instagram.com/suraz2244/" target="_blank">
+            <img src="Insta.avif" alt="Instagram">
+        </a>
+        <a href="https://www.linkedin.com/in/suraj-kanwar-75481b26a" target="_blank">
+            <img src="linkdin.webp" alt="LinkedIn">
+        </a>
+    </div>
+    <footer>
+        <p>&copy; 2023 Suraj. All rights reserved.</p>
+    </footer>
+</body>
+</html>
