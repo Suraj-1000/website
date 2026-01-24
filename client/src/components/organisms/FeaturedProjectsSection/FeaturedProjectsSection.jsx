@@ -7,28 +7,28 @@ const FeaturedProjectsSection = () => {
     const featuredProjects = [
         {
             id: 1,
-            title: "Recipe Sharing App",
-            description: "A cross-platform mobile application for food lovers to share and discover recipes. Features user authentication, recipe creation with images, and social interaction.",
-            techStack: ["Flutter", "Node.js", "SQLite"],
-            repoLink: "#",
+            title: "Voice Command App",
+            description: "A voice-controlled application for enhanced accessibility and hands-free interaction.",
+            techStack: ["JavaScript", "Speech API"],
+            repoLink: "https://github.com/Suraj-1000/Voice-Command-App",
             demoLink: "#",
             imageUrl: null
         },
         {
             id: 2,
-            title: "Smart Tourist Guide App",
-            description: "An AR-powered travel companion offering real-time guidance, location history, and augmented reality navigation for tourists.",
-            techStack: ["Flutter", "AR", "Node.js", "MongoDB"],
-            repoLink: "#",
+            title: "Tourist Attraction Finder",
+            description: "Helps travelers discover popular tourist spots and hidden gems in their vicinity.",
+            techStack: ["JavaScript", "Maps API"],
+            repoLink: "https://github.com/Suraj-1000/Tourist-Attraction-Finder",
             demoLink: "#",
             imageUrl: null
         },
         {
             id: 3,
-            title: "Travel Expense Tracker",
-            description: "A utility app for travelers to track expenses, converting currencies and generating spending reports on the go.",
-            techStack: ["Flutter", "Node.js", "Express"],
-            repoLink: "#",
+            title: "AI and Machine Learning",
+            description: "A collection of Jupyter Notebooks exploring various AI and ML models and algorithms.",
+            techStack: ["Jupyter Notebook", "Python"],
+            repoLink: "https://github.com/Suraj-1000/Artificial-Intelligence-and-Machine-Learning",
             demoLink: "#",
             imageUrl: null
         }

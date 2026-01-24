@@ -21,6 +21,7 @@ app.use(morgan('dev'));
 const educationRoutes = require('./routes/education.routes');
 const projectRoutes = require('./routes/project.routes');
 const travelRoutes = require('./routes/travel.routes');
+const contactRoutes = require('./routes/contact.routes');
 
 app.get('/', (req, res) => {
     res.send('API is running...');
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/education', educationRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/travel', travelRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Error Handling Middleware
 app.use(require('./middlewares/error.middleware'));
