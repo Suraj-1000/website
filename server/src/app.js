@@ -31,6 +31,9 @@ app.use('/api/education', educationRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/travel', travelRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/experiences', require('./routes/experience.routes'));
+app.use('/api/skills', require('./routes/skill.routes'));
+app.use('/api/auth', require('./routes/auth.routes'));
 
 // Error Handling Middleware
 app.use(require('./middlewares/error.middleware'));

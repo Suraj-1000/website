@@ -1,24 +1,30 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar } from 'lucide-react';
 
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 const Experience = () => {
-    const experiences = [
-        {
-            id: 1,
-            role: "Backend Developer (Part-Time, Intern)",
-            company: "Engineering & Tech.Connect",
-            location: "Michigan, US (Remote)",
-            period: "Nov 2024 - Nov 2025",
-            description: [
-                "Built responsive web apps with MERN stack.",
-                "Developed APIs and managed MongoDB database operations.",
-                "Integrated React.js frontend with backend and optimized performance.",
-                "Used Git for version control and handled cloud deployments.",
-                "Conducted functional and API testing with Postman.",
-                "Explored AI-driven features and Prompt Engineering."
-            ]
-        }
-    ];
+    const [experiences, setExperiences] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchExperiences = async () => {
+            try {
+                // Ideally use environment variable for URL
+                const res = await axios.get('http://localhost:5000/api/experience');
+                setExperiences(res.data.data);
+            } catch (error) {
+                console.error('Failed to fetch experiences', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchExperiences();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
         <div className="container mx-auto px-6 py-20 min-h-screen">

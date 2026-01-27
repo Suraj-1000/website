@@ -1,44 +1,34 @@
 import { motion } from 'framer-motion';
 import { Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain } from 'lucide-react';
 
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+// Mapping string icon names to components
+const IconMap = {
+    Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain
+};
+
 const Skills = () => {
-    const skillCategories = [
-        {
-            title: "Languages",
-            icon: <Code className="text-primary" />,
-            skills: ["Python", "C", "Java", "JavaScript"]
-        },
-        {
-            title: "Web Technologies",
-            icon: <Globe className="text-secondary" />,
-            skills: ["HTML", "CSS", "PHP", "MERN Stack"]
-        },
-        {
-            title: "Databases",
-            icon: <Database className="text-green-500" />,
-            skills: ["MySQL", "MongoDB", "PostgreSQL"]
-        },
-        {
-            title: "Soft Skills",
-            icon: <Users className="text-yellow-500" />,
-            skills: ["Communication", "Project Planning", "Positive Attitude", "Teamwork", "Problem Solving", "Data Management", "Workaholic"]
-        },
-        {
-            title: "Tools & DevOps",
-            icon: <Settings className="text-orange-500" />,
-            skills: ["Git", "GitHub", "VS Code", "Canva", "Figma", "Postman", "JIRA", "phpMyAdmin", "Microsoft Office"]
-        },
-        {
-            title: "AI & Innovation",
-            icon: <Bot className="text-purple-500" />,
-            skills: ["Prompt Engineering", "ChatGPT", "Gemini", "Claude", "Cursor", "Antigravity"]
-        },
-        {
-            title: "QA & Methodologies",
-            icon: <Terminal className="text-pink-500" />,
-            skills: ["Manual/Automated Testing", "API Testing", "Agile Scrum", "Kanban", "Software Architecture", "SDLC"]
-        }
-    ];
+    const [skillCategories, setSkillCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSkills = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/skills');
+                setSkillCategories(res.data.data);
+            } catch (error) {
+                console.error('Failed to fetch skills', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSkills();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
         <div className="container mx-auto px-6 py-20 min-h-screen">
@@ -52,33 +42,37 @@ const Skills = () => {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {skillCategories.map((category, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
-                        className="bg-card/40 border border-border/50 p-8 rounded-2xl backdrop-blur-sm hover:bg-card/60 transition-colors group"
-                    >
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="p-3 bg-muted/50 rounded-xl group-hover:bg-primary/20 transition-colors">
-                                {category.icon}
+                {skillCategories.map((category, index) => {
+                    const IconComponent = IconMap[category.icon] || Code;
+
+                    return (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className="bg-card/40 border border-border/50 p-8 rounded-2xl backdrop-blur-sm hover:bg-card/60 transition-colors group"
+                        >
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="p-3 bg-muted/50 rounded-xl group-hover:bg-primary/20 transition-colors">
+                                    <IconComponent className="text-primary" size={24} />
+                                </div>
+                                <h3 className="text-2xl font-bold text-foreground">{category.category}</h3>
                             </div>
-                            <h3 className="text-2xl font-bold text-foreground">{category.title}</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {category.skills.map((skill, idx) => (
-                                <span
-                                    key={idx}
-                                    className="px-3 py-1 bg-muted/50 border border-border/50 rounded-full text-sm text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
-                                >
-                                    {skill}
-                                </span>
-                            ))}
-                        </div>
-                    </motion.div>
-                ))}
+                            <div className="flex flex-wrap gap-2">
+                                {category.items.map((skill, idx) => (
+                                    <span
+                                        key={idx}
+                                        className="px-3 py-1 bg-muted/50 border border-border/50 rounded-full text-sm text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+                                    >
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        </motion.div>
+                    );
+                })}
             </div>
         </div>
     );
