@@ -1,36 +1,12 @@
 import { motion } from 'framer-motion';
 import { GraduationCap, BookOpen, School, Link as LinkIcon, MapPin, Calendar } from 'lucide-react';
 
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 const Education = () => {
-    const educationData = [
-        {
-            degree: "Under Graduate (BSc Hons Computer Science)",
-            institution: "Herald College Kathmandu",
-            address: "Naxal, Kathmandu",
-            year: "2023 - 2025",
-            grade: "Percentage: 78.56%",
-            icon: <GraduationCap size={24} />,
-            color: "text-primary"
-        },
-        {
-            degree: "High School (+2 in Computer Science)",
-            institution: "Greenplant English Boarding Higher Secondary School",
-            address: "Devdaha -07, Rupandehi",
-            year: "2020 - 2022",
-            grade: "Grade: 3.31 / 4.0",
-            icon: <School size={24} />,
-            color: "text-secondary"
-        },
-        {
-            degree: "School Year (SEE)",
-            institution: "Sunwal United English Boarding Secondary School",
-            address: "Sunwal - 04, Nawalparasi",
-            year: "2007 - 2020",
-            grade: "Grade: 3.75 / 4.0",
-            icon: <BookOpen size={24} />,
-            color: "text-pink-500"
-        }
-    ];
+    const [educationData, setEducationData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const learningResources = [
         { name: "Programiz", url: "https://www.programiz.com/html" },
@@ -38,6 +14,23 @@ const Education = () => {
         { name: "W3Schools", url: "https://www.w3schools.com/" },
         { name: "Coding Karunadu (YouTube)", url: "https://youtu.be/7UIBIaEZVWw" },
     ];
+
+    useEffect(() => {
+        const fetchEducation = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/education');
+                setEducationData(res.data);
+            } catch (error) {
+                console.error('Failed to fetch education', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEducation();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
         <div className="container mx-auto px-6 py-20 min-h-screen">
@@ -53,39 +46,44 @@ const Education = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
                 {/* Timeline Section */}
                 <div className="lg:col-span-2 space-y-8">
-                    {educationData.map((item, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.2 }}
-                            className="relative pl-8 border-l-2 border-border/20 hover:border-primary transition-colors group"
-                        >
-                            <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-background border-2 border-primary group-hover:bg-primary transition-colors ring-4 ring-transparent group-hover:ring-primary/20" />
-
+                    {educationData.map((item, index) => {
+                        const IconComponent = item.icon === 'GraduationCap' ? GraduationCap : item.icon === 'School' ? School : BookOpen;
+                        return (
                             <motion.div
-                                whileHover={{ scale: 1.02, y: -5 }}
-                                className="bg-card/40 border border-border/50 p-6 rounded-2xl backdrop-blur-sm shadow-lg hover:shadow-primary/10 hover:bg-card/60 transition-all"
+                                key={item.id || index}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.2 }}
+                                className="relative pl-8 border-l-2 border-border/20 hover:border-primary transition-colors group"
                             >
-                                <div className={`inline-flex p-3 rounded-lg bg-muted/50 mb-4 ${item.color}`}>
-                                    {item.icon}
-                                </div>
-                                <h3 className="text-2xl font-bold mb-1 text-foreground">{item.degree}</h3>
-                                <h4 className="text-lg text-primary mb-2">{item.institution}</h4>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                                    <MapPin size={14} /> {item.address}
-                                </div>
-                                <div className="flex flex-wrap gap-3 text-sm font-medium">
-                                    <span className="bg-muted/50 text-foreground/90 px-3 py-1 rounded-md border border-border/50 flex items-center gap-2">
-                                        <Calendar size={14} className="text-muted-foreground" /> {item.year}
-                                    </span>
-                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/20">
-                                        {item.grade}
-                                    </span>
-                                </div>
+                                <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-background border-2 border-primary group-hover:bg-primary transition-colors ring-4 ring-transparent group-hover:ring-primary/20" />
+
+                                <motion.div
+                                    whileHover={{ scale: 1.02, y: -5 }}
+                                    className="bg-card/40 border border-border/50 p-6 rounded-2xl backdrop-blur-sm shadow-lg hover:shadow-primary/10 hover:bg-card/60 transition-all"
+                                >
+                                    <div className={`inline-flex p-3 rounded-lg bg-muted/50 mb-4 ${item.color}`}>
+                                        <IconComponent size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-1 text-foreground">{item.degree}</h3>
+                                    <h4 className="text-lg text-primary mb-2">{item.institution}</h4>
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                                        <MapPin size={14} /> {item.address}
+                                    </div>
+                                    <div className="flex flex-wrap gap-3 text-sm font-medium">
+                                        <span className="bg-muted/50 text-foreground/90 px-3 py-1 rounded-md border border-border/50 flex items-center gap-2">
+                                            <Calendar size={14} className="text-muted-foreground" /> {item.year}
+                                        </span>
+                                        {item.grade && (
+                                            <span className="bg-primary/20 text-primary px-3 py-1 rounded-full border border-primary/20">
+                                                {item.grade}
+                                            </span>
+                                        )}
+                                    </div>
+                                </motion.div>
                             </motion.div>
-                        </motion.div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* Resources Section */}

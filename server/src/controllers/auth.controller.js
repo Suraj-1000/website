@@ -1,22 +1,17 @@
-const asyncHandler = require('../utils/asyncHandler');
-const User = require('../models/User');
+const asyncHandler = require('../middlewares/asyncHandler');
+const authService = require('../services/auth.service');
 const jwt = require('jsonwebtoken');
 
 // @desc    Register user
 // @route   POST /api/auth/register
-// @access  Public (Should be private in production ideally, or one-time setup)
+// @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-    const { name, email, password, role } = req.body;
-
-    // Create user
-    const user = await User.create({
-        name,
-        email,
-        password,
-        role
-    });
-
-    sendTokenResponse(user, 200, res);
+    try {
+        const user = await authService.registerUser(req.body);
+        sendTokenResponse(user, 201, res);
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
 });
 
 // @desc    Login user
@@ -25,33 +20,26 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
 
-    // Validate email & password
     if (!email || !password) {
         return res.status(400).json({ success: false, error: 'Please provide an email and password' });
     }
 
-    // Check for user
-    const user = await User.findOne({ email }).select('+password');
-
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid credentials' });
+    try {
+        const user = await authService.loginUser(email, password);
+        sendTokenResponse(user, 200, res);
+    } catch (error) {
+        res.status(401).json({ success: false, error: error.message });
     }
-
-    // Check if password matches
-    const isMatch = await user.matchPassword(password);
-
-    if (!isMatch) {
-        return res.status(401).json({ success: false, error: 'Invalid credentials' });
-    }
-
-    sendTokenResponse(user, 200, res);
 });
 
 // @desc    Get current logged in user
 // @route   GET /api/auth/me
 // @access  Private
 exports.getMe = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
+    // req.user is set by auth middleware using repo/service ideally, or directly.
+    // Let's assume middleware attaches user.
+    // If we want to be strict, middleware should use service too.
+    const user = await authService.getUserById(req.user.id);
 
     res.status(200).json({
         success: true,
@@ -62,8 +50,8 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
     // Create token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '30d' // Hardcoded for simplified setup, ideally from env
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', {
+        expiresIn: '30d'
     });
 
     const options = {
@@ -82,6 +70,12 @@ const sendTokenResponse = (user, statusCode, res) => {
         .cookie('token', token, options)
         .json({
             success: true,
-            token
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
         });
 };

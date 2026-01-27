@@ -1,11 +1,8 @@
-const asyncHandler = require('../utils/asyncHandler');
-const Experience = require('../models/Experience');
+const asyncHandler = require('../middlewares/asyncHandler');
+const experienceService = require('../services/experience.service');
 
-// @desc    Get all experiences
-// @route   GET /api/experience
-// @access  Public
 exports.getExperiences = asyncHandler(async (req, res, next) => {
-    const experiences = await Experience.find().sort({ createdAt: -1 });
+    const experiences = await experienceService.getAllExperiences();
 
     res.status(200).json({
         success: true,
@@ -14,11 +11,8 @@ exports.getExperiences = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Create new experience
-// @route   POST /api/experience
-// @access  Private
 exports.createExperience = asyncHandler(async (req, res, next) => {
-    const experience = await Experience.create(req.body);
+    const experience = await experienceService.createExperience(req.body);
 
     res.status(201).json({
         success: true,
@@ -26,20 +20,12 @@ exports.createExperience = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Update experience
-// @route   PUT /api/experience/:id
-// @access  Private
 exports.updateExperience = asyncHandler(async (req, res, next) => {
-    let experience = await Experience.findById(req.params.id);
+    const experience = await experienceService.updateExperience(req.params.id, req.body);
 
     if (!experience) {
         return res.status(404).json({ success: false, error: 'Experience not found' });
     }
-
-    experience = await Experience.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    });
 
     res.status(200).json({
         success: true,
@@ -47,17 +33,12 @@ exports.updateExperience = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Delete experience
-// @route   DELETE /api/experience/:id
-// @access  Private
 exports.deleteExperience = asyncHandler(async (req, res, next) => {
-    const experience = await Experience.findById(req.params.id);
+    const success = await experienceService.deleteExperience(req.params.id);
 
-    if (!experience) {
+    if (!success) {
         return res.status(404).json({ success: false, error: 'Experience not found' });
     }
-
-    await experience.deleteOne();
 
     res.status(200).json({
         success: true,

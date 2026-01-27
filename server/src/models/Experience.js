@@ -1,34 +1,55 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
 
-const experienceSchema = new mongoose.Schema({
+const Experience = sequelize.define('Experience', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
     role: {
-        type: String,
-        required: [true, 'Please add a role/job title']
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     company: {
-        type: String,
-        required: [true, 'Please add a company name']
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     location: {
-        type: String,
-        required: [true, 'Please add a location']
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    period: {
+        // Merging startDate/endDate to 'period' to match simple string usage if preferred, 
+        // OR using start/end separate fields. 
+        // Frontend uses "period" or "startDate - endDate".
+        // Let's stick to what I wrote in previous iteration but mapped to Sequelize: startDate, endDate
+        // Actually, previous Mongoose had startDate, endDate. Frontend list displayed period || start-end.
+        // Let's use startDate and endDate for structured data.
+        type: DataTypes.VIRTUAL,
+        get() {
+            return `${this.startDate} - ${this.endDate}`;
+        },
+        set(value) {
+            throw new Error('Do not try to set the `period` value!');
+        }
     },
     startDate: {
-        type: String, // Keeping as string to match "Nov 2024" format for simplicity, or could use Date
-        required: [true, 'Please add a start date']
+        type: DataTypes.STRING,
+        allowNull: false
     },
     endDate: {
-        type: String, // Keeping as string for "Present" or "Nov 2025"
-        required: [true, 'Please add an end date']
+        type: DataTypes.STRING,
+        allowNull: false
     },
     description: {
-        type: [String],
-        required: [true, 'Please add description points']
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: []
     }
+}, {
+    timestamps: true,
+    tableName: 'experiences'
 });
 
-module.exports = mongoose.model('Experience', experienceSchema);
+module.exports = Experience;

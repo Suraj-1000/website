@@ -5,5 +5,7 @@ const { protect } = require('../middlewares/auth.middleware');
 
 router.get('/', projectController.getProjects);
 router.post('/', protect, projectController.createProject);
+router.put('/:id', protect, projectController.updateProject);
+router.delete('/:id', protect, projectController.deleteProject);
 
 module.exports = router;

@@ -11,26 +11,35 @@ const Education = sequelize.define('Education', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    fieldOfStudy: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     institution: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    graduationYear: {
+    address: {
+        type: DataTypes.STRING,
+        allowNull: true, // Made nullable to avoid breaking if migration doesn't fill it
+    },
+    year: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    gpa: {
+    grade: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    icon: {
+        type: DataTypes.STRING, // "GraduationCap", etc.
+        allowNull: false,
+        defaultValue: 'School'
+    },
+    color: {
+        type: DataTypes.STRING, // "text-primary"
+        allowNull: false,
+        defaultValue: 'text-primary'
     }
 }, {
     timestamps: true,
     tableName: 'educations'
 });
 
-// Sync model (basic, handled in server.js but good to export)
 module.exports = Education;

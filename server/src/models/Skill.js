@@ -1,23 +1,28 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
 
-const skillSchema = new mongoose.Schema({
+const Skill = sequelize.define('Skill', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
     category: {
-        type: String,
-        required: [true, 'Please add a category'], // e.g., "Languages", "Web Technologies"
-        trim: true
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     items: {
-        type: [String],
-        required: [true, 'Please add skills']
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        defaultValue: []
     },
     icon: {
-        type: String, // Storing icon name string, frontend will map to Lucide icon
-        required: [true, 'Please add an icon name']
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
+        type: DataTypes.STRING,
+        allowNull: false,
     }
+}, {
+    timestamps: true,
+    tableName: 'skills'
 });
 
-module.exports = mongoose.model('Skill', skillSchema);
+module.exports = Skill;

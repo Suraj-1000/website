@@ -18,6 +18,7 @@ const Project = sequelize.define('Project', {
     techStack: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
+        defaultValue: []
     },
     repoLink: {
         type: DataTypes.STRING,

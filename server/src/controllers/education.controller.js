@@ -1,23 +1,28 @@
 const educationService = require('../services/education.service');
+const asyncHandler = require('../middlewares/asyncHandler');
 
-class EducationController {
-    async getEducations(req, res) {
-        try {
-            const educations = await educationService.getAllEducations();
-            res.status(200).json(educations);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+exports.getEducations = asyncHandler(async (req, res, next) => {
+    const educations = await educationService.getAllEducations();
+    res.status(200).json(educations);
+});
+
+exports.createEducation = asyncHandler(async (req, res, next) => {
+    const education = await educationService.addEducation(req.body);
+    res.status(201).json({ success: true, data: education });
+});
+
+exports.updateEducation = asyncHandler(async (req, res, next) => {
+    const education = await educationService.updateEducation(req.params.id, req.body);
+    if (!education) {
+        return res.status(404).json({ success: false, error: 'Not Found' });
     }
+    res.status(200).json({ success: true, data: education });
+});
 
-    async createEducation(req, res) {
-        try {
-            const education = await educationService.addEducation(req.body);
-            res.status(201).json(education);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
+exports.deleteEducation = asyncHandler(async (req, res, next) => {
+    const success = await educationService.deleteEducation(req.params.id);
+    if (!success) {
+        return res.status(404).json({ success: false, error: 'Not Found' });
     }
-}
-
-module.exports = new EducationController();
+    res.status(200).json({ success: true, data: {} });
+});

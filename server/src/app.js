@@ -36,6 +36,6 @@ app.use('/api/skills', require('./routes/skill.routes'));
 app.use('/api/auth', require('./routes/auth.routes'));
 
 // Error Handling Middleware
-app.use(require('./middlewares/error.middleware'));
+app.use(require('./middlewares/errorHandler'));
 
 module.exports = app;

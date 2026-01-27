@@ -20,6 +20,10 @@ import ExperienceList from './pages/Admin/Experience/ExperienceList';
 import ExperienceForm from './pages/Admin/Experience/ExperienceForm';
 import SkillList from './pages/Admin/Skills/SkillList';
 import SkillForm from './pages/Admin/Skills/SkillForm';
+import ProjectList from './pages/Admin/Projects/ProjectList';
+import ProjectForm from './pages/Admin/Projects/ProjectForm';
+import EducationList from './pages/Admin/Education/EducationList';
+import EducationForm from './pages/Admin/Education/EducationForm';
 
 import Skills from './pages/Skills/Skills';
 import Experience from './pages/Experience/Experience';
@@ -58,6 +62,16 @@ function App() {
             <Route path="skills" element={<SkillList />} />
             <Route path="skills/new" element={<SkillForm />} />
             <Route path="skills/edit/:id" element={<SkillForm />} />
+
+            {/* Projects Admin */}
+            <Route path="projects" element={<ProjectList />} />
+            <Route path="projects/new" element={<ProjectForm />} />
+            <Route path="projects/edit/:id" element={<ProjectForm />} />
+
+            {/* Education Admin */}
+            <Route path="education" element={<EducationList />} />
+            <Route path="education/new" element={<EducationForm />} />
+            <Route path="education/edit/:id" element={<EducationForm />} />
           </Route>
 
           {/* 404 Route */}

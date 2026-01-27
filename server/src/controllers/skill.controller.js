@@ -1,11 +1,8 @@
-const asyncHandler = require('../utils/asyncHandler');
-const Skill = require('../models/Skill');
+const asyncHandler = require('../middlewares/asyncHandler');
+const skillService = require('../services/skill.service');
 
-// @desc    Get all skills
-// @route   GET /api/skills
-// @access  Public
 exports.getSkills = asyncHandler(async (req, res, next) => {
-    const skills = await Skill.find().sort({ createdAt: 1 });
+    const skills = await skillService.getAllSkills();
 
     res.status(200).json({
         success: true,
@@ -14,11 +11,8 @@ exports.getSkills = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Create new skill category
-// @route   POST /api/skills
-// @access  Private
 exports.createSkill = asyncHandler(async (req, res, next) => {
-    const skill = await Skill.create(req.body);
+    const skill = await skillService.createSkill(req.body);
 
     res.status(201).json({
         success: true,
@@ -26,20 +20,12 @@ exports.createSkill = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Update skill category
-// @route   PUT /api/skills/:id
-// @access  Private
 exports.updateSkill = asyncHandler(async (req, res, next) => {
-    let skill = await Skill.findById(req.params.id);
+    const skill = await skillService.updateSkill(req.params.id, req.body);
 
     if (!skill) {
-        return res.status(404).json({ success: false, error: 'Skill category not found' });
+        return res.status(404).json({ success: false, error: 'Skill not found' });
     }
-
-    skill = await Skill.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    });
 
     res.status(200).json({
         success: true,
@@ -47,17 +33,12 @@ exports.updateSkill = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Delete skill category
-// @route   DELETE /api/skills/:id
-// @access  Private
 exports.deleteSkill = asyncHandler(async (req, res, next) => {
-    const skill = await Skill.findById(req.params.id);
+    const success = await skillService.deleteSkill(req.params.id);
 
-    if (!skill) {
-        return res.status(404).json({ success: false, error: 'Skill category not found' });
+    if (!success) {
+        return res.status(404).json({ success: false, error: 'Skill not found' });
     }
-
-    await skill.deleteOne();
 
     res.status(200).json({
         success: true,
