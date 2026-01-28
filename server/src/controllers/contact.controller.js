@@ -1,5 +1,5 @@
 const contactRepository = require('../repositories/contact.repo');
-const asyncHandler = require('../utils/asyncHandler');
+const asyncHandler = require('../middlewares/asyncHandler');
 
 exports.submitContact = asyncHandler(async (req, res) => {
     const { name, email, subject, message } = req.body;

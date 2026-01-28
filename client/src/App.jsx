@@ -25,6 +25,13 @@ import ProjectForm from './pages/Admin/Projects/ProjectForm';
 import EducationList from './pages/Admin/Education/EducationList';
 import EducationForm from './pages/Admin/Education/EducationForm';
 
+// Travel Admin
+import TravelList from './pages/Admin/Travel/TravelList';
+import TravelForm from './pages/Admin/Travel/TravelForm';
+
+// Messages Admin
+import MessageList from './pages/Admin/Messages/MessageList';
+
 import Skills from './pages/Skills/Skills';
 import Experience from './pages/Experience/Experience';
 import Testimonials from './pages/Testimonials/Testimonials';
@@ -72,6 +79,14 @@ function App() {
             <Route path="education" element={<EducationList />} />
             <Route path="education/new" element={<EducationForm />} />
             <Route path="education/edit/:id" element={<EducationForm />} />
+
+            {/* Travel Admin */}
+            <Route path="travel" element={<TravelList />} />
+            <Route path="travel/new" element={<TravelForm />} />
+            <Route path="travel/edit/:id" element={<TravelForm />} />
+
+            {/* Messages Admin */}
+            <Route path="messages" element={<MessageList />} />
           </Route>
 
           {/* 404 Route */}

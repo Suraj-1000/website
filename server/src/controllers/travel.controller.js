@@ -4,7 +4,7 @@ class TravelController {
     async getTravels(req, res) {
         try {
             const travels = await travelService.getAllTravels();
-            res.status(200).json(travels);
+            res.status(200).json({ success: true, data: travels });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -13,7 +13,7 @@ class TravelController {
     async createTravel(req, res) {
         try {
             const travel = await travelService.addTravel(req.body);
-            res.status(201).json(travel);
+            res.status(201).json({ success: true, data: travel });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
