@@ -10,12 +10,17 @@ const app = express();
 // Connect Database
 connectDB();
 
+const path = require('path');
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false })); // Allow loading images
 app.use(morgan('dev'));
+
+// Static Files (Private/Awards)
+app.use('/private', express.static(path.join(__dirname, '../private')));
 
 // Routes
 const educationRoutes = require('./routes/education.routes');

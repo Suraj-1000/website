@@ -23,9 +23,10 @@ const Award = sequelize.define('Award', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-    image: {
-        type: DataTypes.STRING, // URL to image
+    images: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
+        defaultValue: []
     }
 }, {
     timestamps: true,

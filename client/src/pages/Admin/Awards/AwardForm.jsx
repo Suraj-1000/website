@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { Save, ArrowLeft } from 'lucide-react';
+import { Save, ArrowLeft, Upload, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 const AwardForm = () => {
     const navigate = useNavigate();
@@ -13,6 +15,14 @@ const AwardForm = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEdit);
+
+    // Image State
+    const [existingImages, setExistingImages] = useState([]); // URLs from server
+    const [newImages, setNewImages] = useState([]); // File objects
+    const [newImagePreviews, setNewImagePreviews] = useState([]); // Preview URLs for new files
+
+    // Rich Text State
+    const [description, setDescription] = useState('');
 
     useEffect(() => {
         if (isEdit) {
@@ -25,8 +35,21 @@ const AwardForm = () => {
                         setValue('title', award.title);
                         setValue('issuer', award.issuer);
                         setValue('date', award.date);
-                        setValue('description', award.description);
-                        setValue('image', award.image);
+                        setDescription(award.description || '');
+
+                        // Handle images (backward compatibility with 'image' field if needed, but per new model use 'images')
+                        let imgs = [];
+                        if (award.images && Array.isArray(award.images)) {
+                            imgs = award.images;
+                        } else if (award.image) {
+                            imgs = [award.image];
+                        }
+
+                        // Ensure URLs are complete
+                        const completeUrls = imgs.map(img =>
+                            img.startsWith('http') ? img : `http://localhost:5000${img}`
+                        );
+                        setExistingImages(completeUrls);
                     }
                 } catch (error) {
                     console.error('Failed to fetch award', error);
@@ -38,16 +61,79 @@ const AwardForm = () => {
         }
     }, [id, isEdit, setValue]);
 
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        const totalImages = existingImages.length + newImages.length + files.length;
+
+        if (totalImages > 2) {
+            alert('You can only upload a maximum of 2 images.');
+            return;
+        }
+
+        const validFiles = files.filter(file => file.type.startsWith('image/'));
+        const filePreviews = validFiles.map(file => URL.createObjectURL(file));
+
+        setNewImages([...newImages, ...validFiles]);
+        setNewImagePreviews([...newImagePreviews, ...filePreviews]);
+    };
+
+    const removeExistingImage = (index) => {
+        setExistingImages(existingImages.filter((_, i) => i !== index));
+    };
+
+    const removeNewImage = (index) => {
+        const updatedNewImages = newImages.filter((_, i) => i !== index);
+        const updatedPreviews = newImagePreviews.filter((_, i) => i !== index);
+
+        // Revoke URL to avoid memory leak
+        URL.revokeObjectURL(newImagePreviews[index]);
+
+        setNewImages(updatedNewImages);
+        setNewImagePreviews(updatedPreviews);
+    };
+
     const onSubmit = async (data) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const formData = new FormData();
+
+            formData.append('title', data.title);
+            formData.append('issuer', data.issuer);
+            formData.append('date', data.date);
+            formData.append('description', description); // Use state for Rich Text
+
+            // Append Existing Images (as URLs, backend will handle keeping them)
+            // Note: Controller expects `existingImages` to be the RELATIVE paths if possible, or full URLs.
+            // Our controller logic handled `req.body.existingImages`.
+            // We should send the path relative to server if possible, or handle full URL stripping in backend.
+            // However, the backend logic: `currentImages = Array.isArray(req.body.existingImages) ? ...`
+            // If we send full URL `http://localhost:5000/private/award/abc.jpg`, backend saves that.
+            // It's better to strip the domain if we want clean DB paths, but for now sending what we have is okay
+            // providing backend doesn't double-prefix.
+            // Let's rely on what we have. Ideally we strip `http://localhost:5000` before sending.
+
+            existingImages.forEach(img => {
+                const relativePath = img.replace('http://localhost:5000', '');
+                formData.append('existingImages', relativePath);
+            });
+
+            // Append New Images
+            newImages.forEach(file => {
+                formData.append('images', file);
+            });
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
 
             if (isEdit) {
-                await axios.patch(`http://localhost:5000/api/awards/${id}`, data, config);
+                await axios.patch(`http://localhost:5000/api/awards/${id}`, formData, config);
             } else {
-                await axios.post('http://localhost:5000/api/awards', data, config);
+                await axios.post('http://localhost:5000/api/awards', formData, config);
             }
             navigate('/admin/awards');
         } catch (error) {
@@ -59,6 +145,8 @@ const AwardForm = () => {
     };
 
     if (fetching) return <div>Loading...</div>;
+
+    const totalCount = existingImages.length + newImages.length;
 
     return (
         <div className="max-w-2xl mx-auto space-y-6">
@@ -103,20 +191,65 @@ const AwardForm = () => {
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Description</label>
-                    <textarea
-                        {...register('description')}
-                        className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none min-h-[100px]"
-                    />
+                    <div className="bg-background border border-border rounded-lg overflow-hidden">
+                        <ReactQuill
+                            theme="snow"
+                            value={description}
+                            onChange={setDescription}
+                            className="h-48 mb-10 text-foreground"
+                        />
+                    </div>
                 </div>
 
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">Image URL (Optional)</label>
-                    <input
-                        type="text"
-                        {...register('image')}
-                        className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                        placeholder="https://..."
-                    />
+                <div className="space-y-4">
+                    <label className="text-sm font-medium block">Award Images (Max 2)</label>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Existing Images */}
+                        {existingImages.map((img, index) => (
+                            <div key={`existing-${index}`} className="relative h-40 bg-muted rounded-lg overflow-hidden border border-border group">
+                                <img src={img} alt="Existing" className="w-full h-full object-cover" />
+                                <button
+                                    type="button"
+                                    onClick={() => removeExistingImage(index)}
+                                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ))}
+
+                        {/* New Images */}
+                        {newImagePreviews.map((img, index) => (
+                            <div key={`new-${index}`} className="relative h-40 bg-muted rounded-lg overflow-hidden border border-border group">
+                                <img src={img} alt="New Preview" className="w-full h-full object-cover" />
+                                <button
+                                    type="button"
+                                    onClick={() => removeNewImage(index)}
+                                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ))}
+
+                        {/* Upload Button */}
+                        {totalCount < 2 && (
+                            <label className="relative h-40 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-muted/50 transition-colors cursor-pointer">
+                                <Upload size={24} className="text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Upload Image</span>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                    // Make sure it doesn't allow more than remaining slot
+                                    // But handleFileChange checks total anyway.
+                                    multiple={totalCount === 0} // Allow multiple only if 0 images so far, simplistic logic. Better to just allow always and slice in handler.
+                                />
+                            </label>
+                        )}
+                    </div>
                 </div>
 
                 <button
