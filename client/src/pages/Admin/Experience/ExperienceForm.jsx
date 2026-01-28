@@ -38,7 +38,7 @@ const ExperienceForm = () => {
                 try {
                     const res = await axios.get(`http://localhost:5000/api/experiences`);
                     const allExp = res.data.data;
-                    const exp = allExp.find(e => e._id === id);
+                    const exp = allExp.find(e => e.id === id); // Fix: use .id instead of ._id
                     if (exp) {
                         setValue('role', exp.role);
                         setValue('company', exp.company);
@@ -84,7 +84,7 @@ const ExperienceForm = () => {
 
         try {
             if (isEdit) {
-                await axios.put(`http://localhost:5000/api/experiences/${id}`, formattedData);
+                await axios.patch(`http://localhost:5000/api/experiences/${id}`, formattedData);
             } else {
                 await axios.post('http://localhost:5000/api/experiences', formattedData);
             }

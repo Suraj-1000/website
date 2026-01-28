@@ -30,9 +30,12 @@ const EducationForm = () => {
                     const edu = res.data.find(e => e.id === id);
                     if (edu) {
                         setValue('degree', edu.degree);
+                        setValue('level', edu.level);
                         setValue('institution', edu.institution);
                         setValue('address', edu.address);
                         setValue('year', edu.year);
+                        setValue('startYear', edu.startYear);
+                        setValue('endYear', edu.endYear);
                         setValue('grade', edu.grade);
                         setValue('icon', edu.icon);
                         setValue('color', edu.color);
@@ -95,6 +98,23 @@ const EducationForm = () => {
                     </div>
 
                     <div>
+                        <label className="block text-sm font-medium mb-2">Level</label>
+                        <select
+                            {...register('level', { required: 'Level is required' })}
+                            className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
+                        >
+                            <option value="">Select Level</option>
+                            <option value="School">School Level (SLC/SEE)</option>
+                            <option value="+2">High School (+2)</option>
+                            <option value="Bachelors">Bachelors</option>
+                            <option value="Masters">Masters</option>
+                            <option value="PhD">PhD</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        {errors.level && <span className="text-red-500 text-sm">{errors.level.message}</span>}
+                    </div>
+
+                    <div>
                         <label className="block text-sm font-medium mb-2">Institution</label>
                         <input
                             {...register('institution', { required: 'Institution is required' })}
@@ -105,14 +125,39 @@ const EducationForm = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-2">Year / Period</label>
-                            <input
-                                {...register('year', { required: 'Year is required' })}
-                                className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
-                                placeholder="e.g. 2023 - 2025"
-                            />
-                            {errors.year && <span className="text-red-500 text-sm">{errors.year.message}</span>}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Start Year</label>
+                                <input
+                                    type="number"
+                                    min="1900"
+                                    max="2099"
+                                    {...register('startYear', {
+                                        required: 'Start Year is required',
+                                        min: { value: 1900, message: 'Year must be valid' },
+                                        max: { value: 2099, message: 'Year must be valid' }
+                                    })}
+                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
+                                    placeholder="YYYY"
+                                />
+                                {errors.startYear && <span className="text-red-500 text-sm">{errors.startYear.message}</span>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">End Year</label>
+                                <input
+                                    type="number"
+                                    min="1900"
+                                    max="2099"
+                                    {...register('endYear', {
+                                        required: 'End Year is required',
+                                        min: { value: 1900, message: 'Year must be valid' },
+                                        max: { value: 2099, message: 'Year must be valid' }
+                                    })}
+                                    className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
+                                    placeholder="YYYY"
+                                />
+                                {errors.endYear && <span className="text-red-500 text-sm">{errors.endYear.message}</span>}
+                            </div>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2">Address</label>

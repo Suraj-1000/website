@@ -33,6 +33,9 @@ app.use('/api/travel', travelRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/experiences', require('./routes/experience.routes'));
 app.use('/api/skills', require('./routes/skill.routes'));
+app.use('/api/awards', require('./routes/award.routes'));
+app.use('/api/languages', require('./routes/language.routes'));
+app.use('/api/references', require('./routes/reference.routes'));
 app.use('/api/auth', require('./routes/auth.routes'));
 
 // Error Handling Middleware

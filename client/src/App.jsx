@@ -29,6 +29,18 @@ import EducationForm from './pages/Admin/Education/EducationForm';
 import TravelList from './pages/Admin/Travel/TravelList';
 import TravelForm from './pages/Admin/Travel/TravelForm';
 
+// Awards Admin
+import AwardList from './pages/Admin/Awards/AwardList';
+import AwardForm from './pages/Admin/Awards/AwardForm';
+
+// Languages Admin
+import LanguageList from './pages/Admin/Languages/LanguageList';
+import LanguageForm from './pages/Admin/Languages/LanguageForm';
+
+// References Admin
+import ReferenceList from './pages/Admin/References/ReferenceList';
+import ReferenceForm from './pages/Admin/References/ReferenceForm';
+
 // Messages Admin
 import MessageList from './pages/Admin/Messages/MessageList';
 
@@ -84,6 +96,21 @@ function App() {
             <Route path="travel" element={<TravelList />} />
             <Route path="travel/new" element={<TravelForm />} />
             <Route path="travel/edit/:id" element={<TravelForm />} />
+
+            {/* Awards Admin */}
+            <Route path="awards" element={<AwardList />} />
+            <Route path="awards/new" element={<AwardForm />} />
+            <Route path="awards/edit/:id" element={<AwardForm />} />
+
+            {/* Languages Admin */}
+            <Route path="languages" element={<LanguageList />} />
+            <Route path="languages/new" element={<LanguageForm />} />
+            <Route path="languages/edit/:id" element={<LanguageForm />} />
+
+            {/* References Admin */}
+            <Route path="references" element={<ReferenceList />} />
+            <Route path="references/new" element={<ReferenceForm />} />
+            <Route path="references/edit/:id" element={<ReferenceForm />} />
 
             {/* Messages Admin */}
             <Route path="messages" element={<MessageList />} />

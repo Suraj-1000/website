@@ -11,6 +11,10 @@ const Education = sequelize.define('Education', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    level: {
+        type: DataTypes.STRING, // e.g. "Plus Two", "Bachelors", "School"
+        allowNull: true,
+    },
     institution: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -21,7 +25,15 @@ const Education = sequelize.define('Education', {
     },
     year: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true, // Legacy support or optional
+    },
+    startYear: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    endYear: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     grade: {
         type: DataTypes.STRING,

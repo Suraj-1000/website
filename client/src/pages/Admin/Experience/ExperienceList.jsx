@@ -27,7 +27,7 @@ const ExperienceList = () => {
         if (window.confirm('Are you sure you want to delete this experience?')) {
             try {
                 await axios.delete(`http://localhost:5000/api/experiences/${id}`);
-                setExperiences(experiences.filter(exp => exp._id !== id));
+                setExperiences(experiences.filter(exp => exp.id !== id));
             } catch (error) {
                 console.error('Failed to delete experience', error);
                 alert('Failed to delete experience');
@@ -53,7 +53,7 @@ const ExperienceList = () => {
             <div className="grid gap-6">
                 {experiences.map((exp) => (
                     <motion.div
-                        key={exp._id}
+                        key={exp.id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="bg-card border border-border p-6 rounded-xl flex flex-col md:flex-row justify-between gap-4"
@@ -67,13 +67,13 @@ const ExperienceList = () => {
 
                         <div className="flex items-start gap-2">
                             <Link
-                                to={`/admin/experience/edit/${exp._id}`}
+                                to={`/admin/experience/edit/${exp.id}`}
                                 className="p-2 bg-muted text-foreground rounded-lg hover:bg-primary/20 hover:text-primary transition-colors"
                             >
                                 <Edit2 size={18} />
                             </Link>
                             <button
-                                onClick={() => handleDelete(exp._id)}
+                                onClick={() => handleDelete(exp.id)}
                                 className="p-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors"
                             >
                                 <Trash2 size={18} />

@@ -15,7 +15,7 @@ router.route('/')
     .post(protect, createExperience);
 
 router.route('/:id')
-    .put(protect, updateExperience)
+    .patch(protect, updateExperience)
     .delete(protect, deleteExperience);
 
 module.exports = router;
