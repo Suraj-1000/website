@@ -1,14 +1,24 @@
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import axios from 'axios';
 import { Send, Mail, MapPin, Linkedin, Github, Twitter, Instagram } from 'lucide-react';
 
 const Contact = () => {
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
 
     const onSubmit = async (data) => {
-        // Placeholder for EmailJS or Backend integration
-        console.log("Form Data:", data);
-        alert("Thank you for reaching out! This form is currently in demo mode. Please contact me directly via email.");
+        try {
+            await axios.post('http://localhost:5000/api/contacts', data);
+            setSubmitStatus('success');
+            reset();
+            setTimeout(() => setSubmitStatus(null), 5000); // Clear message after 5 seconds
+        } catch (error) {
+            console.error("Failed to send message", error);
+            setSubmitStatus('error');
+            setTimeout(() => setSubmitStatus(null), 5000);
+        }
     };
 
     const contactInfo = [
@@ -118,6 +128,16 @@ const Contact = () => {
                             </div>
 
                             <div className="space-y-2">
+                                <label className="text-sm font-medium ml-1 text-foreground">Phone (Optional)</label>
+                                <input
+                                    {...register("phone")}
+                                    type="tel"
+                                    className="w-full bg-muted/50 border border-border/50 rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
+                                    placeholder="+1 (234) 567-890"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
                                 <label className="text-sm font-medium ml-1 text-foreground">Subject</label>
                                 <input
                                     {...register("subject", { required: "Subject is required" })}
@@ -150,6 +170,26 @@ const Contact = () => {
                                     </>
                                 )}
                             </button>
+
+                            {submitStatus === 'success' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-4 bg-green-500/10 border border-green-500/20 text-green-500 rounded-xl text-center font-medium"
+                                >
+                                    Message sent successfully! I'll get back to you soon.
+                                </motion.div>
+                            )}
+
+                            {submitStatus === 'error' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl text-center font-medium"
+                                >
+                                    Failed to send message. Please try again later.
+                                </motion.div>
+                            )}
                         </form>
                     </motion.div>
                 </div>

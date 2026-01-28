@@ -1,7 +1,75 @@
-import { motion } from 'framer-motion';
-import { User, Heart, Coffee, Code, Users, Music, Plane, Camera, Award, Languages, Utensils, Waves, Brain, Laptop, Sparkles, Lightbulb, Target, Quote } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User, Heart, Coffee, Code, Users, Music, Plane, Camera, Award, Languages, Utensils, Waves, Brain, Laptop, Sparkles, Lightbulb, Target, Quote, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import axios from 'axios';
 
 const About = () => {
+    // State for dynamic data
+    const [awards, setAwards] = useState([]);
+    const [languages, setLanguages] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Modal State
+    const [selectedAward, setSelectedAward] = useState(null);
+
+    // Lightbox State
+    const [lightboxIndex, setLightboxIndex] = useState(null); // Index of image in lightbox
+    const [lightboxImages, setLightboxImages] = useState([]); // Array of all images for current award
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [awardsRes, langRes] = await Promise.all([
+                    axios.get('http://localhost:5000/api/awards'),
+                    axios.get('http://localhost:5000/api/languages')
+                ]);
+                setAwards(awardsRes.data.data);
+                setLanguages(langRes.data.data);
+            } catch (error) {
+                console.error('Failed to fetch about data', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Prevent scrolling when modal or lightbox is open
+    useEffect(() => {
+        if (selectedAward || lightboxIndex !== null) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [selectedAward, lightboxIndex]);
+
+    // Helper to open lightbox
+    const openLightbox = (images, index = 0) => {
+        setLightboxImages(images);
+        setLightboxIndex(index);
+    };
+
+    // Helper to close lightbox
+    const closeLightbox = () => {
+        setLightboxIndex(null);
+        setLightboxImages([]);
+    };
+
+    // Navigation handlers
+    const nextImage = (e) => {
+        e.stopPropagation();
+        setLightboxIndex((prev) => (prev + 1) % lightboxImages.length);
+    };
+
+    const prevImage = (e) => {
+        e.stopPropagation();
+        setLightboxIndex((prev) => (prev - 1 + lightboxImages.length) % lightboxImages.length);
+    };
+
     // Animation variants
     const container = {
         hidden: { opacity: 0 },
@@ -36,7 +104,7 @@ const About = () => {
             <motion.div
                 variants={container}
                 initial="hidden"
-                animate="show"
+                animate={loading ? "hidden" : "show"}
                 className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto auto-rows-[minmax(180px,auto)]"
             >
                 {/* 1. Who I Am (Large Block - 2x2) */}
@@ -60,15 +128,25 @@ const About = () => {
                     </div>
                 </motion.div>
 
-                {/* 2. Awards (Small Block - 1x1) */}
-                <motion.div variants={item} className="md:col-span-1 md:row-span-1 bg-gradient-to-br from-yellow-500/10 to-transparent border border-border/50 rounded-3xl p-6 backdrop-blur-sm hover:border-yellow-500/30 transition-colors flex flex-col justify-center">
-                    <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                {/* 2. Awards (Small Block - 1x1 or expands if many) */}
+                <motion.div variants={item} className="md:col-span-1 md:row-span-1 bg-gradient-to-br from-yellow-500/10 to-transparent border border-border/50 rounded-3xl p-6 backdrop-blur-sm hover:border-yellow-500/30 transition-colors flex flex-col justify-center overflow-y-auto overflow-x-hidden max-h-[250px] scrollbar-hide">
+                    <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2 sticky top-0 bg-transparent backdrop-blur-md z-10 pb-2">
                         <Award className="text-yellow-500" /> Recognition
                     </h3>
-                    <div>
-                        <p className="font-bold text-lg text-foreground">AAA Scholarship</p>
-                        <p className="text-sm text-yellow-600 dark:text-yellow-200/80 mb-2">Herald College (2025)</p>
-                        <p className="text-xs text-muted-foreground">Awarded for excellence in Academics, Attitude, & Attendance.</p>
+                    <div className="space-y-4">
+                        {awards.length > 0 ? awards.map((award) => (
+                            <div
+                                key={award.id}
+                                onClick={() => setSelectedAward(award)}
+                                className="border-b border-white/10 last:border-0 pb-3 last:pb-0 cursor-pointer hover:bg-white/5 p-2 rounded-lg transition-colors group"
+                            >
+                                <p className="font-bold text-lg text-foreground leading-tight group-hover:text-primary transition-colors">{award.title}</p>
+                                <p className="text-sm text-yellow-600 dark:text-yellow-200/80 mb-1">{award.issuer} ({new Date(award.date).getFullYear()})</p>
+                                <p className="text-[10px] text-muted-foreground italic">Click for details</p>
+                            </div>
+                        )) : (
+                            <p className="text-sm text-muted-foreground">No awards listed yet.</p>
+                        )}
                     </div>
                 </motion.div>
 
@@ -78,11 +156,14 @@ const About = () => {
                         <Languages className="text-green-500" /> Languages
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                        {["Nepali", "English", "Hindi", "Bhojpuri"].map((lang, i) => (
-                            <span key={i} className="px-3 py-1 bg-muted/50 rounded-full text-xs font-medium text-foreground/80 border border-border/50">
-                                {lang}
+                        {languages.length > 0 ? languages.map((lang) => (
+                            <span key={lang.id} className="px-3 py-1 bg-muted/50 rounded-full text-xs font-medium text-foreground/80 border border-border/50 flex flex-col items-center">
+                                <span>{lang.name}</span>
+                                <span className="text-[10px] opacity-70">{lang.proficiency}</span>
                             </span>
-                        ))}
+                        )) : (
+                            <p className="text-sm text-muted-foreground">No languages listed.</p>
+                        )}
                     </div>
                 </motion.div>
 
@@ -110,6 +191,7 @@ const About = () => {
                         <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400" /> Open Source Contrib</li>
                     </ul>
                 </motion.div>
+
 
                 {/* 6. My Roots (Medium - 1x2 - Spans Row 3 & 4 in Col 3) */}
                 <motion.div variants={item} className="md:col-span-1 md:row-span-2 bg-card/40 border border-border/50 rounded-3xl p-8 backdrop-blur-sm hover:bg-card/60 transition-colors flex flex-col justify-between">
@@ -160,8 +242,149 @@ const About = () => {
                     </p>
                     <p className="text-sm text-primary font-bold tracking-widest uppercase">- Steve Jobs</p>
                 </motion.div>
-
             </motion.div>
+
+            {/* Award Details Modal - Rendered via Portal to sit on top of everything */}
+            {createPortal(
+                <AnimatePresence>
+                    {selectedAward && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={() => setSelectedAward(null)}>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                className="bg-card border border-border rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto overflow-x-hidden scrollbar-hide shadow-2xl relative"
+                                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                            >
+                                <button
+                                    onClick={() => setSelectedAward(null)}
+                                    className="absolute top-4 right-4 p-2 bg-muted/80 backdrop-blur rounded-full hover:bg-destructive hover:text-white transition-colors z-20 shadow-sm"
+                                >
+                                    <X size={20} />
+                                </button>
+
+                                <div className="p-8">
+                                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-2 pr-10 break-words">{selectedAward.title}</h2>
+                                    <p className="text-lg text-muted-foreground mb-1 font-medium break-words">{selectedAward.issuer}</p>
+                                    <p className="text-sm text-muted-foreground mb-6">{new Date(selectedAward.date).toDateString()}</p>
+
+                                    {/* Images Carousel/Grid */}
+                                    {selectedAward.images && selectedAward.images.length > 0 && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                            {selectedAward.images.map((img, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="rounded-xl overflow-hidden border border-border/50 h-48 cursor-zoom-in group relative"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        openLightbox(
+                                                            selectedAward.images.map(i => i.startsWith('http') ? i : `http://localhost:5000${i}`),
+                                                            idx
+                                                        );
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={img.startsWith('http') ? img : `http://localhost:5000${img}`}
+                                                        alt={`${selectedAward.title} - ${idx + 1}`}
+                                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                                    />
+                                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">View Fullscreen</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {selectedAward.image && (!selectedAward.images || selectedAward.images.length === 0) && (
+                                        <div
+                                            className="rounded-xl overflow-hidden border border-border/50 h-48 mb-6 cursor-zoom-in group relative"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                openLightbox([
+                                                    selectedAward.image.startsWith('http') ? selectedAward.image : `http://localhost:5000${selectedAward.image}`
+                                                ], 0);
+                                            }}
+                                        >
+                                            <img
+                                                src={selectedAward.image.startsWith('http') ? selectedAward.image : `http://localhost:5000${selectedAward.image}`}
+                                                alt={selectedAward.title}
+                                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                            />
+                                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">View Fullscreen</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Rich Text Description */}
+                                    <div className="prose prose-invert max-w-none text-foreground/90 leading-relaxed break-words">
+                                        <div dangerouslySetInnerHTML={{ __html: selectedAward.description }} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+
+            {/* Lightbox for Images with Navigation - Rendered via Portal */}
+            {createPortal(
+                <AnimatePresence>
+                    {lightboxIndex !== null && lightboxImages.length > 0 && (
+                        <div
+                            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+                            onClick={closeLightbox}
+                        >
+                            <button
+                                onClick={closeLightbox}
+                                className="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-70"
+                            >
+                                <X size={24} />
+                            </button>
+
+                            {/* Navigation Buttons */}
+                            {lightboxImages.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={prevImage}
+                                        className="absolute left-4 p-3 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-70"
+                                    >
+                                        <ChevronLeft size={32} />
+                                    </button>
+                                    <button
+                                        onClick={nextImage}
+                                        className="absolute right-4 p-3 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-70"
+                                    >
+                                        <ChevronRight size={32} />
+                                    </button>
+                                </>
+                            )}
+
+
+                            <motion.img
+                                key={lightboxIndex} // Key forces re-render for animation when index changes
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.2 }}
+                                src={lightboxImages[lightboxIndex]}
+                                alt={`Full View ${lightboxIndex + 1}`}
+                                className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+
+                            {/* Image Counter */}
+                            {lightboxImages.length > 1 && (
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 bg-black/50 px-3 py-1 rounded-full text-sm">
+                                    {lightboxIndex + 1} / {lightboxImages.length}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </div>
     );
 };

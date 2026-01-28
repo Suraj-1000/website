@@ -42,7 +42,7 @@ import ReferenceList from './pages/Admin/References/ReferenceList';
 import ReferenceForm from './pages/Admin/References/ReferenceForm';
 
 // Messages Admin
-import MessageList from './pages/Admin/Messages/MessageList';
+import AdminMessages from './pages/Admin/AdminMessages';
 
 import Skills from './pages/Skills/Skills';
 import Experience from './pages/Experience/Experience';
@@ -62,7 +62,7 @@ function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/education" element={<Education />} />
             <Route path="/travel" element={<Travel />} />
-            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/references" element={<Testimonials />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
 
@@ -113,7 +113,7 @@ function App() {
             <Route path="references/edit/:id" element={<ReferenceForm />} />
 
             {/* Messages Admin */}
-            <Route path="messages" element={<MessageList />} />
+            <Route path="messages" element={<AdminMessages />} />
           </Route>
 
           {/* 404 Route */}

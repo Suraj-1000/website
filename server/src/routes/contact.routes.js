@@ -9,4 +9,7 @@ router.post('/', contactController.submitContact);
 // Only admin can view all contacts
 router.get('/', protect, contactController.getAllContacts);
 
+// Admin reply to contact
+router.post('/:id/reply', protect, contactController.replyToContact);
+
 module.exports = router;

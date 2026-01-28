@@ -1,12 +1,14 @@
-import { motion } from 'framer-motion';
-import { Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain } from 'lucide-react';
+import { Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package, Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 
 // Mapping string icon names to components
 const IconMap = {
-    Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain
+    Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain,
+    Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package,
+    Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command
 };
 
 const Skills = () => {

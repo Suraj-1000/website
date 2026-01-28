@@ -1,12 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Briefcase, Code, FolderGit2, BookOpen, Plane, MessageSquare, LogOut, Menu, X, Award, Languages, Users } from 'lucide-react';
+import { LayoutDashboard, Briefcase, Code, FolderGit2, BookOpen, Plane, MessageSquare, LogOut, Menu, X, Award, Languages, Users, Sun, Moon } from 'lucide-react';
 
 const AdminLayout = () => {
     const { isAuthenticated, loading, logout } = useAuth();
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Theme Logic
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(theme === 'dark' ? 'light' : 'dark');
+    };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
 
@@ -35,9 +50,14 @@ const AdminLayout = () => {
                 <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                     Admin Panel
                 </h1>
-                <button onClick={toggleSidebar} className="text-foreground p-1">
-                    {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button onClick={toggleTheme} className="p-2 text-foreground">
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
+                    <button onClick={toggleSidebar} className="text-foreground p-1">
+                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
             </div>
 
             {/* Sidebar Overlay */}
@@ -55,10 +75,13 @@ const AdminLayout = () => {
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
                 `}
             >
-                <div className="p-6 border-b border-border hidden md:block">
+                <div className="p-6 border-b border-border hidden md:flex items-center justify-between">
                     <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                         Admin Panel
                     </h1>
+                    <button onClick={toggleTheme} className="p-2 text-foreground hover:bg-muted rounded-full transition-colors">
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
                 </div>
 
                 {/* Mobile Header Placeholder in Sidebar (optional spacing fix) */}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Save, ArrowLeft, Plus, X, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain } from 'lucide-react';
+import { Save, ArrowLeft, Plus, X, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package, Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const icons = [
@@ -14,6 +14,22 @@ const icons = [
     { name: 'Settings', icon: Settings },
     { name: 'Users', icon: Users },
     { name: 'Brain', icon: Brain },
+    { name: 'Server', icon: Server },
+    { name: 'Cloud', icon: Cloud },
+    { name: 'Smartphone', icon: Smartphone },
+    { name: 'PenTool', icon: PenTool },
+    { name: 'Cpu', icon: Cpu },
+    { name: 'Shield', icon: Shield },
+    { name: 'GitBranch', icon: GitBranch },
+    { name: 'Package', icon: Package },
+    { name: 'Monitor', icon: Monitor },
+    { name: 'Tablet', icon: Tablet },
+    { name: 'HardDrive', icon: HardDrive },
+    { name: 'Wifi', icon: Wifi },
+    { name: 'Zap', icon: Zap },
+    { name: 'BarChart', icon: BarChart },
+    { name: 'Layers', icon: Layers },
+    { name: 'Command', icon: Command },
 ];
 
 const SkillForm = () => {
@@ -119,8 +135,8 @@ const SkillForm = () => {
                                 type="button"
                                 onClick={() => setFormData({ ...formData, icon: item.name })}
                                 className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${formData.icon === item.name
-                                        ? 'border-primary bg-primary/10 text-primary'
-                                        : 'border-border hover:bg-muted'
+                                    ? 'border-primary bg-primary/10 text-primary'
+                                    : 'border-border hover:bg-muted'
                                     }`}
                             >
                                 <item.icon size={24} />

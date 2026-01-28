@@ -1,117 +1,93 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Quote, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Users, Mail, Phone, Building2, Briefcase } from 'lucide-react';
+import axios from 'axios';
 
 const Testimonials = () => {
-    // Mock Data
-    const testimonials = [
-        {
-            id: 1,
-            name: "Alex Johnson",
-            role: "Product Manager at TechCorp",
-            image: null,
-            text: "Suraj is an exceptional developer who brings both technical expertise and creative problem-solving to the table. His ability to translate complex requirements into seamless user experiences is unmatched."
-        },
-        {
-            id: 2,
-            name: "Priya Sharma",
-            role: "Senior Designer at CreativeStudio",
-            image: null,
-            text: "Working with Suraj was a breeze. He has a keen eye for design details and ensures that the final product looks exactly as envisioned, if not better. Highly recommended!"
-        },
-        {
-            id: 3,
-            name: "David Lee",
-            role: "Startup Founder",
-            image: null,
-            text: "He built our MVP in record time without compromising on quality. The scalable architecture he designed allowed us to grow our user base rapidly. A true professional."
-        }
-    ];
+    const [references, setReferences] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+    useEffect(() => {
+        const fetchReferences = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/references');
+                setReferences(res.data.data);
+            } catch (error) {
+                console.error('Failed to fetch references', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchReferences();
+    }, []);
 
-    const nextTestimonial = () => {
-        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    };
-
-    const prevTestimonial = () => {
-        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    };
+    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="container mx-auto px-6 py-20 min-h-screen flex flex-col items-center justify-center">
+        <div className="container mx-auto px-6 py-20 min-h-screen flex flex-col items-center">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-16"
             >
-                <h2 className="text-3xl md:text-5xl font-bold mb-6">What People Say</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-6">Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">References</span></h2>
                 <p className="text-muted-foreground text-xl">
-                    Feedback from clients and collaborators I've had the pleasure of working with.
+                    People I've worked with who can vouch for my skills and dedication.
                 </p>
             </motion.div>
 
-            <div className="relative w-full max-w-4xl">
-                <div className="absolute top-0 left-0 -translate-x-12 hidden md:block text-primary/20">
-                    <Quote size={80} />
-                </div>
-
-                <div className="bg-card/40 border border-border/50 rounded-3xl p-8 md:p-12 backdrop-blur-md relative overflow-hidden">
-                    {/* Background Decoration */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-                    <AnimatePresence mode='wait'>
-                        <motion.div
-                            key={currentIndex}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="relative z-10 flex flex-col items-center text-center"
-                        >
-                            <div className="w-20 h-20 bg-secondary/20 rounded-full mb-6 flex items-center justify-center text-2xl font-bold text-secondary">
-                                {testimonials[currentIndex].name.charAt(0)}
-                            </div>
-
-                            <p className="text-xl md:text-2xl font-light italic text-foreground/90 mb-8 leading-relaxed">
-                                "{testimonials[currentIndex].text}"
-                            </p>
-
-                            <div>
-                                <h4 className="text-lg font-bold text-primary">{testimonials[currentIndex].name}</h4>
-                                <p className="text-sm text-muted-foreground">{testimonials[currentIndex].role}</p>
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-
-                {/* Controls */}
-                <div className="flex justify-center gap-4 mt-8">
-                    <button
-                        onClick={prevTestimonial}
-                        className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors text-foreground"
-                        aria-label="Previous testimonial"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+                {references.length > 0 ? references.map((ref, index) => (
+                    <motion.div
+                        key={ref.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-card/40 border border-border/50 rounded-2xl p-8 backdrop-blur-sm hover:bg-card/60 transition-colors group relative overflow-hidden"
                     >
-                        <ChevronLeft size={24} />
-                    </button>
-                    <div className="flex gap-2 items-center">
-                        {testimonials.map((_, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setCurrentIndex(idx)}
-                                className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-primary' : 'bg-muted-foreground/30'}`}
-                                aria-label={`Go to testimonial ${idx + 1}`}
-                            />
-                        ))}
+                        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Users size={64} />
+                        </div>
+
+                        <div className="relative z-10">
+                            <h3 className="text-2xl font-bold text-foreground mb-1">{ref.name}</h3>
+                            <div className="flex items-center gap-2 text-primary font-medium mb-4">
+                                <Briefcase size={16} />
+                                <span>{ref.position}</span>
+                            </div>
+
+                            <div className="bg-muted/30 rounded-xl p-4 mb-6 border border-border/50">
+                                <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                                    <Building2 size={16} />
+                                    <span>{ref.company}</span>
+                                </div>
+                                <div className="text-sm font-medium text-foreground/80">
+                                    Relation: {ref.relationship}
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                {ref.email && (
+                                    <a href={`mailto:${ref.email}`} className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors">
+                                        <Mail size={16} />
+                                        {ref.email}
+                                    </a>
+                                )}
+                                {ref.phone && (
+                                    <a href={`tel:${ref.phone}`} className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors">
+                                        <Phone size={16} />
+                                        {ref.phone}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                )) : (
+                    <div className="col-span-full text-center text-muted-foreground py-10">
+                        No references available at the moment.
                     </div>
-                    <button
-                        onClick={nextTestimonial}
-                        className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors text-foreground"
-                        aria-label="Next testimonial"
-                    >
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
+                )}
             </div>
         </div>
     );
