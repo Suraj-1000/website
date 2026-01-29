@@ -6,6 +6,9 @@ import {
     ArrowUpRight, Plus, ExternalLink, Award, Users
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
 
 const Dashboard = () => {
     const [greeting, setGreeting] = useState('');
@@ -65,17 +68,16 @@ const Dashboard = () => {
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium">
+                    <Button variant="outline" className="gap-2">
                         <Eye size={18} />
                         View Live
-                    </button>
-                    <Link
-                        to="/admin/projects/new"
-                        className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity text-sm font-medium shadow-lg shadow-primary/20"
-                    >
-                        <Plus size={18} />
-                        Create New
-                    </Link>
+                    </Button>
+                    <Button asChild className="gap-2 shadow-lg shadow-primary/20">
+                        <Link to="/admin/projects/new">
+                            <Plus size={18} />
+                            Create New
+                        </Link>
+                    </Button>
                 </div>
             </motion.div>
 
@@ -86,31 +88,29 @@ const Dashboard = () => {
                         key={index}
                         variants={itemVariants}
                         whileHover={{ y: -5 }}
-                        className="relative overflow-hidden bg-card border border-border p-6 rounded-2xl group transition-all"
                     >
-                        <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full group-hover:opacity-[0.08] transition-opacity`}></div>
-
-                        <div className="flex items-center justify-between mb-4">
-                            <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-current/10`}>
-                                {stat.icon}
-                            </div>
-                            <span className="text-xs font-medium text-emerald-500 flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-full">
-                                <TrendingUp size={12} />
-                                +12%
-                            </span>
-                        </div>
-
-                        <div>
-                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
-                            <h3 className="text-3xl font-bold mt-1 text-foreground">{stat.count}</h3>
-                        </div>
-
-                        <Link
-                            to={stat.path}
-                            className="absolute bottom-4 right-4 text-muted-foreground group-hover:text-primary transition-colors"
-                        >
-                            <ArrowUpRight size={20} />
-                        </Link>
+                        <Card className="relative overflow-hidden group transition-all">
+                            <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full group-hover:opacity-[0.08] transition-opacity`}></div>
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-current/10`}>
+                                    {stat.icon}
+                                </div>
+                                <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-none">
+                                    <TrendingUp size={12} className="mr-1" />
+                                    +12%
+                                </Badge>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+                                <h3 className="text-3xl font-bold mt-1 text-foreground">{stat.count}</h3>
+                                <Link
+                                    to={stat.path}
+                                    className="absolute bottom-4 right-4 text-muted-foreground group-hover:text-primary transition-colors"
+                                >
+                                    <ArrowUpRight size={20} />
+                                </Link>
+                            </CardContent>
+                        </Card>
                     </motion.div>
                 ))}
             </div>
@@ -118,12 +118,12 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Activity / Content Sections */}
                 <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
-                    <div className="bg-card border border-border rounded-2xl p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-bold text-foreground">Recent Projects</h2>
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle className="text-xl">Recent Projects</CardTitle>
                             <Link to="/admin/projects" className="text-sm text-primary hover:underline">View all</Link>
-                        </div>
-                        <div className="space-y-4">
+                        </CardHeader>
+                        <CardContent className="space-y-4">
                             {[1, 2, 3].map((_, i) => (
                                 <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border hover:bg-muted/50 transition-colors cursor-pointer group">
                                     <div className="flex items-center gap-4">
@@ -136,21 +136,23 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button className="p-2 hover:bg-background rounded-md text-muted-foreground hover:text-foreground">
+                                        <Button variant="ghost" size="icon">
                                             <ExternalLink size={16} />
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
                 </motion.div>
 
                 {/* Quick Actions Sidebar */}
                 <motion.div variants={itemVariants} className="space-y-6">
-                    <div className="bg-card border border-border rounded-2xl p-6">
-                        <h2 className="text-xl font-bold text-foreground mb-6">Quick Actions</h2>
-                        <div className="grid grid-cols-1 gap-3">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-xl">Quick Actions</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 gap-3">
                             {quickActions.map((action, index) => (
                                 <Link
                                     key={index}
@@ -163,8 +165,8 @@ const Dashboard = () => {
                                     <span className="text-sm font-medium text-foreground">{action.label}</span>
                                 </Link>
                             ))}
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
 
                     <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
                         <div className="relative z-10">
@@ -172,9 +174,9 @@ const Dashboard = () => {
                             <p className="text-sm text-muted-foreground mt-2">
                                 Keeping your projects up to date increases engagement from recruiters by 40%.
                             </p>
-                            <button className="mt-4 text-xs font-bold text-primary uppercase tracking-widest">
+                            <Button variant="link" className="px-0 text-xs font-bold text-primary uppercase tracking-widest h-auto mt-4">
                                 Learn More
-                            </button>
+                            </Button>
                         </div>
                         <Award className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/5 -rotate-12" />
                     </div>
