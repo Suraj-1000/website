@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Briefcase, Code, FolderGit2, BookOpen, Plane, MessageSquare, LogOut, Menu, X, Award, Languages, Users, Sun, Moon } from 'lucide-react';
+import {
+    LayoutDashboard, Briefcase, Code, FolderGit2,
+    BookOpen, Plane, MessageSquare, LogOut,
+    Menu, X, Award, Languages, Users,
+    Sun, Moon, ChevronRight
+} from 'lucide-react';
 
 const AdminLayout = () => {
     const { isAuthenticated, loading, logout } = useAuth();
@@ -23,7 +28,9 @@ const AdminLayout = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
+    if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>;
 
     if (!isAuthenticated) return <Navigate to="/admin/login" />;
 
@@ -44,17 +51,18 @@ const AdminLayout = () => {
     const closeSidebar = () => setIsSidebarOpen(false);
 
     return (
-        <div className="flex h-screen bg-background text-foreground overflow-hidden">
+        <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans">
             {/* Mobile Header */}
-            <div className="md:hidden fixed top-0 w-full bg-card border-b border-border p-4 flex justify-between items-center z-50">
-                <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                    Admin Panel
-                </h1>
+            <div className="md:hidden fixed top-0 w-full bg-card/80 backdrop-blur-md border-b border-border p-4 flex justify-between items-center z-50">
                 <div className="flex items-center gap-2">
-                    <button onClick={toggleTheme} className="p-2 text-foreground">
+                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold">S</div>
+                    <h1 className="text-xl font-bold tracking-tight">Admin</h1>
+                </div>
+                <div className="flex items-center gap-2">
+                    <button onClick={toggleTheme} className="p-2 hover:bg-muted rounded-full transition-colors">
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
-                    <button onClick={toggleSidebar} className="text-foreground p-1">
+                    <button onClick={toggleSidebar} className="p-2 hover:bg-muted rounded-full transition-colors">
                         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
@@ -63,7 +71,7 @@ const AdminLayout = () => {
             {/* Sidebar Overlay */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
                     onClick={closeSidebar}
                 />
             )}
@@ -71,57 +79,66 @@ const AdminLayout = () => {
             {/* Sidebar */}
             <aside
                 className={`
-                    fixed md:static top-0 left-0 h-full w-64 bg-card border-r border-border flex flex-col z-50 transition-transform duration-300
-                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+                    fixed md:static top-0 left-0 h-full w-72 bg-card border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out
+                    ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
                 `}
             >
-                <div className="p-6 border-b border-border hidden md:flex items-center justify-between">
-                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                        Admin Panel
-                    </h1>
-                    <button onClick={toggleTheme} className="p-2 text-foreground hover:bg-muted rounded-full transition-colors">
+                <div className="p-8 border-b border-border hidden md:flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg shadow-primary/20">S</div>
+                        <h1 className="text-2xl font-bold tracking-tighter">SURADJ</h1>
+                    </div>
+                    <button onClick={toggleTheme} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all">
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
                 </div>
 
-                {/* Mobile Header Placeholder in Sidebar (optional spacing fix) */}
-                <div className="md:hidden h-16 border-b border-border flex items-center px-6">
-                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                        Menu
-                    </h1>
-                </div>
-
-                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={closeSidebar}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname.startsWith(item.path)
-                                ? 'bg-primary/20 text-primary font-medium'
-                                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                }`}
-                        >
-                            {item.icon}
-                            <span>{item.label}</span>
-                        </Link>
-                    ))}
+                <nav className="flex-1 p-6 space-y-1 overflow-y-auto custom-scrollbar">
+                    <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Main Menu</p>
+                    {navItems.map((item) => {
+                        const isActive = location.pathname.startsWith(item.path);
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                onClick={closeSidebar}
+                                className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${isActive
+                                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 font-medium'
+                                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className={isActive ? 'text-primary-foreground' : 'group-hover:text-primary transition-colors'}>
+                                        {item.icon}
+                                    </span>
+                                    <span>{item.label}</span>
+                                </div>
+                                {isActive && <ChevronRight size={16} />}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
-                <div className="p-4 border-t border-border">
+                <div className="p-6 border-t border-border mt-auto">
                     <button
                         onClick={logout}
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-500 hover:bg-red-50/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-500 hover:bg-red-500/10 transition-all font-medium group"
                     >
-                        <LogOut size={20} />
-                        <span>Logout</span>
+                        <div className="p-2 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-all">
+                            <LogOut size={20} />
+                        </div>
+                        <span>Logout Session</span>
                     </button>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto bg-background/50 pt-16 md:pt-0">
-                <div className="container mx-auto p-6 md:p-10">
+            <main className="flex-1 overflow-y-auto bg-background/30 backdrop-blur-[2px] transition-all relative">
+                {/* Decorative background elements */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+
+                <div className="container mx-auto p-6 md:p-12 max-w-7xl pt-24 md:pt-12">
                     <Outlet />
                 </div>
             </main>

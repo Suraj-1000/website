@@ -1,51 +1,186 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Code, FolderGit2, BookOpen, Plane, MessageSquare } from 'lucide-react';
+import {
+    Briefcase, Code, FolderGit2, BookOpen, Plane,
+    MessageSquare, Eye, TrendingUp, Calendar,
+    ArrowUpRight, Plus, ExternalLink, Award, Users
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
+    const [greeting, setGreeting] = useState('');
+
+    useEffect(() => {
+        const hour = new Date().getHours();
+        if (hour < 12) setGreeting('Good Morning');
+        else if (hour < 18) setGreeting('Good Afternoon');
+        else setGreeting('Good Evening');
+    }, []);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 }
+    };
+
     const stats = [
-        { label: 'Experiences', value: 'Manage', icon: <Briefcase size={24} />, path: '/admin/experience', color: 'text-blue-500' },
-        { label: 'Skills', value: 'Manage', icon: <Code size={24} />, path: '/admin/skills', color: 'text-purple-500' },
-        { label: 'Projects', value: 'Manage', icon: <FolderGit2 size={24} />, path: '/admin/projects', color: 'text-green-500' },
-        { label: 'Education', value: 'Manage', icon: <BookOpen size={24} />, path: '/admin/education', color: 'text-yellow-500' },
-        { label: 'Travel', value: 'Manage', icon: <Plane size={24} />, path: '/admin/travel', color: 'text-pink-500' },
-        // { label: 'Messages', value: 'View', icon: <MessageSquare size={24} />, path: '/admin/messages', color: 'text-indigo-500' },
+        { label: 'Experiences', count: '12', icon: <Briefcase size={20} />, path: '/admin/experience', color: 'from-blue-500 to-cyan-500' },
+        { label: 'Skills', count: '24', icon: <Code size={20} />, path: '/admin/skills', color: 'from-purple-500 to-pink-500' },
+        { label: 'Projects', count: '18', icon: <FolderGit2 size={20} />, path: '/admin/projects', color: 'from-emerald-500 to-teal-500' },
+        { label: 'Travel', count: '8', icon: <Plane size={20} />, path: '/admin/travel', color: 'from-orange-500 to-yellow-500' },
+    ];
+
+    const quickActions = [
+        { label: 'Add New Project', icon: <Plus size={18} />, path: '/admin/projects/new', bg: 'bg-blue-500' },
+        { label: 'New Experience', icon: <Briefcase size={18} />, path: '/admin/experience/new', bg: 'bg-purple-500' },
+        { label: 'Check Messages', icon: <MessageSquare size={18} />, path: '/admin/messages', bg: 'bg-emerald-500' },
+        { label: 'View Portfolio', icon: <ExternalLink size={18} />, path: '/', bg: 'bg-slate-700' },
     ];
 
     return (
-        <div className="space-y-8">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-            >
-                <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-                <p className="text-muted-foreground">Welcome to your portfolio control center.</p>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-8 pb-10"
+        >
+            {/* Header Section */}
+            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+                        {greeting}, <span className="text-primary">Suraj</span>
+                    </h1>
+                    <p className="text-muted-foreground mt-1 flex items-center gap-2">
+                        <Calendar size={16} />
+                        {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                    </p>
+                </div>
+                <div className="flex gap-3">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium">
+                        <Eye size={18} />
+                        View Live
+                    </button>
+                    <Link
+                        to="/admin/projects/new"
+                        className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity text-sm font-medium shadow-lg shadow-primary/20"
+                    >
+                        <Plus size={18} />
+                        Create New
+                    </Link>
+                </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
                     <motion.div
                         key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
+                        variants={itemVariants}
+                        whileHover={{ y: -5 }}
+                        className="relative overflow-hidden bg-card border border-border p-6 rounded-2xl group transition-all"
                     >
+                        <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full group-hover:opacity-[0.08] transition-opacity`}></div>
+
+                        <div className="flex items-center justify-between mb-4">
+                            <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-current/10`}>
+                                {stat.icon}
+                            </div>
+                            <span className="text-xs font-medium text-emerald-500 flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-full">
+                                <TrendingUp size={12} />
+                                +12%
+                            </span>
+                        </div>
+
+                        <div>
+                            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+                            <h3 className="text-3xl font-bold mt-1 text-foreground">{stat.count}</h3>
+                        </div>
+
                         <Link
                             to={stat.path}
-                            className="block bg-card border border-border p-6 rounded-xl hover:bg-card/80 hover:border-primary/50 transition-all group"
+                            className="absolute bottom-4 right-4 text-muted-foreground group-hover:text-primary transition-colors"
                         >
-                            <div className="flex items-start justify-between mb-4">
-                                <div className={`p-3 rounded-lg bg-muted/50 group-hover:bg-primary/20 transition-colors ${stat.color}`}>
-                                    {stat.icon}
-                                </div>
-                            </div>
-                            <h3 className="text-lg font-semibold text-foreground mb-1">{stat.label}</h3>
-                            <p className="text-sm text-muted-foreground">{stat.value}</p>
+                            <ArrowUpRight size={20} />
                         </Link>
                     </motion.div>
                 ))}
             </div>
-        </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Recent Activity / Content Sections */}
+                <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
+                    <div className="bg-card border border-border rounded-2xl p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-bold text-foreground">Recent Projects</h2>
+                            <Link to="/admin/projects" className="text-sm text-primary hover:underline">View all</Link>
+                        </div>
+                        <div className="space-y-4">
+                            {[1, 2, 3].map((_, i) => (
+                                <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border hover:bg-muted/50 transition-colors cursor-pointer group">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                            <FolderGit2 size={24} />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-foreground">Real Estate App</h4>
+                                            <p className="text-xs text-muted-foreground">Updated 2 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button className="p-2 hover:bg-background rounded-md text-muted-foreground hover:text-foreground">
+                                            <ExternalLink size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Quick Actions Sidebar */}
+                <motion.div variants={itemVariants} className="space-y-6">
+                    <div className="bg-card border border-border rounded-2xl p-6">
+                        <h2 className="text-xl font-bold text-foreground mb-6">Quick Actions</h2>
+                        <div className="grid grid-cols-1 gap-3">
+                            {quickActions.map((action, index) => (
+                                <Link
+                                    key={index}
+                                    to={action.path}
+                                    className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/20 hover:bg-muted/50 transition-all hover:translate-x-1"
+                                >
+                                    <div className={`p-2 rounded-lg ${action.bg} text-white`}>
+                                        {action.icon}
+                                    </div>
+                                    <span className="text-sm font-medium text-foreground">{action.label}</span>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h3 className="text-lg font-bold text-foreground">Portfolio Tip</h3>
+                            <p className="text-sm text-muted-foreground mt-2">
+                                Keeping your projects up to date increases engagement from recruiters by 40%.
+                            </p>
+                            <button className="mt-4 text-xs font-bold text-primary uppercase tracking-widest">
+                                Learn More
+                            </button>
+                        </div>
+                        <Award className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/5 -rotate-12" />
+                    </div>
+                </motion.div>
+            </div>
+        </motion.div>
     );
 };
 
