@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Save, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Save, ArrowLeft, Plane, MapPin, Calendar, Globe, Info } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Textarea } from '../../../components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Label } from '../../../components/ui/label';
 
 const TravelForm = () => {
     const navigate = useNavigate();
@@ -14,7 +19,7 @@ const TravelForm = () => {
         location: '',
         visitDate: '',
         description: '',
-        images: '' // Comma separated for simplicity for now
+        images: ''
     });
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEdit);
@@ -70,84 +75,126 @@ const TravelForm = () => {
         }
     };
 
-    if (fetching) return <div>Loading...</div>;
+    if (fetching) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
-            <div className="flex items-center gap-4">
-                <Link to="/admin/travel" className="p-2 hover:bg-muted rounded-full transition-colors">
-                    <ArrowLeft size={20} />
-                </Link>
-                <h1 className="text-2xl font-bold">{isEdit ? 'Edit Travel' : 'Add New Travel'}</h1>
-            </div>
+        <div className="max-w-3xl mx-auto pb-10">
+            <Button
+                variant="ghost"
+                onClick={() => navigate('/admin/travel')}
+                className="group mb-6 hover:bg-transparent -ml-2"
+            >
+                <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+                Back to List
+            </Button>
 
-            <form onSubmit={handleSubmit} className="space-y-6 bg-card border border-border p-6 rounded-xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Title</label>
-                        <input
-                            type="text"
-                            required
-                            className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Location</label>
-                        <input
-                            type="text"
-                            required
-                            className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                            value={formData.location}
-                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                        />
-                    </div>
-                </div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+            >
+                <Card className="shadow-xl">
+                    <CardHeader className="border-b bg-muted/20 pb-8">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                                <Plane size={24} />
+                            </div>
+                            <CardTitle className="text-3xl font-bold">
+                                {isEdit ? 'Edit Adventure' : 'Add New Adventure'}
+                            </CardTitle>
+                        </div>
+                        <p className="text-muted-foreground">
+                            Share your travel experiences and memories with the world.
+                        </p>
+                    </CardHeader>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Visit Date</label>
-                        <input
-                            type="date"
-                            className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                            value={formData.visitDate}
-                            onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Images (Comma separated URLs)</label>
-                        <input
-                            type="text"
-                            className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                            placeholder="http://example.com/img1.jpg, http://example.com/img2.jpg"
-                            value={formData.images}
-                            onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-                        />
-                    </div>
-                </div>
+                    <CardContent className="p-8">
+                        <form onSubmit={handleSubmit} className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="title" className="text-base">Adventure Title</Label>
+                                    <Input
+                                        id="title"
+                                        required
+                                        placeholder="e.g. Sunset at Phewa Lake"
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        className="h-11"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="location" className="text-base flex items-center gap-2">
+                                        <MapPin size={16} /> Location
+                                    </Label>
+                                    <Input
+                                        id="location"
+                                        required
+                                        placeholder="e.g. Pokhara, Nepal"
+                                        value={formData.location}
+                                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                        className="h-11"
+                                    />
+                                </div>
+                            </div>
 
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">Description</label>
-                    <textarea
-                        required
-                        className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none min-h-[150px]"
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    />
-                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="visitDate" className="text-base flex items-center gap-2">
+                                        <Calendar size={16} /> Date of Visit
+                                    </Label>
+                                    <Input
+                                        id="visitDate"
+                                        type="date"
+                                        value={formData.visitDate}
+                                        onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
+                                        className="h-11"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="images" className="text-base flex items-center gap-2">
+                                        <Globe size={16} /> Images (Comma URLs)
+                                    </Label>
+                                    <Input
+                                        id="images"
+                                        placeholder="URL1, URL2, ..."
+                                        value={formData.images}
+                                        onChange={(e) => setFormData({ ...formData, images: e.target.value })}
+                                        className="h-11"
+                                    />
+                                </div>
+                            </div>
 
-                <div className="pt-4">
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-                    >
-                        <Save size={20} />
-                        {loading ? 'Saving...' : 'Save Travel'}
-                    </button>
-                </div>
-            </form>
+                            <div className="space-y-2">
+                                <Label htmlFor="description" className="text-base flex items-center gap-2">
+                                    <Info size={16} /> Description
+                                </Label>
+                                <Textarea
+                                    id="description"
+                                    required
+                                    placeholder="Tell the story of your trip..."
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    className="min-h-[150px] resize-none"
+                                />
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full h-12 text-lg font-bold shadow-lg shadow-primary/20"
+                            >
+                                {loading ? (
+                                    'Saving...'
+                                ) : (
+                                    <>
+                                        <Save size={20} className="mr-2" />
+                                        {isEdit ? 'Update Adventure' : 'Save Adventure'}
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            </motion.div>
         </div>
     );
 };
