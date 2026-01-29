@@ -47,6 +47,7 @@ import AdminMessages from './pages/Admin/AdminMessages';
 import Skills from './pages/Skills/Skills';
 import Experience from './pages/Experience/Experience';
 import Testimonials from './pages/Testimonials/Testimonials';
+import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   return (
@@ -117,7 +118,7 @@ function App() {
           </Route>
 
           {/* 404 Route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AuthProvider>
