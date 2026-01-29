@@ -3,7 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { Save, ArrowLeft, Plus, X } from 'lucide-react';
+import { Save, ArrowLeft, Plus, X, Globe, Github } from 'lucide-react';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Textarea } from '../../../components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Label } from '../../../components/ui/label';
 
 const ProjectForm = () => {
     const { id } = useParams();
@@ -37,8 +42,6 @@ const ProjectForm = () => {
                         setValue('imageUrl', project.imageUrl);
 
                         // Populate tech stack
-                        // Backend stores array of strings ["React", "Node"]
-                        // Form expects array of objects [{value: "React"}, {value: "Node"}]
                         if (project.techStack && project.techStack.length > 0) {
                             setValue('techStack', project.techStack.map(t => ({ value: t })));
                         }
@@ -57,7 +60,6 @@ const ProjectForm = () => {
             const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
-            // Convert techStack from [{value: 'React'}] back to ['React']
             const formattedData = {
                 ...data,
                 techStack: data.techStack.map(item => item.value).filter(val => val.trim() !== '')
@@ -78,100 +80,131 @@ const ProjectForm = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <button
+        <div className="max-w-3xl mx-auto pb-10">
+            <Button
+                variant="ghost"
                 onClick={() => navigate('/admin/projects')}
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+                className="group mb-6 hover:bg-transparent -ml-2"
             >
-                <ArrowLeft size={20} /> Back to List
-            </button>
+                <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+                Back to List
+            </Button>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-card border border-border/50 rounded-xl p-8 shadow-lg"
             >
-                <h2 className="text-2xl font-bold mb-6">
-                    {isEditing ? 'Edit Project' : 'Add New Project'}
-                </h2>
+                <Card className="shadow-xl">
+                    <CardHeader className="border-b bg-muted/20 pb-8">
+                        <CardTitle className="text-3xl font-bold">
+                            {isEditing ? 'Edit Project' : 'Add New Project'}
+                        </CardTitle>
+                        <p className="text-muted-foreground mt-2">
+                            Fill details about your latest work to showcase it.
+                        </p>
+                    </CardHeader>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Project Title</label>
-                        <input
-                            {...register('title', { required: 'Title is required' })}
-                            className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
-                            placeholder="e.g. Portfolio Website"
-                        />
-                        {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Description</label>
-                        <textarea
-                            {...register('description', { required: 'Description is required' })}
-                            className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none h-32"
-                            placeholder="Brief description of the project..."
-                        />
-                        {errors.description && <span className="text-red-500 text-sm">{errors.description.message}</span>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-2">Repository Link</label>
-                            <input
-                                {...register('repoLink')}
-                                className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
-                                placeholder="https://github.com/..."
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-2">Demo Link</label>
-                            <input
-                                {...register('demoLink')}
-                                className="w-full bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
-                                placeholder="https://..."
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Tech Stack</label>
-                        <div className="space-y-3">
-                            {fields.map((field, index) => (
-                                <div key={field.id} className="flex gap-2">
-                                    <input
-                                        {...register(`techStack.${index}.value`)}
-                                        className="flex-1 bg-background border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none"
-                                        placeholder="e.g. React"
+                    <CardContent className="p-8">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="title" className="text-base">Project Title</Label>
+                                    <Input
+                                        id="title"
+                                        {...register('title', { required: 'Title is required' })}
+                                        placeholder="e.g. Portfolio Website"
+                                        className="h-11"
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                                    >
-                                        <X size={20} />
-                                    </button>
+                                    {errors.title && <p className="text-destructive text-sm font-medium">{errors.title.message}</p>}
                                 </div>
-                            ))}
-                            <button
-                                type="button"
-                                onClick={() => append({ value: '' })}
-                                className="text-sm text-primary hover:text-primary/80 flex items-center gap-1"
-                            >
-                                <Plus size={16} /> Add Tech
-                            </button>
-                        </div>
-                    </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-                    >
-                        {loading ? 'Saving...' : <><Save size={20} /> Save Project</>}
-                    </button>
-                </form>
+                                <div className="space-y-2">
+                                    <Label htmlFor="description" className="text-base">Description</Label>
+                                    <Textarea
+                                        id="description"
+                                        {...register('description', { required: 'Description is required' })}
+                                        className="min-h-[150px] resize-none"
+                                        placeholder="Brief description of the project..."
+                                    />
+                                    {errors.description && <p className="text-destructive text-sm font-medium">{errors.description.message}</p>}
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="repoLink" className="flex items-center gap-2 text-base">
+                                            <Github size={16} /> Repository Link
+                                        </Label>
+                                        <Input
+                                            id="repoLink"
+                                            {...register('repoLink')}
+                                            placeholder="https://github.com/..."
+                                            className="h-11"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="demoLink" className="flex items-center gap-2 text-base">
+                                            <Globe size={16} /> Demo Link
+                                        </Label>
+                                        <Input
+                                            id="demoLink"
+                                            {...register('demoLink')}
+                                            placeholder="https://..."
+                                            className="h-11"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <Label className="text-base">Tech Stack</Label>
+                                    <div className="space-y-3">
+                                        {fields.map((field, index) => (
+                                            <div key={field.id} className="flex gap-2">
+                                                <Input
+                                                    {...register(`techStack.${index}.value`)}
+                                                    className="flex-1 h-11"
+                                                    placeholder="e.g. React"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => remove(index)}
+                                                    className="text-destructive hover:bg-destructive/10 h-11 w-11"
+                                                >
+                                                    <X size={20} />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => append({ value: '' })}
+                                            className="gap-2"
+                                        >
+                                            <Plus size={16} /> Add Tech
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full h-12 text-lg font-bold shadow-lg shadow-primary/20"
+                            >
+                                {loading ? (
+                                    'Saving...'
+                                ) : (
+                                    <>
+                                        <Save size={20} className="mr-2" />
+                                        {isEditing ? 'Update Project' : 'Save Project'}
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
             </motion.div>
         </div>
     );

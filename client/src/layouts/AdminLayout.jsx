@@ -7,6 +7,7 @@ import {
     Menu, X, Award, Languages, Users,
     Sun, Moon, ChevronRight
 } from 'lucide-react';
+import { Button } from '../components/ui/button';
 
 const AdminLayout = () => {
     const { isAuthenticated, loading, logout } = useAuth();
@@ -55,16 +56,16 @@ const AdminLayout = () => {
             {/* Mobile Header */}
             <div className="md:hidden fixed top-0 w-full bg-card/80 backdrop-blur-md border-b border-border p-4 flex justify-between items-center z-50">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold">S</div>
+                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold shadow-lg shadow-primary/20">S</div>
                     <h1 className="text-xl font-bold tracking-tight">Admin</h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button onClick={toggleTheme} className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                    </button>
-                    <button onClick={toggleSidebar} className="p-2 hover:bg-muted rounded-full transition-colors">
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={toggleSidebar} className="rounded-full">
                         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -88,9 +89,9 @@ const AdminLayout = () => {
                         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg shadow-primary/20">S</div>
                         <h1 className="text-2xl font-bold tracking-tighter">SURADJ</h1>
                     </div>
-                    <button onClick={toggleTheme} className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all">
+                    <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground hover:text-foreground rounded-xl">
                         {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                    </button>
+                    </Button>
                 </div>
 
                 <nav className="flex-1 p-6 space-y-1 overflow-y-auto custom-scrollbar">
@@ -120,15 +121,16 @@ const AdminLayout = () => {
                 </nav>
 
                 <div className="p-6 border-t border-border mt-auto">
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={logout}
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-500 hover:bg-red-500/10 transition-all font-medium group"
+                        className="flex items-center gap-3 px-4 py-6 w-full rounded-xl text-red-500 hover:bg-red-500/10 hover:text-red-500 transition-all font-semibold group justify-start h-auto"
                     >
-                        <div className="p-2 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <div className="p-2 rounded-lg bg-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all">
                             <LogOut size={20} />
                         </div>
                         <span>Logout Session</span>
-                    </button>
+                    </Button>
                 </div>
             </aside>
 

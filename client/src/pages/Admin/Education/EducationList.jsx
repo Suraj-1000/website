@@ -3,6 +3,9 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, GraduationCap, School, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Badge } from '../../../components/ui/badge';
 
 const EducationList = () => {
     const [educations, setEducations] = useState([]);
@@ -41,15 +44,14 @@ const EducationList = () => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Manage Education
+                <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+                    <GraduationCap className="text-primary" /> Manage Education
                 </h1>
-                <Link
-                    to="/admin/education/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} /> Add New
-                </Link>
+                <Button asChild className="gap-2 shadow-lg shadow-primary/20">
+                    <Link to="/admin/education/new">
+                        <Plus size={20} /> Add New
+                    </Link>
+                </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -61,39 +63,52 @@ const EducationList = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             layout
-                            className="bg-card border border-border/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative group"
                         >
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Link
-                                    to={`/admin/education/edit/${edu.id}`}
-                                    className="p-2 bg-secondary/10 text-secondary rounded-full hover:bg-secondary/20 transition-colors"
-                                >
-                                    <Edit2 size={16} />
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(edu.id)}
-                                    className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500/20 transition-colors"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className={`p-2 rounded-lg bg-primary/10 text-primary`}>
-                                    {edu.icon === 'GraduationCap' ? <GraduationCap size={24} /> :
-                                        edu.icon === 'School' ? <School size={24} /> : <BookOpen size={24} />}
+                            <Card className="hover:border-primary/50 transition-all shadow-sm relative group h-full">
+                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                    <Button variant="secondary" size="icon" asChild className="h-8 w-8 rounded-full">
+                                        <Link to={`/admin/education/edit/${edu.id}`}>
+                                            <Edit2 size={14} />
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="destructive"
+                                        size="icon"
+                                        onClick={() => handleDelete(edu.id)}
+                                        className="h-8 w-8 rounded-full"
+                                    >
+                                        <Trash2 size={14} />
+                                    </Button>
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg line-clamp-1">{edu.degree}</h3>
-                                    <p className="text-sm text-muted-foreground">{edu.institution}</p>
-                                </div>
-                            </div>
 
-                            <div className="space-y-2 text-sm text-muted-foreground">
-                                <p>Year: <span className="text-foreground">{edu.startYear && edu.endYear ? `${edu.startYear} - ${edu.endYear}` : edu.year}</span></p>
-                                <p>Address: <span className="text-foreground">{edu.address}</span></p>
-                                <p>Grade: <span className="text-foreground">{edu.grade}</span></p>
-                            </div>
+                                <CardHeader className="flex flex-row items-center gap-4 pb-4">
+                                    <div className="p-3 bg-primary/10 rounded-xl text-primary shadow-inner">
+                                        {edu.icon === 'GraduationCap' ? <GraduationCap size={24} /> :
+                                            edu.icon === 'School' ? <School size={24} /> : <BookOpen size={24} />}
+                                    </div>
+                                    <div className="space-y-1">
+                                        <CardTitle className="text-lg font-bold line-clamp-1">{edu.degree}</CardTitle>
+                                        <p className="text-sm text-muted-foreground">{edu.institution}</p>
+                                    </div>
+                                </CardHeader>
+
+                                <CardContent className="space-y-2">
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-muted-foreground">Year</span>
+                                        <Badge variant="secondary" className="font-semibold uppercase tracking-wider text-[10px]">
+                                            {edu.startYear && edu.endYear ? `${edu.startYear} - ${edu.endYear}` : edu.year}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-muted-foreground">Address</span>
+                                        <span className="text-foreground font-medium">{edu.address}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm border-t border-border/50 pt-2">
+                                        <span className="text-muted-foreground">Grade</span>
+                                        <span className="text-primary font-bold">{edu.grade}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </motion.div>
                     ))}
                 </AnimatePresence>

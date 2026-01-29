@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Briefcase, Calendar, MapPin, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Badge } from '../../../components/ui/badge';
 
 const ExperienceList = () => {
     const [experiences, setExperiences] = useState([]);
@@ -10,7 +13,7 @@ const ExperienceList = () => {
 
     const fetchExperiences = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/experiences'); // Use full URL or setup proxy
+            const res = await axios.get('http://localhost:5000/api/experiences');
             setExperiences(res.data.data);
         } catch (error) {
             console.error('Failed to fetch experiences', error);
@@ -35,57 +38,76 @@ const ExperienceList = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold">Experience</h2>
-                <Link
-                    to="/admin/experience/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} />
-                    Add New
-                </Link>
+                <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+                    <Briefcase className="text-primary" /> Manage Experience
+                </h1>
+                <Button asChild className="gap-2 shadow-lg shadow-primary/20">
+                    <Link to="/admin/experience/new">
+                        <Plus size={20} /> Add New
+                    </Link>
+                </Button>
             </div>
 
             <div className="grid gap-6">
                 {experiences.map((exp) => (
                     <motion.div
                         key={exp.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="bg-card border border-border p-6 rounded-xl flex flex-col md:flex-row justify-between gap-4"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                     >
-                        <div className="space-y-2">
-                            <h3 className="text-xl font-bold text-foreground">{exp.role}</h3>
-                            <p className="text-primary font-medium">{exp.company}</p>
-                            <p className="text-sm text-muted-foreground">{exp.period || `${exp.startDate} - ${exp.endDate}`}</p>
-                            <p className="text-sm text-muted-foreground">{exp.location}</p>
-                        </div>
+                        <Card className="hover:border-primary/50 transition-all shadow-sm relative group overflow-hidden">
+                            <CardHeader className="flex flex-col md:flex-row justify-between gap-4 pb-4">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <CardTitle className="text-xl font-bold">{exp.role}</CardTitle>
+                                        <Badge variant="secondary" className="bg-primary/10 text-primary font-bold uppercase tracking-wider text-[10px]">
+                                            {exp.period || `${exp.startDate} - ${exp.endDate}`}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex flex-wrap gap-4 text-sm font-medium">
+                                        <div className="flex items-center gap-1.5 text-primary">
+                                            <Building2 size={16} />
+                                            {exp.company}
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                                            <MapPin size={16} />
+                                            {exp.location}
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div className="flex items-start gap-2">
-                            <Link
-                                to={`/admin/experience/edit/${exp.id}`}
-                                className="p-2 bg-muted text-foreground rounded-lg hover:bg-primary/20 hover:text-primary transition-colors"
-                            >
-                                <Edit2 size={18} />
-                            </Link>
-                            <button
-                                onClick={() => handleDelete(exp.id)}
-                                className="p-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors"
-                            >
-                                <Trash2 size={18} />
-                            </button>
-                        </div>
+                                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button variant="outline" size="icon" asChild className="h-9 w-9">
+                                        <Link to={`/admin/experience/edit/${exp.id}`}>
+                                            <Edit2 size={16} />
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        onClick={() => handleDelete(exp.id)}
+                                        className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                    >
+                                        <Trash2 size={16} />
+                                    </Button>
+                                </div>
+                            </CardHeader>
+                        </Card>
                     </motion.div>
                 ))}
 
                 {experiences.length === 0 && (
-                    <div className="text-center py-20 bg-card/50 rounded-xl border border-dashed border-border px-4">
-                        <p className="text-muted-foreground">No experiences found. Add your first one!</p>
-                    </div>
+                    <Card className="flex flex-col items-center justify-center py-20 border-dashed bg-muted/20">
+                        <p className="text-muted-foreground font-medium">No experiences found. Add your first one!</p>
+                        <Button asChild variant="link" className="mt-2" href="/admin/experience/new">
+                            <Link to="/admin/experience/new">Get Started</Link>
+                        </Button>
+                    </Card>
                 )}
             </div>
         </div>

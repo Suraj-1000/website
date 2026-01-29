@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Mail, Loader2, Calendar, Trash2, Send } from 'lucide-react';
+import { Mail, Loader2, Calendar, Trash2, Send, MessageSquare, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
+import { Textarea } from '../../components/ui/textarea';
 
 const AdminMessages = () => {
     const [messages, setMessages] = useState([]);
@@ -59,61 +64,77 @@ const AdminMessages = () => {
     }
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-8 flex items-center gap-2">
-                <Mail className="text-primary" /> Messages
-            </h1>
+        <div className="space-y-8">
+            <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+                    <Mail className="text-primary" /> Messages
+                </h1>
+                <Badge variant="outline" className="px-3 py-1">
+                    {messages.length} Total
+                </Badge>
+            </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-6">
                 {messages.length > 0 ? (
                     messages.map((msg) => (
                         <motion.div
                             key={msg.id}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-card border border-border/50 p-6 rounded-xl hover:border-primary/50 transition-colors shadow-sm relative group"
                         >
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 className="font-bold text-lg text-foreground">{msg.subject}</h3>
-                                    <p className="text-sm text-primary font-medium">{msg.name} <span className="text-muted-foreground font-normal">({msg.email})</span></p>
-                                    {msg.phone && <p className="text-sm text-muted-foreground mt-1">Phone: {msg.phone}</p>}
-                                </div>
-                                <div className="flex flex-col items-end gap-2">
-                                    <div className="text-xs text-muted-foreground flex items-center gap-1 bg-muted/50 px-2 py-1 rounded">
-                                        <Calendar size={12} />
-                                        {new Date(msg.createdAt).toLocaleString()}
+                            <Card className="hover:border-primary/50 transition-all shadow-sm relative group">
+                                <CardHeader className="flex flex-row items-start justify-between">
+                                    <div className="space-y-1">
+                                        <CardTitle className="text-xl font-bold">{msg.subject}</CardTitle>
+                                        <div className="flex flex-col gap-1">
+                                            <p className="text-sm text-primary font-semibold flex items-center gap-2">
+                                                <Users size={14} />
+                                                {msg.name}
+                                                <span className="text-muted-foreground font-normal">({msg.email})</span>
+                                            </p>
+                                            {msg.phone && <p className="text-xs text-muted-foreground">Phone: {msg.phone}</p>}
+                                        </div>
                                     </div>
-                                    {msg.status === 'replied' && (
-                                        <span className="text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded">Replied</span>
-                                    )}
-                                </div>
-                            </div>
-                            <p className="text-muted-foreground bg-muted/30 p-4 rounded-lg text-sm leading-relaxed whitespace-pre-wrap mb-4">
-                                {msg.message}
-                            </p>
+                                    <div className="flex flex-col items-end gap-2">
+                                        <div className="text-[10px] font-medium text-muted-foreground flex items-center gap-1 bg-muted/50 px-2 py-1 rounded-full border border-border/50 uppercase tracking-wider">
+                                            <Calendar size={10} />
+                                            {new Date(msg.createdAt).toLocaleDateString()}
+                                        </div>
+                                        {msg.status === 'replied' && (
+                                            <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-none px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                                                Replied
+                                            </Badge>
+                                        )}
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-muted-foreground bg-muted/20 p-4 rounded-xl text-sm leading-relaxed whitespace-pre-wrap mb-4 border border-border/30">
+                                        {msg.message}
+                                    </p>
 
-                            <div className="flex justify-end mt-4">
-                                {msg.status === 'replied' ? (
-                                    <button
-                                        disabled
-                                        className="px-4 py-2 bg-green-500/20 text-green-500 text-sm font-bold rounded-lg cursor-not-allowed flex items-center gap-2"
-                                    >
-                                        <Send size={16} /> Replied
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => setReplyingTo(msg)}
-                                        className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-                                    >
-                                        Reply via Email
-                                    </button>
-                                )}
-                            </div>
+                                    <div className="flex justify-end pt-2">
+                                        {msg.status === 'replied' ? (
+                                            <Button disabled variant="secondary" className="gap-2 bg-emerald-500/10 text-emerald-500">
+                                                <Send size={16} /> Replied
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                onClick={() => setReplyingTo(msg)}
+                                                className="gap-2 shadow-lg shadow-primary/20"
+                                            >
+                                                Reply via Email
+                                            </Button>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </motion.div>
                     ))
                 ) : (
-                    <p className="text-muted-foreground text-center py-10">No messages found.</p>
+                    <Card className="p-12 text-center">
+                        <MessageSquare className="mx-auto text-muted-foreground mb-4" size={48} />
+                        <CardTitle className="text-muted-foreground">No messages found.</CardTitle>
+                    </Card>
                 )}
             </div>
 
@@ -123,48 +144,54 @@ const AdminMessages = () => {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-card border border-border p-6 rounded-2xl w-full max-w-lg shadow-2xl"
+                        className="w-full max-w-lg"
                     >
-                        <h2 className="text-2xl font-bold mb-4">Reply to {replyingTo.name}</h2>
-                        <form onSubmit={handleReply}>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium mb-1">Subject</label>
-                                <input
-                                    type="text"
-                                    value={`Re: ${replyingTo.subject}`}
-                                    disabled
-                                    className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-muted-foreground"
-                                />
-                            </div>
-                            <div className="mb-6">
-                                <label className="block text-sm font-medium mb-1">Message</label>
-                                <textarea
-                                    value={replyMessage}
-                                    onChange={(e) => setReplyMessage(e.target.value)}
-                                    rows={6}
-                                    className="w-full bg-background border border-border rounded-lg px-3 py-2 focus:ring-1 focus:ring-primary outline-none resize-none"
-                                    placeholder="Write your reply here..."
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setReplyingTo(null)}
-                                    className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={sending}
-                                    className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
-                                >
-                                    {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
-                                    Send Reply
-                                </button>
-                            </div>
-                        </form>
+                        <Card className="shadow-2xl">
+                            <CardHeader>
+                                <CardTitle className="text-2xl font-bold">Reply to {replyingTo.name}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <form onSubmit={handleReply} className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium">Subject</label>
+                                        <Input
+                                            type="text"
+                                            value={`Re: ${replyingTo.subject}`}
+                                            disabled
+                                            className="bg-muted/50"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium">Message</label>
+                                        <Textarea
+                                            value={replyMessage}
+                                            onChange={(e) => setReplyMessage(e.target.value)}
+                                            rows={6}
+                                            className="resize-none"
+                                            placeholder="Write your reply here..."
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex justify-end gap-3 pt-2">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => setReplyingTo(null)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            disabled={sending}
+                                            className="gap-2"
+                                        >
+                                            {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
+                                            Send Reply
+                                        </Button>
+                                    </div>
+                                </form>
+                            </CardContent>
+                        </Card>
                     </motion.div>
                 </div>
             )}
