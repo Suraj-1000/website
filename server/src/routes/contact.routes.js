@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const contactController = require('../controllers/contact.controller');
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 // Public can submit contact form
 router.post('/', contactController.submitContact);
 
 // Only admin can view all contacts
-router.get('/', protect, contactController.getAllContacts);
+router.get('/', protect, authorize('admin'), contactController.getAllContacts);
 
 // Admin reply to contact
-router.post('/:id/reply', protect, contactController.replyToContact);
+router.post('/:id/reply', protect, authorize('admin'), contactController.replyToContact);
 
 module.exports = router;

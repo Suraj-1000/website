@@ -8,7 +8,7 @@ const {
     deleteAward
 } = require('../controllers/award.controller');
 
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
@@ -38,11 +38,11 @@ const upload = multer({
 
 router.route('/')
     .get(getAwards)
-    .post(protect, upload.array('images', 2), createAward);
+    .post(protect, authorize('admin'), upload.array('images', 2), createAward);
 
 router.route('/:id')
-    .put(protect, upload.array('images', 2), updateAward)
-    .patch(protect, upload.array('images', 2), updateAward)
-    .delete(protect, deleteAward);
+    .put(protect, authorize('admin'), upload.array('images', 2), updateAward)
+    .patch(protect, authorize('admin'), upload.array('images', 2), updateAward)
+    .delete(protect, authorize('admin'), deleteAward);
 
 module.exports = router;

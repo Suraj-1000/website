@@ -6,17 +6,17 @@ const {
     deleteLanguage
 } = require('../controllers/language.controller');
 
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
 router.route('/')
     .get(getLanguages)
-    .post(protect, createLanguage);
+    .post(protect, authorize('admin'), createLanguage);
 
 router.route('/:id')
-    .put(protect, updateLanguage)
-    .patch(protect, updateLanguage)
-    .delete(protect, deleteLanguage);
+    .put(protect, authorize('admin'), updateLanguage)
+    .patch(protect, authorize('admin'), updateLanguage)
+    .delete(protect, authorize('admin'), deleteLanguage);
 
 module.exports = router;

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../controllers/project.controller');
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 router.get('/', projectController.getProjects);
-router.post('/', protect, projectController.createProject);
-router.put('/:id', protect, projectController.updateProject);
-router.delete('/:id', protect, projectController.deleteProject);
+router.post('/', protect, authorize('admin'), projectController.createProject);
+router.put('/:id', protect, authorize('admin'), projectController.updateProject);
+router.delete('/:id', protect, authorize('admin'), projectController.deleteProject);
 
 module.exports = router;

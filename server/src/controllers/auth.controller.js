@@ -32,13 +32,34 @@ exports.login = asyncHandler(async (req, res, next) => {
     }
 });
 
+// @desc    Refresh token
+// @route   POST /api/auth/refresh
+// @access  Public
+exports.refresh = asyncHandler(async (req, res, next) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(401).json({ success: false, error: 'Refresh token not found' });
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        const user = await authService.getUserById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({ success: false, error: 'User not found' });
+        }
+
+        sendTokenResponse(user, 200, res);
+    } catch (error) {
+        return res.status(401).json({ success: false, error: 'Invalid refresh token' });
+    }
+});
+
 // @desc    Get current logged in user
 // @route   GET /api/auth/me
 // @access  Private
 exports.getMe = asyncHandler(async (req, res, next) => {
-    // req.user is set by auth middleware using repo/service ideally, or directly.
-    // Let's assume middleware attaches user.
-    // If we want to be strict, middleware should use service too.
     const user = await authService.getUserById(req.user.id);
 
     res.status(200).json({
@@ -49,28 +70,35 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
-    // Create token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', {
-        expiresIn: '30d'
+    // Create Access Token
+    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_ACCESS_EXPIRE
     });
 
-    const options = {
-        expires: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true
+    // Create Refresh Token
+    const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, {
+        expiresIn: process.env.JWT_REFRESH_EXPIRE
+    });
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Lax'
     };
 
-    if (process.env.NODE_ENV === 'production') {
-        options.secure = true;
-    }
+    const refreshCookieOptions = {
+        ...cookieOptions,
+        expires: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days (matching JWT_REFRESH_EXPIRE)
+        ),
+    };
 
     res
         .status(statusCode)
-        .cookie('token', token, options)
+        .cookie('refreshToken', refreshToken, refreshCookieOptions)
         .json({
             success: true,
-            token,
+            accessToken,
             user: {
                 id: user.id,
                 name: user.name,

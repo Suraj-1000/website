@@ -6,16 +6,16 @@ const {
     deleteExperience
 } = require('../controllers/experience.controller');
 
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
 router.route('/')
     .get(getExperiences)
-    .post(protect, createExperience);
+    .post(protect, authorize('admin'), createExperience);
 
 router.route('/:id')
-    .patch(protect, updateExperience)
-    .delete(protect, deleteExperience);
+    .patch(protect, authorize('admin'), updateExperience)
+    .delete(protect, authorize('admin'), deleteExperience);
 
 module.exports = router;

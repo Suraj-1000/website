@@ -33,7 +33,7 @@ const AdminLayout = () => {
         <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
     </div>;
 
-    if (!isAuthenticated) return <Navigate to="/admin/login" />;
+    if (!isAuthenticated || user?.role !== 'admin') return <Navigate to="/admin/login" />;
 
     const navItems = [
         { path: '/admin/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },

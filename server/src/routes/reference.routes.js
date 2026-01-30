@@ -6,17 +6,17 @@ const {
     deleteReference
 } = require('../controllers/reference.controller');
 
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
 router.route('/')
     .get(getReferences)
-    .post(protect, createReference);
+    .post(protect, authorize('admin'), createReference);
 
 router.route('/:id')
-    .put(protect, updateReference)
-    .patch(protect, updateReference)
-    .delete(protect, deleteReference);
+    .put(protect, authorize('admin'), updateReference)
+    .patch(protect, authorize('admin'), updateReference)
+    .delete(protect, authorize('admin'), deleteReference);
 
 module.exports = router;

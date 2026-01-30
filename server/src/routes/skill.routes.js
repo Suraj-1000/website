@@ -6,16 +6,16 @@ const {
     deleteSkill
 } = require('../controllers/skill.controller');
 
-const { protect } = require('../middlewares/auth.middleware');
+const { protect, authorize } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
 router.route('/')
     .get(getSkills)
-    .post(protect, createSkill);
+    .post(protect, authorize('admin'), createSkill);
 
 router.route('/:id')
-    .put(protect, updateSkill)
-    .delete(protect, deleteSkill);
+    .put(protect, authorize('admin'), updateSkill)
+    .delete(protect, authorize('admin'), deleteSkill);
 
 module.exports = router;

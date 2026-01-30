@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const { connectDB } = require('./config/db');
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet({ crossOriginResourcePolicy: false })); // Allow loading images
 app.use(morgan('dev'));
+app.use(cookieParser());
 
 // Static Files (Private/Awards)
 app.use('/private', express.static(path.join(__dirname, '../private')));
