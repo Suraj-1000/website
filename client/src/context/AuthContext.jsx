@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const API_URL = 'http://localhost:5000/api';
+    const API_URL = 'http://127.0.0.1:5000/api';
 
     // Axios Interceptor for Token Refresh
     useEffect(() => {
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 }
 
-                const res = await axios.get(`${API_URL}/auth/me`);
+                const res = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
                 if (res.data.success) {
                     setUser(res.data.data);
                     setIsAuthenticated(true);

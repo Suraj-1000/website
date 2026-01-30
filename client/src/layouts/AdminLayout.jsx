@@ -10,7 +10,7 @@ import {
 import { Button } from '../components/ui/button';
 
 const AdminLayout = () => {
-    const { isAuthenticated, loading, logout } = useAuth();
+    const { isAuthenticated, user, loading, logout } = useAuth();
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
