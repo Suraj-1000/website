@@ -1,67 +1,67 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const path = require('path');
-const { sequelize, connectDB } = require('./src/config/db');
-require('dotenv').config();
+const express = require("express");
+const path = require("path");
+const { envConfig, appConfig } = require("./src/config");
+const { sequelize, connectDB } = require("./src/config/db");
 
-// Initialize App
 const app = express();
 
-// Connect Database
-connectDB();
+// Application Configurations
+appConfig(app);
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: 'http://127.0.0.1:5173',
-    credentials: true
-}));
-app.use(helmet({ crossOriginResourcePolicy: false })); // Allow loading images
-app.use(morgan('dev'));
-app.use(cookieParser());
-
-// Static Files (Private/Awards)
-app.use('/private', express.static(path.join(__dirname, 'private')));
+// Serve Static Files
+app.use("/public", express.static("public"));
+app.use("/private", express.static("private"));
 
 // Routes
-const educationRoutes = require('./src/routes/education.routes');
-const projectRoutes = require('./src/routes/project.routes');
-const travelRoutes = require('./src/routes/travel.routes');
-const contactRoutes = require('./src/routes/contact.routes');
+app.use("/api", require("./src/routes"));
 
-app.get('/', (req, res) => {
-    res.send('API is running...');
+app.get("/", (req, res) => {
+    res.send("API is running...");
 });
 
-app.use('/api/education', educationRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/travel', travelRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/experiences', require('./src/routes/experience.routes'));
-app.use('/api/skills', require('./src/routes/skill.routes'));
-app.use('/api/awards', require('./src/routes/award.routes'));
-app.use('/api/languages', require('./src/routes/language.routes'));
-app.use('/api/references', require('./src/routes/reference.routes'));
-app.use('/api/auth', require('./src/routes/auth.routes'));
+// Route not found
+app.use((req, res) =>
+    res.status(404).json({
+        success: false,
+        message: `Route ${req.path} not found.`,
+        timeStamp: new Date(),
+    })
+);
 
 // Error Handling Middleware
-app.use(require('./src/middlewares/errorHandler'));
+app.use(require("./src/middlewares/errorHandler"));
 
-const PORT = process.env.PORT || 5000;
-
+// Server Connection
 const startServer = async () => {
     try {
+        // Connect to PostgreSQL
+        await connectDB();
+
+        // Sync Sequelize models
         await sequelize.sync();
-        console.log('Database synced successfully.');
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        console.log("PostgreSQL models synced successfully");
+
+        // Graceful shutdown
+        process.on("SIGTERM", async () => {
+            console.log("SIGTERM received, shutting down gracefully...");
+            await sequelize.close();
+            process.exit(0);
         });
+
+        process.on("SIGINT", async () => {
+            console.log("SIGINT received, shutting down gracefully...");
+            await sequelize.close();
+            process.exit(0);
+        });
+
+        app.listen(envConfig.PORT, () =>
+            console.log(
+                `Server running at http://127.0.0.1:${envConfig.PORT} in ${envConfig.NODE_ENV} mode.`
+            )
+        );
     } catch (error) {
-        console.error('Failed to sync database:', error);
+        console.error("Failed to start server:", error);
+        process.exit(1);
     }
 };
 
