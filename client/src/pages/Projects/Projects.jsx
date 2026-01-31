@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ProjectCard from '../../components/organisms/ProjectCard/ProjectCard';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Projects = () => {
     // Real GitHub Data
@@ -11,7 +11,7 @@ const Projects = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/projects');
+                const res = await api.get('/projects');
                 // Standardise: if API returns { success: true, data: [] }, use res.data.data
                 // My Project controller now returns: { success: true, data: projects }
                 setProjects(res.data.data || []);

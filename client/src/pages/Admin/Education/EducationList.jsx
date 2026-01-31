@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, GraduationCap, School, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ const EducationList = () => {
 
     const fetchEducations = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/education');
+            const res = await api.get('/education');
             setEducations(res.data);
         } catch (error) {
             console.error('Failed to fetch education:', error);
@@ -29,9 +29,7 @@ const EducationList = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this education entry?')) return;
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5000/api/education/${id}`, config);
+            await api.delete(`/education/${id}`);
             setEducations(educations.filter(edu => edu.id !== id));
         } catch (error) {
             console.error('Failed to delete education:', error);

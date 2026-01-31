@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Plus, Edit2, Trash2, Plane, MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -13,7 +13,7 @@ const TravelList = () => {
 
     const fetchTravels = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/travel');
+            const res = await api.get('/travel');
             setTravels(res.data.data);
         } catch (error) {
             console.error('Failed to fetch travels', error);
@@ -29,7 +29,7 @@ const TravelList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this travel entry?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/travel/${id}`);
+                await api.delete(`/travel/${id}`);
                 setTravels(travels.filter(t => t.id !== id));
             } catch (error) {
                 console.error('Failed to delete travel', error);

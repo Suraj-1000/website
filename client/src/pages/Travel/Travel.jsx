@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Camera, X, Plane, Loader2 } from 'lucide-react';
-import axios from 'axios';
+import api, { API_URL as API_BASE } from '../../utils/api';
 
 const Travel = () => {
     const [selectedId, setSelectedId] = useState(null);
@@ -11,7 +11,7 @@ const Travel = () => {
     useEffect(() => {
         const fetchTravels = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/travel');
+                const res = await api.get('/travel');
                 setTravels(res.data.data || []);
             } catch (error) {
                 console.error('Failed to fetch travels:', error);
@@ -29,7 +29,7 @@ const Travel = () => {
             title: t.title,
             location: t.location,
             desc: t.description,
-            url: img,
+            url: img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`,
             // Simple logic for varying sizes
             size: idx % 3 === 0 ? "large" : idx % 2 === 0 ? "medium" : "small"
         }))

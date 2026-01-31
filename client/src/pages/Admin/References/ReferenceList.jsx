@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ const ReferenceList = () => {
 
     const fetchReferences = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/references');
+            const res = await api.get('/references');
             setReferences(res.data.data);
         } catch (error) {
             console.error('Failed to fetch references:', error);
@@ -26,9 +26,7 @@ const ReferenceList = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this reference?')) return;
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5000/api/references/${id}`, config);
+            await api.delete(`/references/${id}`);
             setReferences(references.filter(ref => ref.id !== id));
         } catch (error) {
             console.error('Failed to delete reference:', error);

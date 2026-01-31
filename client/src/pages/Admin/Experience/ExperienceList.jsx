@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Plus, Edit2, Trash2, Briefcase, Calendar, MapPin, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -13,7 +13,7 @@ const ExperienceList = () => {
 
     const fetchExperiences = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/experiences');
+            const res = await api.get('/experiences');
             setExperiences(res.data.data);
         } catch (error) {
             console.error('Failed to fetch experiences', error);
@@ -29,7 +29,7 @@ const ExperienceList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this experience?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/experiences/${id}`);
+                await api.delete(`/experiences/${id}`);
                 setExperiences(experiences.filter(exp => exp.id !== id));
             } catch (error) {
                 console.error('Failed to delete experience', error);

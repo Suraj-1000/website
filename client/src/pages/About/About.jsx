@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { User, Heart, Coffee, Code, Users, Music, Plane, Camera, Award, Languages, Utensils, Waves, Brain, Laptop, Sparkles, Lightbulb, Target, Quote, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import axios from 'axios';
+import api, { API_URL as API_BASE } from '../../utils/api';
 
 const About = () => {
     // State for dynamic data
@@ -21,8 +21,8 @@ const About = () => {
         const fetchData = async () => {
             try {
                 const [awardsRes, langRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/awards'),
-                    axios.get('http://localhost:5000/api/languages')
+                    api.get('/awards'),
+                    api.get('/languages')
                 ]);
                 setAwards(awardsRes.data.data);
                 setLanguages(langRes.data.data);
@@ -278,13 +278,13 @@ const About = () => {
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         openLightbox(
-                                                            selectedAward.images.map(i => i.startsWith('http') ? i : `http://localhost:5000${i}`),
+                                                            selectedAward.images.map(i => i.startsWith('http') ? i : `${API_BASE.replace('/api', '')}${i}`),
                                                             idx
                                                         );
                                                     }}
                                                 >
                                                     <img
-                                                        src={img.startsWith('http') ? img : `http://localhost:5000${img}`}
+                                                        src={img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`}
                                                         alt={`${selectedAward.title} - ${idx + 1}`}
                                                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                                                     />
@@ -301,12 +301,12 @@ const About = () => {
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 openLightbox([
-                                                    selectedAward.image.startsWith('http') ? selectedAward.image : `http://localhost:5000${selectedAward.image}`
+                                                    selectedAward.image.startsWith('http') ? selectedAward.image : `${API_BASE.replace('/api', '')}${selectedAward.image}`
                                                 ], 0);
                                             }}
                                         >
                                             <img
-                                                src={selectedAward.image.startsWith('http') ? selectedAward.image : `http://localhost:5000${selectedAward.image}`}
+                                                src={selectedAward.image.startsWith('http') ? selectedAward.image : `${API_BASE.replace('/api', '')}${selectedAward.image}`}
                                                 alt={selectedAward.title}
                                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                                             />

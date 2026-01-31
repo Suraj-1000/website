@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Briefcase, Calendar } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Experience = () => {
     const [experiences, setExperiences] = useState([]);
@@ -12,7 +12,7 @@ const Experience = () => {
         const fetchExperiences = async () => {
             try {
                 // Ideally use environment variable for URL
-                const res = await axios.get('http://localhost:5000/api/experiences');
+                const res = await api.get('/experiences');
                 setExperiences(res.data.data);
             } catch (error) {
                 console.error('Failed to fetch experiences', error);

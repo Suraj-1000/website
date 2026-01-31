@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { Save, ArrowLeft, GraduationCap, School, BookOpen } from 'lucide-react';
@@ -16,7 +16,7 @@ const EducationForm = () => {
         if (isEditing) {
             const fetchEducation = async () => {
                 try {
-                    const res = await axios.get('http://localhost:5000/api/education');
+                    const res = await api.get('/education');
                     // Since get all returns array, find locally or implement getById backend
                     // My backend does NOT have getById public route, only protected Update.
                     // Actually, I didn't verify if GET /:id exists in route file I made.
@@ -51,13 +51,10 @@ const EducationForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
             if (isEditing) {
-                await axios.put(`http://localhost:5000/api/education/${id}`, data, config);
+                await api.put(`/education/${id}`, data);
             } else {
-                await axios.post('http://localhost:5000/api/education', data, config);
+                await api.post('/education', data);
             }
             navigate('/admin/education');
         } catch (error) {

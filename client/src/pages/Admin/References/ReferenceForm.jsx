@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { useForm } from 'react-hook-form';
 import { Save, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ const ReferenceForm = () => {
         if (isEdit) {
             const fetchReference = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/references`);
+                    const res = await api.get(`/references`);
                     const allRefs = res.data.data;
                     const ref = allRefs.find(r => r.id === id);
                     if (ref) {
@@ -42,13 +42,10 @@ const ReferenceForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
             if (isEdit) {
-                await axios.patch(`http://localhost:5000/api/references/${id}`, data, config);
+                await api.patch(`/references/${id}`, data);
             } else {
-                await axios.post('http://localhost:5000/api/references', data, config);
+                await api.post('/references', data);
             }
             navigate('/admin/references');
         } catch (error) {

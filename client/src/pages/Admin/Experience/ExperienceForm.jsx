@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { Save, ArrowLeft, Plus, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -36,7 +36,7 @@ const ExperienceForm = () => {
         if (isEdit) {
             const fetchExperience = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/experiences`);
+                    const res = await api.get(`/experiences`);
                     const allExp = res.data.data;
                     const exp = allExp.find(e => e.id === id); // Fix: use .id instead of ._id
                     if (exp) {
@@ -84,9 +84,9 @@ const ExperienceForm = () => {
 
         try {
             if (isEdit) {
-                await axios.patch(`http://localhost:5000/api/experiences/${id}`, formattedData);
+                await api.patch(`/experiences/${id}`, formattedData);
             } else {
-                await axios.post('http://localhost:5000/api/experiences', formattedData);
+                await api.post('/experiences', formattedData);
             }
             navigate('/admin/experience');
         } catch (error) {

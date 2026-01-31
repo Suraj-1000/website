@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Languages } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ const LanguageList = () => {
 
     const fetchLanguages = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/languages');
+            const res = await api.get('/languages');
             setLanguages(res.data.data);
         } catch (error) {
             console.error('Failed to fetch languages:', error);
@@ -26,9 +26,7 @@ const LanguageList = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this language?')) return;
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5000/api/languages/${id}`, config);
+            await api.delete(`/languages/${id}`);
             setLanguages(languages.filter(lang => lang.id !== id));
         } catch (error) {
             console.error('Failed to delete language:', error);

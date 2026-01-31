@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import { Save, ArrowLeft, Plus, X, Globe, Github } from 'lucide-react';
@@ -32,7 +32,7 @@ const ProjectForm = () => {
         if (isEditing) {
             const fetchProject = async () => {
                 try {
-                    const res = await axios.get('http://localhost:5000/api/projects');
+                    const res = await api.get('/projects');
                     const project = res.data.data.find(p => p.id === id);
                     if (project) {
                         setValue('title', project.title);
@@ -57,18 +57,15 @@ const ProjectForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
             const formattedData = {
                 ...data,
                 techStack: data.techStack.map(item => item.value).filter(val => val.trim() !== '')
             };
 
             if (isEditing) {
-                await axios.put(`http://localhost:5000/api/projects/${id}`, formattedData, config);
+                await api.put(`/projects/${id}`, formattedData);
             } else {
-                await axios.post('http://localhost:5000/api/projects', formattedData, config);
+                await api.post('/projects', formattedData);
             }
             navigate('/admin/projects');
         } catch (error) {

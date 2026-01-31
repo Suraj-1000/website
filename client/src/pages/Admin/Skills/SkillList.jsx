@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Plus, Edit2, Trash2, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -18,7 +18,7 @@ const SkillList = () => {
 
     const fetchSkills = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/skills');
+            const res = await api.get('/skills');
             setSkills(res.data.data);
         } catch (error) {
             console.error('Failed to fetch skills', error);
@@ -34,7 +34,7 @@ const SkillList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/skills/${id}`);
+                await api.delete(`/skills/${id}`);
                 setSkills(skills.filter(s => s._id !== id));
             } catch (error) {
                 console.error('Failed to delete skill category', error);

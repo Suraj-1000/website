@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { useForm } from 'react-hook-form';
 import { Save, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ const LanguageForm = () => {
         if (isEdit) {
             const fetchLanguage = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/languages`);
+                    const res = await api.get(`/languages`);
                     const allLangs = res.data.data;
                     const lang = allLangs.find(l => l.id === id);
                     if (lang) {
@@ -38,13 +38,10 @@ const LanguageForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-
             if (isEdit) {
-                await axios.patch(`http://localhost:5000/api/languages/${id}`, data, config);
+                await api.patch(`/languages/${id}`, data);
             } else {
-                await axios.post('http://localhost:5000/api/languages', data, config);
+                await api.post('/languages', data);
             }
             navigate('/admin/languages');
         } catch (error) {

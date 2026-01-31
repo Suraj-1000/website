@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ const AwardList = () => {
 
     const fetchAwards = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/awards');
+            const res = await api.get('/awards');
             setAwards(res.data.data);
         } catch (error) {
             console.error('Failed to fetch awards:', error);
@@ -26,9 +26,7 @@ const AwardList = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this award?')) return;
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5000/api/awards/${id}`, config);
+            await api.delete(`/awards/${id}`);
             setAwards(awards.filter(award => award.id !== id));
         } catch (error) {
             console.error('Failed to delete award:', error);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Save, ArrowLeft, Plus, X, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package, Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -49,7 +49,7 @@ const SkillForm = () => {
         if (isEdit) {
             const fetchSkill = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/skills`);
+                    const res = await api.get(`/skills`);
                     const allSkills = res.data.data;
                     const skill = allSkills.find(s => s._id === id);
                     if (skill) {
@@ -90,9 +90,9 @@ const SkillForm = () => {
 
         try {
             if (isEdit) {
-                await axios.put(`http://localhost:5000/api/skills/${id}`, formData);
+                await api.put(`/skills/${id}`, formData);
             } else {
-                await axios.post('http://localhost:5000/api/skills', formData);
+                await api.post('/skills', formData);
             }
             navigate('/admin/skills');
         } catch (error) {

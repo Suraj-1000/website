@@ -2,7 +2,7 @@ import { Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, S
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../../utils/api';
 
 // Mapping string icon names to components
 const IconMap = {
@@ -18,7 +18,7 @@ const Skills = () => {
     useEffect(() => {
         const fetchSkills = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/skills');
+                const res = await api.get('/skills');
                 setSkillCategories(res.data.data);
             } catch (error) {
                 console.error('Failed to fetch skills', error);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Mail, Phone, Building2, Briefcase } from 'lucide-react';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Testimonials = () => {
     const [references, setReferences] = useState([]);
@@ -10,7 +10,7 @@ const Testimonials = () => {
     useEffect(() => {
         const fetchReferences = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/references');
+                const res = await api.get('/references');
                 setReferences(res.data.data);
             } catch (error) {
                 console.error('Failed to fetch references', error);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { Mail, Loader2, Calendar, Trash2, Send, MessageSquare, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../../components/ui/button';
@@ -17,10 +17,7 @@ const AdminMessages = () => {
 
     const fetchMessages = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/api/contacts', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/contacts');
             setMessages(response.data.data);
         } catch (error) {
             console.error("Failed to fetch messages", error);
@@ -37,11 +34,8 @@ const AdminMessages = () => {
         e.preventDefault();
         setSending(true);
         try {
-            const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/contacts/${replyingTo.id}/reply`, {
+            await api.post(`/contacts/${replyingTo.id}/reply`, {
                 replyMessage
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
             alert('Reply sent successfully!');
             setReplyingTo(null);

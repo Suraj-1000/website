@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { Send, Mail, MapPin, Linkedin, Github, Twitter, Instagram } from 'lucide-react';
 
 const Contact = () => {
@@ -10,7 +10,7 @@ const Contact = () => {
 
     const onSubmit = async (data) => {
         try {
-            await axios.post('http://localhost:5000/api/contacts', data);
+            await api.post('/contacts', data);
             setSubmitStatus('success');
             reset();
             setTimeout(() => setSubmitStatus(null), 5000); // Clear message after 5 seconds

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api, { API_URL as API_BASE } from '../../../utils/api';
 import { useForm } from 'react-hook-form';
 import { Save, ArrowLeft, Upload, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -28,7 +28,7 @@ const AwardForm = () => {
         if (isEdit) {
             const fetchAward = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/awards`);
+                    const res = await api.get(`/awards`);
                     const allAwards = res.data.data;
                     const award = allAwards.find(a => a.id === id);
                     if (award) {
@@ -47,7 +47,7 @@ const AwardForm = () => {
 
                         // Ensure URLs are complete
                         const completeUrls = imgs.map(img =>
-                            img.startsWith('http') ? img : `http://localhost:5000${img}`
+                            img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`
                         );
                         setExistingImages(completeUrls);
                     }
@@ -95,7 +95,6 @@ const AwardForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
             const formData = new FormData();
 
             formData.append('title', data.title);
@@ -104,17 +103,17 @@ const AwardForm = () => {
             formData.append('description', description); // Use state for Rich Text
 
             // Append Existing Images (as URLs, backend will handle keeping them)
-            // Note: Controller expects `existingImages` to be the RELATIVE paths if possible, or full URLs.
-            // Our controller logic handled `req.body.existingImages`.
+            // Note: Controller expects existingImages to be the RELATIVE paths if possible, or full URLs.
+            // Our controller logic handled req.body.existingImages.
             // We should send the path relative to server if possible, or handle full URL stripping in backend.
-            // However, the backend logic: `currentImages = Array.isArray(req.body.existingImages) ? ...`
-            // If we send full URL `http://localhost:5000/private/award/abc.jpg`, backend saves that.
+            // However, the backend logic: currentImages = Array.isArray(req.body.existingImages) ? ...
+            // If we send full URL, backend saves that.
             // It's better to strip the domain if we want clean DB paths, but for now sending what we have is okay
             // providing backend doesn't double-prefix.
-            // Let's rely on what we have. Ideally we strip `http://localhost:5000` before sending.
+            // Let's rely on what we have. Ideally we strip the base URL before sending.
 
             existingImages.forEach(img => {
-                const relativePath = img.replace('http://localhost:5000', '');
+                const relativePath = img.replace(API_BASE.replace('/api', ''), '');
                 formData.append('existingImages', relativePath);
             });
 
@@ -123,17 +122,10 @@ const AwardForm = () => {
                 formData.append('images', file);
             });
 
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            };
-
             if (isEdit) {
-                await axios.patch(`http://localhost:5000/api/awards/${id}`, formData, config);
+                await api.patch(`/awards/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             } else {
-                await axios.post('http://localhost:5000/api/awards', formData, config);
+                await api.post('/awards', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
             navigate('/admin/awards');
         } catch (error) {

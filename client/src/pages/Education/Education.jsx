@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { GraduationCap, BookOpen, School, Link as LinkIcon, MapPin, Calendar } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const Education = () => {
     const [educationData, setEducationData] = useState([]);
@@ -18,7 +18,7 @@ const Education = () => {
     useEffect(() => {
         const fetchEducation = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/education');
+                const res = await api.get('/education');
                 setEducationData(res.data);
             } catch (error) {
                 console.error('Failed to fetch education', error);

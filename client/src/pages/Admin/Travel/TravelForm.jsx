@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Save, ArrowLeft, Plane, MapPin, Calendar, Globe, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../../../components/ui/button';
@@ -28,7 +28,7 @@ const TravelForm = () => {
         if (isEdit) {
             const fetchTravel = async () => {
                 try {
-                    const res = await axios.get('http://localhost:5000/api/travel');
+                    const res = await api.get('/travel');
                     const allTravels = res.data.data;
                     const travel = allTravels.find(t => t.id === id);
 
@@ -62,9 +62,9 @@ const TravelForm = () => {
 
         try {
             if (isEdit) {
-                await axios.put(`http://localhost:5000/api/travel/${id}`, dataToSend);
+                await api.put(`/travel/${id}`, dataToSend);
             } else {
-                await axios.post('http://localhost:5000/api/travel', dataToSend);
+                await api.post('/travel', dataToSend);
             }
             navigate('/admin/travel');
         } catch (error) {

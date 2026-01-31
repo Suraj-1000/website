@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import { Trash2, CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,7 +9,7 @@ const MessageList = () => {
 
     const fetchMessages = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/contact');
+            const res = await api.get('/contacts');
             setMessages(res.data.data);
         } catch (error) {
             console.error('Failed to fetch messages', error);
@@ -25,7 +25,7 @@ const MessageList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this message?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/contact/${id}`); // Assumes delete endpoint exists
+                await api.delete(`/contacts/${id}`); // Assumes delete endpoint exists
                 setMessages(messages.filter(m => m.id !== id));
             } catch (error) {
                 console.error('Failed to delete message', error);
