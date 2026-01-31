@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
+import { cn } from '../../lib/utils';
 
 const AdminMessages = () => {
     const [messages, setMessages] = useState([]);
@@ -14,6 +15,12 @@ const AdminMessages = () => {
     const [replyingTo, setReplyingTo] = useState(null);
     const [replyMessage, setReplyMessage] = useState("");
     const [sending, setSending] = useState(false);
+    const [notification, setNotification] = useState(null);
+
+    const showNotification = (message, type = 'success') => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 5000);
+    };
 
     const fetchMessages = async () => {
         try {
@@ -37,13 +44,13 @@ const AdminMessages = () => {
             await api.post(`/contacts/${replyingTo.id}/reply`, {
                 replyMessage
             });
-            alert('Reply sent successfully!');
-            setReplyingTo(null);
+            showNotification('Reply sent successfully!');
+            setTimeout(() => setReplyingTo(null), 1500); // Close modal after a short delay
             setReplyMessage("");
             fetchMessages(); // Refresh status
         } catch (error) {
             console.error("Failed to send reply", error);
-            alert('Failed to send reply. Please check server logs.');
+            showNotification('Failed to send reply. Please check server logs.', 'error');
         } finally {
             setSending(false);
         }
@@ -143,6 +150,24 @@ const AdminMessages = () => {
                         <Card className="shadow-2xl">
                             <CardHeader>
                                 <CardTitle className="text-2xl font-bold">Reply to {replyingTo.name}</CardTitle>
+                                {notification && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={cn(
+                                            "mt-4 p-3 rounded-lg text-sm font-medium border flex items-center gap-2",
+                                            notification.type === 'error'
+                                                ? "bg-red-500/10 text-red-500 border-red-500/20"
+                                                : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "w-2 h-2 rounded-full",
+                                            notification.type === 'error' ? "bg-red-500" : "bg-emerald-500"
+                                        )} />
+                                        {notification.message}
+                                    </motion.div>
+                                )}
                             </CardHeader>
                             <CardContent>
                                 <form onSubmit={handleReply} className="space-y-4">
