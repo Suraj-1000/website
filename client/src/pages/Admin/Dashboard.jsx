@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import {
     Briefcase, Code, FolderGit2, BookOpen, Plane,
@@ -11,14 +11,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 
 const Dashboard = () => {
-    const [greeting, setGreeting] = useState('');
-
-    useEffect(() => {
+    const getGreeting = () => {
         const hour = new Date().getHours();
-        if (hour < 12) setGreeting('Good Morning');
-        else if (hour < 18) setGreeting('Good Afternoon');
-        else setGreeting('Good Evening');
-    }, []);
+        if (hour < 12) return 'Good Morning';
+        if (hour < 18) return 'Good Afternoon';
+        return 'Good Evening';
+    };
+
+    const greeting = getGreeting();
 
     const containerVariants = {
         hidden: { opacity: 0 },

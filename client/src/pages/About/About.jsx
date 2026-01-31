@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Heart, Coffee, Code, Users, Music, Plane, Camera, Award, Languages, Utensils, Waves, Brain, Laptop, Sparkles, Lightbulb, Target, Quote, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { User, Heart, Code, Users, Music, Plane, Camera, Award, Languages, Sparkles, Lightbulb, Target, Quote, X, ChevronLeft, ChevronRight, Utensils, Brain } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import api, { API_URL as API_BASE } from '../../utils/api';

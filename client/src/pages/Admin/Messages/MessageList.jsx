@@ -34,17 +34,6 @@ const MessageList = () => {
         }
     };
 
-    const toggleStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === 'new' ? 'read' : 'new';
-        try {
-            // Assumes PATCH or PUT endpoint for status
-            // Keeping it simple for UI now, might need backend adjust if route not generic
-            // For now just toggle UI locally or skip if no endpoint
-            // Implementation depends on backend route availability for update
-        } catch (error) {
-            console.error('Failed to update status', error);
-        }
-    };
 
     if (loading) return <div>Loading...</div>;
 

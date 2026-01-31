@@ -10,7 +10,7 @@ const ExperienceForm = () => {
     const { id } = useParams();
     const isEdit = !!id;
 
-    const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm({
         defaultValues: {
             role: '',
             company: '', // company -> company

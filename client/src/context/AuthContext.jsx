@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(res.data.data);
                     setIsAuthenticated(true);
                 }
-            } catch (error) {
+            } catch {
                 // api.js interceptor handles 401s and token refresh
                 // If it still fails, just ensure loading is false
             } finally {
