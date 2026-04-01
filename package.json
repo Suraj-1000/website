@@ -1,0 +1,33 @@
+{
+   "name": "local-business-industry-platform",
+   "version": "1.0.0",
+   "description": "",
+   "main": "index.js",
+   "scripts": {
+      "postinstall": "npm install --prefix client && npm install --prefix server",
+      "prepare": "husky",
+      "migrate": "npm run migrate --prefix server",
+      "format": "prettier . --write -c"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "type": "commonjs",
+   "devDependencies": {
+      "autoprefixer": "^10.4.23",
+      "lint-staged": "^16.2.7",
+      "postcss": "^8.5.6",
+      "prettier": "3.7.4",
+      "tailwindcss": "^4.1.18"
+   },
+   "lint-staged": {
+      "**/*.{js,jsx,ts,tsx,json,html,css,md}": "prettier --write"
+   },
+   "dependencies": {
+      "axios": "^1.13.2",
+      "clsx": "^2.1.1",
+      "framer-motion": "^12.29.0",
+      "lucide-react": "^0.563.0",
+      "tailwind-merge": "^3.4.0"
+   }
+}
