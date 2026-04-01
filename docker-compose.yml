@@ -1,0 +1,65 @@
+services:
+   local-business-db:
+      image: postgis/postgis:16-3.4
+
+      container_name: baalvo-local-business-db
+      restart: unless-stopped
+      ports:
+         - "5438:5432"
+      environment:
+         POSTGRES_USER: postgres_user
+         POSTGRES_PASSWORD: postgres_password
+         POSTGRES_DB: baalvo-local-business-platform
+      volumes:
+         - local-business-db-data:/var/lib/postgresql/data
+      healthcheck:
+         test: [ "CMD-SHELL", "pg_isready -U postgres_user -d baalvo-local-business-platform && PGPASSWORD=postgres_password psql -U postgres_user -d baalvo-local-business-platform -c 'SELECT 1'" ]
+         interval: 5s
+         timeout: 5s
+         retries: 5
+         start_period: 10s
+
+      networks:
+         - baalvo-network
+   server:
+      build:
+         context: ./server
+         dockerfile: Dockerfile
+      container_name: baalvo-local-business-server
+      restart: unless-stopped
+      ports:
+         - "7008:7008"
+      environment:
+         - NODE_ENV=production
+         - DB_HOST=local-business-db
+         - DB_PORT=5432
+         - DB_USER=postgres_user
+         - DB_PASSWORD=postgres_password
+         - DB_NAME=baalvo-local-business-platform
+         - APP_NAME=Local Business & Industry
+      depends_on:
+         local-business-db:
+            condition: service_healthy
+      networks:
+         - baalvo-network
+
+   frontend:
+      build:
+         context: ./client
+         dockerfile: Dockerfile
+      container_name: baalvo-local-business-client
+      restart: unless-stopped
+      ports:
+         - "5008:8086"
+      depends_on:
+         - server
+      networks:
+         - baalvo-network
+
+volumes:
+   local-business-db-data:
+
+
+networks:
+   baalvo-network:
+      driver: bridge
