@@ -7,9 +7,9 @@ services:
       ports:
          - "5438:5432"
       environment:
-         POSTGRES_USER: postgres_user
-         POSTGRES_PASSWORD: postgres_password
-         POSTGRES_DB: baalvo-local-business-platform
+         POSTGRES_USER: ${POSTGRES_USER:-postgres_user}
+         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
+         POSTGRES_DB: ${POSTGRES_DB:-baalvo-local-business-platform}
       volumes:
          - local-business-db-data:/var/lib/postgresql/data
       healthcheck:
@@ -33,9 +33,9 @@ services:
          - NODE_ENV=production
          - DB_HOST=local-business-db
          - DB_PORT=5432
-         - DB_USER=postgres_user
-         - DB_PASSWORD=postgres_password
-         - DB_NAME=baalvo-local-business-platform
+         - DB_USER=${POSTGRES_USER:-postgres_user}
+         - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres_password}
+         - DB_NAME=${POSTGRES_DB:-baalvo-local-business-platform}
          - APP_NAME=Local Business & Industry
       depends_on:
          local-business-db:
