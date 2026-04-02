@@ -7,7 +7,12 @@
       "postinstall": "npm install --prefix client && npm install --prefix server",
       "prepare": "husky",
       "migrate": "npm run migrate --prefix server",
-      "format": "prettier . --write -c"
+      "format": "prettier . --write -c",
+      "format:check": "prettier . -c",
+      "client:dev": "npm run dev --prefix client",
+      "client:build": "npm run build --prefix client",
+      "server:dev": "npm run dev --prefix server",
+      "server:start": "npm run start --prefix server"
    },
    "keywords": [],
    "author": "",
