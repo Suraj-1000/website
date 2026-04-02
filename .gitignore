@@ -13,3 +13,7 @@ coverage/
 *.local
 server/.env
 client/.env
+
+# Docker/local dev artifacts
+.env.docker
+*.log
