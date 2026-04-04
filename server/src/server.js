@@ -56,7 +56,7 @@ const startServer = async () => {
 
         app.listen(envConfig.PORT, () =>
             console.log(
-                `Server running at http://127.0.0.1:${envConfig.PORT} in ${envConfig.NODE_ENV} mode.`
+                `Server running at http://[IP_ADDRESS] in ${envConfig.NODE_ENV} mode.`
             )
         );
     } catch (error) {
