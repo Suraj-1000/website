@@ -2,44 +2,49 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('educations', {
+    await queryInterface.createTable('experiences', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4,
       },
-      degree: {
+      role: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      fieldOfStudy: {
+      company: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      institution: {
+      location: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      graduationYear: {
+      startDate: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
-      gpa: {
+      endDate: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+        defaultValue: [],
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('educations');
-  }
+    await queryInterface.dropTable('experiences');
+  },
 };
