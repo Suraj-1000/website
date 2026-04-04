@@ -5,7 +5,7 @@ services:
       container_name: baalvo-local-business-db
       restart: unless-stopped
       ports:
-         - "5438:5432"
+         - "5008:5432"
       environment:
          POSTGRES_USER: ${POSTGRES_USER:-postgres_user}
          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
