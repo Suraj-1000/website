@@ -1,25 +1,15 @@
+const BaseRepository = require('./base.repo');
 const { Contact } = require('@/database/models');
 
-class ContactRepository {
-    async create(data) {
-        return await Contact.create(data);
-    }
+class ContactRepository extends BaseRepository {
+   constructor() {
+      super(Contact, [['createdAt', 'DESC']]);
+   }
 
-    async findAll() {
-        return await Contact.findAll({
-            order: [['createdAt', 'DESC']]
-        });
-    }
-
-    async findById(id) {
-        return await Contact.findByPk(id);
-    }
-
-    async updateStatus(id, status) {
-        return await Contact.update({ status }, {
-            where: { id }
-        });
-    }
+   // Custom method: update only the status field
+   async updateStatus(id, status) {
+      return await this.model.update({ status }, { where: { id } });
+   }
 }
 
 module.exports = new ContactRepository();

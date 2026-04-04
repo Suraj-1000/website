@@ -1,17 +1,15 @@
+const BaseRepository = require('./base.repo');
 const { User } = require('@/database/models');
 
-class UserRepository {
-    async create(userData) {
-        return await User.create(userData);
-    }
+class UserRepository extends BaseRepository {
+   constructor() {
+      super(User, [['createdAt', 'DESC']]);
+   }
 
-    async findByEmail(email) {
-        return await User.findOne({ where: { email } });
-    }
-
-    async findById(id) {
-        return await User.findByPk(id);
-    }
+   // Custom method: find user by email for auth
+   async findByEmail(email) {
+      return await this.findOne({ email });
+   }
 }
 
 module.exports = new UserRepository();

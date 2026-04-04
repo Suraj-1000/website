@@ -1,15 +1,13 @@
-const CategoryRepository = require("./category.repository");
-const ReviewRepository = require("./review.repository");
-const BusinessApprovalRepository = require("./business-approval.repository");
-const BusinessRepository = require("./business.repository");
-const ServiceRepository = require("./service.repository");
-
 module.exports = {
-   CategoryRepository,
-   BusinessPromotionRepository: require("./business-promotion.repository"),
-   AdminPromotionRepository: require("./admin-promotion.repository"),
-   ReviewRepository,
-   BusinessApprovalRepository,
-   BusinessRepository,
-   ServiceRepository,
+   BaseRepository:    require('./base.repo'),
+   AwardRepository:   require('./award.repo'),
+   ContactRepository: require('./contact.repo'),
+   EducationRepository: require('./education.repo'),
+   ExperienceRepository: require('./experience.repo'),
+   LanguageRepository: require('./language.repo'),
+   ProjectRepository: require('./project.repo'),
+   ReferenceRepository: require('./reference.repo'),
+   SkillRepository:   require('./skill.repo'),
+   TravelRepository:  require('./travel.repo'),
+   UserRepository:    require('./user.repo'),
 };

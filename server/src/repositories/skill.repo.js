@@ -1,33 +1,10 @@
+const BaseRepository = require('./base.repo');
 const { Skill } = require('@/database/models');
 
-class SkillRepository {
-    async findAll() {
-        return await Skill.findAll({ order: [['createdAt', 'ASC']] });
-    }
-
-    async findById(id) {
-        return await Skill.findByPk(id);
-    }
-
-    async create(data) {
-        return await Skill.create(data);
-    }
-
-    async update(id, data) {
-        const skill = await this.findById(id);
-        if (skill) {
-            return await skill.update(data);
-        }
-        return null;
-    }
-
-    async delete(id) {
-        const skill = await this.findById(id);
-        if (skill) {
-            return await skill.destroy();
-        }
-        return null;
-    }
+class SkillRepository extends BaseRepository {
+   constructor() {
+      super(Skill, [['createdAt', 'ASC']]);
+   }
 }
 
 module.exports = new SkillRepository();
