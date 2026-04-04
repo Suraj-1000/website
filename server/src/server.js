@@ -1,68 +1,45 @@
 const express = require("express");
-const path = require("path");
-const { envConfig, appConfig } = require("./config");
-const { sequelize, connectDB } = require("./config/db");
+const moduleAlias = require("module-alias");
+
+// Setup module aliases
+moduleAlias.addAliases({ "@": __dirname, });
+
+const { appConfig, envConfig } = require("@/config");
+const { errorHandler } = require("@/middlewares");
+const db = require("@/database/models");
 
 const app = express();
 
-// Application Configurations
+// Trust proxy for production (correctly handle X-Forwarded-Proto, IP, etc.)
+app.set("trust proxy", 1);
+
+// app configurations
 appConfig(app);
 
-// Serve Static Files
-app.use("/public", express.static("public"));
-app.use("/private", express.static("private"));
+//Routes
+app.use("/api", require("@/routes"));
 
-// Routes
-app.use("/api", require("./routes"));
-
-app.get("/", (req, res) => {
-    res.send("API is running...");
-});
-
-// Route not found
+// Invalid Route
 app.use((req, res) =>
-    res.status(404).json({
-        success: false,
-        message: `Route ${req.path} not found.`,
-        timeStamp: new Date(),
-    })
+   res.status(404).json({
+      success: false,
+      message: `Route ${req.path} not found`,
+      timestamp: new Date().toISOString(),
+   })
 );
 
-// Error Handling Middleware
-app.use(require("./middlewares/errorHandler"));
+// Global Error Handler
+app.use(errorHandler);
 
-// Server Connection
-const startServer = async () => {
-    try {
-        // Connect to PostgreSQL
-        await connectDB();
-
-        // Sync Sequelize models
-        await sequelize.sync();
-        console.log("PostgreSQL models synced successfully");
-
-        // Graceful shutdown
-        process.on("SIGTERM", async () => {
-            console.log("SIGTERM received, shutting down gracefully...");
-            await sequelize.close();
-            process.exit(0);
-        });
-
-        process.on("SIGINT", async () => {
-            console.log("SIGINT received, shutting down gracefully...");
-            await sequelize.close();
-            process.exit(0);
-        });
-
-        app.listen(envConfig.PORT, () =>
-            console.log(
-                `Server running at http://[IP_ADDRESS] in ${envConfig.NODE_ENV} mode.`
-            )
-        );
-    } catch (error) {
-        console.error("Failed to start server:", error);
-        process.exit(1);
-    }
-};
-
-startServer();
+db.sequelize
+   .authenticate()
+   .then(() => {
+      console.log("Postgres connected successfully");
+      return db.sequelize.sync(); // Removed { alter: true } to support migrations
+   })
+   .then(() => console.log("Database synchronized"))
+   .catch((err) => console.error("Unable to connect/sync the database:", err));
+// Server Configuration
+app.listen(envConfig.PORT, () =>
+   console.log(`Backend Server running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`)
+);

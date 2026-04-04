@@ -1,4 +1,4 @@
-const Experience = require('../models/Experience');
+const { Experience } = require('@/database/models');
 
 class ExperienceRepository {
     async findAll() {

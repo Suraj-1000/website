@@ -1,4 +1,4 @@
-const Project = require('../models/Project');
+const { Project } = require('@/database/models');
 
 class ProjectRepository {
     async findAll() {

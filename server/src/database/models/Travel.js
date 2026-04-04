@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { sequelize } = require('@/config/db');
 
-const Project = sequelize.define('Project', {
+const Travel = sequelize.define('Travel', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -15,26 +15,21 @@ const Project = sequelize.define('Project', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    techStack: {
+    location: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    visitDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    images: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        defaultValue: []
-    },
-    repoLink: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    demoLink: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    imageUrl: {
-        type: DataTypes.STRING,
         allowNull: true,
     }
 }, {
     timestamps: true,
-    tableName: 'projects'
+    tableName: 'travels'
 });
 
-module.exports = Project;
+module.exports = Travel;

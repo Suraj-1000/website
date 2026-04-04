@@ -1,4 +1,4 @@
-const Travel = require('../models/Travel');
+const { Travel } = require('@/database/models');
 
 class TravelRepository {
     async findAll() {

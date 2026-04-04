@@ -1,4 +1,4 @@
-const Language = require('../models/Language');
+const { Language } = require('@/database/models');
 
 class LanguageRepository {
     async findAll() {

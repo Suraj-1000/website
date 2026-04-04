@@ -1,4 +1,4 @@
-const Award = require('../models/Award');
+const { Award } = require('@/database/models');
 
 class AwardRepository {
     async findAll() {

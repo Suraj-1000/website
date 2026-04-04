@@ -1,4 +1,4 @@
-const Education = require('../models/Education');
+const { Education } = require('@/database/models');
 
 class EducationRepository {
     async findAll() {

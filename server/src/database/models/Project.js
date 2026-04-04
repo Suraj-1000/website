@@ -1,42 +1,40 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { sequelize } = require('@/config/db');
 
-const Reference = sequelize.define('Reference', {
+const Project = sequelize.define('Project', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-    name: {
+    title: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    position: {
-        type: DataTypes.STRING,
+    description: {
+        type: DataTypes.TEXT,
         allowNull: false,
     },
-    company: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
+    techStack: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
-        validate: {
-            isEmail: true
-        }
+        defaultValue: []
     },
-    phone: {
+    repoLink: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    relationship: {
-        type: DataTypes.STRING, // e.g., "Former Manager"
+    demoLink: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    imageUrl: {
+        type: DataTypes.STRING,
         allowNull: true,
     }
 }, {
     timestamps: true,
-    tableName: 'references'
+    tableName: 'projects'
 });
 
-module.exports = Reference;
+module.exports = Project;

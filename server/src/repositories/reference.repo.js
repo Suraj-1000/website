@@ -1,4 +1,4 @@
-const Reference = require('../models/Reference');
+const { Reference } = require('@/database/models');
 
 class ReferenceRepository {
     async findAll() {

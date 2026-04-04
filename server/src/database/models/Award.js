@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { sequelize } = require('@/config/db');
 
-const Travel = sequelize.define('Travel', {
+const Award = sequelize.define('Award', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -11,25 +11,26 @@ const Travel = sequelize.define('Travel', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    location: {
+    issuer: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    visitDate: {
-        type: DataTypes.DATE,
+    date: {
+        type: DataTypes.DATEONLY, // YYYY-MM-DD
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.TEXT,
         allowNull: true,
     },
     images: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
+        defaultValue: []
     }
 }, {
     timestamps: true,
-    tableName: 'travels'
+    tableName: 'awards'
 });
 
-module.exports = Travel;
+module.exports = Award;
