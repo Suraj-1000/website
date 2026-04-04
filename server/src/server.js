@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
-const { envConfig, appConfig } = require("./src/config");
-const { sequelize, connectDB } = require("./src/config/db");
+const { envConfig, appConfig } = require("./config");
+const { sequelize, connectDB } = require("./config/db");
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use("/public", express.static("public"));
 app.use("/private", express.static("private"));
 
 // Routes
-app.use("/api", require("./src/routes"));
+app.use("/api", require("./routes"));
 
 app.get("/", (req, res) => {
     res.send("API is running...");
@@ -29,7 +29,7 @@ app.use((req, res) =>
 );
 
 // Error Handling Middleware
-app.use(require("./src/middlewares/errorHandler"));
+app.use(require("./middlewares/errorHandler"));
 
 // Server Connection
 const startServer = async () => {
