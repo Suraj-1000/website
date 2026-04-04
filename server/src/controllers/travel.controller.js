@@ -1,23 +1,12 @@
-const travelService = require('../services/travel.service');
+const asyncHandler = require('@/middlewares/asyncHandler');
+const travelService = require('@/services/travel.service');
 
-class TravelController {
-    async getTravels(req, res) {
-        try {
-            const travels = await travelService.getAllTravels();
-            res.status(200).json({ success: true, data: travels });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+exports.getTravels = asyncHandler(async (req, res) => {
+   const travels = await travelService.findAll();
+   res.status(200).json({ success: true, count: travels.length, data: travels });
+});
 
-    async createTravel(req, res) {
-        try {
-            const travel = await travelService.addTravel(req.body);
-            res.status(201).json({ success: true, data: travel });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-}
-
-module.exports = new TravelController();
+exports.createTravel = asyncHandler(async (req, res) => {
+   const travel = await travelService.create(req.body);
+   res.status(201).json({ success: true, data: travel });
+});
