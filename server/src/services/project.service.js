@@ -1,21 +1,10 @@
-const projectRepository = require('../repositories/project.repo');
+const BaseService = require('./base.service');
+const projectRepository = require('@/repositories/project.repo');
 
-class ProjectService {
-    async getAllProjects() {
-        return await projectRepository.findAll();
-    }
-
-    async addProject(data) {
-        return await projectRepository.create(data);
-    }
-
-    async updateProject(id, data) {
-        return await projectRepository.update(id, data);
-    }
-
-    async deleteProject(id) {
-        return await projectRepository.delete(id);
-    }
+class ProjectService extends BaseService {
+   constructor() {
+      super(projectRepository);
+   }
 }
 
 module.exports = new ProjectService();

@@ -1,21 +1,10 @@
-const referenceRepository = require('../repositories/reference.repo');
+const BaseService = require('./base.service');
+const referenceRepository = require('@/repositories/reference.repo');
 
-class ReferenceService {
-    async getAllReferences() {
-        return await referenceRepository.findAll();
-    }
-
-    async addReference(data) {
-        return await referenceRepository.create(data);
-    }
-
-    async updateReference(id, data) {
-        return await referenceRepository.update(id, data);
-    }
-
-    async deleteReference(id) {
-        return await referenceRepository.delete(id);
-    }
+class ReferenceService extends BaseService {
+   constructor() {
+      super(referenceRepository);
+   }
 }
 
 module.exports = new ReferenceService();

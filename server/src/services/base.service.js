@@ -3,8 +3,24 @@ class BaseService {
       this.repository = repository;
    }
 
-   response(success, message, data = null) {
-      return { success, message, ...(data != null && { data }) };
+   async findAll() {
+      return await this.repository.findAll();
+   }
+
+   async findById(id) {
+      return await this.repository.findById(id);
+   }
+
+   async create(data) {
+      return await this.repository.create(data);
+   }
+
+   async update(id, data) {
+      return await this.repository.update(id, data);
+   }
+
+   async delete(id) {
+      return await this.repository.delete(id);
    }
 }
 
