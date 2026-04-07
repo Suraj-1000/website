@@ -1,21 +1,16 @@
 const { Router } = require('express');
-const {
-   getReferences,
-   createReference,
-   updateReference,
-   deleteReference,
-} = require('@/controllers/reference.controller');
+const referenceController = require('@/controllers/reference.controller');
 const { protect, authorize } = require('@/middlewares/auth.middleware');
 
 const router = Router();
 
 router.route('/')
-   .get(getReferences)
-   .post(protect, authorize('admin'), createReference);
+   .get(referenceController.getAll)
+   .post(protect, authorize('admin'), referenceController.create);
 
 router.route('/:id')
-   .put(protect, authorize('admin'), updateReference)
-   .patch(protect, authorize('admin'), updateReference)
-   .delete(protect, authorize('admin'), deleteReference);
+   .put(protect, authorize('admin'), referenceController.update)
+   .patch(protect, authorize('admin'), referenceController.update)
+   .delete(protect, authorize('admin'), referenceController.delete);
 
 module.exports = router;

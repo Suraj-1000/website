@@ -1,21 +1,16 @@
 const { Router } = require('express');
-const {
-   getLanguages,
-   createLanguage,
-   updateLanguage,
-   deleteLanguage,
-} = require('@/controllers/language.controller');
+const languageController = require('@/controllers/language.controller');
 const { protect, authorize } = require('@/middlewares/auth.middleware');
 
 const router = Router();
 
 router.route('/')
-   .get(getLanguages)
-   .post(protect, authorize('admin'), createLanguage);
+   .get(languageController.getAll)
+   .post(protect, authorize('admin'), languageController.create);
 
 router.route('/:id')
-   .put(protect, authorize('admin'), updateLanguage)
-   .patch(protect, authorize('admin'), updateLanguage)
-   .delete(protect, authorize('admin'), deleteLanguage);
+   .put(protect, authorize('admin'), languageController.update)
+   .patch(protect, authorize('admin'), languageController.update)
+   .delete(protect, authorize('admin'), languageController.delete);
 
 module.exports = router;

@@ -1,21 +1,16 @@
 const { Router } = require('express');
-const {
-   getSkills,
-   createSkill,
-   updateSkill,
-   deleteSkill,
-} = require('@/controllers/skill.controller');
+const skillController = require('@/controllers/skill.controller');
 const { protect, authorize } = require('@/middlewares/auth.middleware');
 
 const router = Router();
 
 router.route('/')
-   .get(getSkills)
-   .post(protect, authorize('admin'), createSkill);
+   .get(skillController.getAll)
+   .post(protect, authorize('admin'), skillController.create);
 
 router.route('/:id')
-   .put(protect, authorize('admin'), updateSkill)
-   .patch(protect, authorize('admin'), updateSkill)
-   .delete(protect, authorize('admin'), deleteSkill);
+   .put(protect, authorize('admin'), skillController.update)
+   .patch(protect, authorize('admin'), skillController.update)
+   .delete(protect, authorize('admin'), skillController.delete);
 
 module.exports = router;
