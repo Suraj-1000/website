@@ -1,46 +1,50 @@
 const asyncHandler = require('@/middlewares/asyncHandler');
 const awardService = require('@/services/award.service');
 
-exports.getAwards = asyncHandler(async (req, res) => {
-   const awards = await awardService.findAll();
-   res.status(200).json({ success: true, count: awards.length, data: awards });
-});
+class AwardController {
+   getAwards = asyncHandler(async (req, res) => {
+      const awards = await awardService.findAll();
+      res.status(200).json({ success: true, count: awards.length, data: awards });
+   });
 
-exports.createAward = asyncHandler(async (req, res) => {
-   const awardData = { ...req.body };
-   if (req.files && req.files.length > 0) {
-      awardData.images = req.files.map(file => `/private/award/${file.filename}`);
-   } else {
-      awardData.images = [];
-   }
-   const award = await awardService.create(awardData);
-   res.status(201).json({ success: true, data: award });
-});
+   createAward = asyncHandler(async (req, res) => {
+      const awardData = { ...req.body };
+      if (req.files && req.files.length > 0) {
+         awardData.images = req.files.map(file => `/private/award/${file.filename}`);
+      } else {
+         awardData.images = [];
+      }
+      const award = await awardService.create(awardData);
+      res.status(201).json({ success: true, data: award });
+   });
 
-exports.updateAward = asyncHandler(async (req, res) => {
-   const awardData = { ...req.body };
+   updateAward = asyncHandler(async (req, res) => {
+      const awardData = { ...req.body };
 
-   let currentImages = [];
-   if (req.body.existingImages) {
-      currentImages = Array.isArray(req.body.existingImages)
-         ? req.body.existingImages
-         : [req.body.existingImages];
-   }
+      let currentImages = [];
+      if (req.body.existingImages) {
+         currentImages = Array.isArray(req.body.existingImages)
+            ? req.body.existingImages
+            : [req.body.existingImages];
+      }
 
-   let newImages = [];
-   if (req.files && req.files.length > 0) {
-      newImages = req.files.map(file => `/private/award/${file.filename}`);
-   }
+      let newImages = [];
+      if (req.files && req.files.length > 0) {
+         newImages = req.files.map(file => `/private/award/${file.filename}`);
+      }
 
-   awardData.images = [...currentImages, ...newImages].slice(0, 2);
+      awardData.images = [...currentImages, ...newImages].slice(0, 2);
 
-   const award = await awardService.update(req.params.id, awardData);
-   if (!award) return res.status(404).json({ success: false, error: 'Award not found' });
-   res.status(200).json({ success: true, data: award });
-});
+      const award = await awardService.update(req.params.id, awardData);
+      if (!award) return res.status(404).json({ success: false, error: 'Award not found' });
+      res.status(200).json({ success: true, data: award });
+   });
 
-exports.deleteAward = asyncHandler(async (req, res) => {
-   const result = await awardService.delete(req.params.id);
-   if (!result) return res.status(404).json({ success: false, error: 'Award not found' });
-   res.status(200).json({ success: true, data: {} });
-});
+   deleteAward = asyncHandler(async (req, res) => {
+      const result = await awardService.delete(req.params.id);
+      if (!result) return res.status(404).json({ success: false, error: 'Award not found' });
+      res.status(200).json({ success: true, data: {} });
+   });
+}
+
+module.exports = new AwardController();
