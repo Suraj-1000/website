@@ -7,9 +7,9 @@ class ContactRepository extends BaseRepository {
    }
 
    // Custom method: update only the status field
-   async updateStatus(id, status) {
+   updateStatus = async (id, status) => {
       return await this.model.update({ status }, { where: { id } });
-   }
+   };
 }
 
 module.exports = new ContactRepository();

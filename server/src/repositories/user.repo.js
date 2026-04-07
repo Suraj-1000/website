@@ -7,9 +7,9 @@ class UserRepository extends BaseRepository {
    }
 
    // Custom method: find user by email for auth
-   async findByEmail(email) {
+   findByEmail = async (email) => {
       return await this.findOne({ email });
-   }
+   };
 }
 
 module.exports = new UserRepository();
