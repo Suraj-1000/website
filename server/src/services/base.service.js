@@ -3,25 +3,25 @@ class BaseService {
       this.repository = repository;
    }
 
-   async findAll() {
+   findAll = async () => {
       return await this.repository.findAll();
-   }
+   };
 
-   async findById(id) {
+   findById = async (id) => {
       return await this.repository.findById(id);
-   }
+   };
 
-   async create(data) {
+   create = async (data) => {
       return await this.repository.create(data);
-   }
+   };
 
-   async update(id, data) {
+   update = async (id, data) => {
       return await this.repository.update(id, data);
-   }
+   };
 
-   async delete(id) {
+   delete = async (id) => {
       return await this.repository.delete(id);
-   }
+   };
 }
 
 module.exports = BaseService;

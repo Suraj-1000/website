@@ -6,7 +6,7 @@ class AuthService extends BaseService {
       super(userRepository);
    }
 
-   async login(email, password) {
+   login = async (email, password) => {
       const user = await this.repository.findByEmail(email);
       if (!user) throw new Error('Invalid credentials');
 
@@ -14,11 +14,11 @@ class AuthService extends BaseService {
       if (!isMatch) throw new Error('Invalid credentials');
 
       return user;
-   }
+   };
 
-   async findByEmail(email) {
+   findByEmail = async (email) => {
       return await this.repository.findByEmail(email);
-   }
+   };
 }
 
 module.exports = new AuthService();
