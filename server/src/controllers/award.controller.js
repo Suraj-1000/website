@@ -2,12 +2,12 @@ const asyncHandler = require('@/middlewares/asyncHandler');
 const awardService = require('@/services/award.service');
 
 class AwardController {
-   getAwards = asyncHandler(async (req, res) => {
+   getAll = asyncHandler(async (req, res) => {
       const awards = await awardService.findAll();
       res.status(200).json({ success: true, count: awards.length, data: awards });
    });
 
-   createAward = asyncHandler(async (req, res) => {
+   create = asyncHandler(async (req, res) => {
       const awardData = { ...req.body };
       if (req.files && req.files.length > 0) {
          awardData.images = req.files.map(file => `/private/award/${file.filename}`);
@@ -18,7 +18,7 @@ class AwardController {
       res.status(201).json({ success: true, data: award });
    });
 
-   updateAward = asyncHandler(async (req, res) => {
+   update = asyncHandler(async (req, res) => {
       const awardData = { ...req.body };
 
       let currentImages = [];
@@ -40,7 +40,7 @@ class AwardController {
       res.status(200).json({ success: true, data: award });
    });
 
-   deleteAward = asyncHandler(async (req, res) => {
+   delete = asyncHandler(async (req, res) => {
       const result = await awardService.delete(req.params.id);
       if (!result) return res.status(404).json({ success: false, error: 'Award not found' });
       res.status(200).json({ success: true, data: {} });
