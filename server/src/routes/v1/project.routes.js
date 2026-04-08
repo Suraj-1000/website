@@ -3,14 +3,15 @@ const projectController = require('@/controllers/project.controller');
 const { protect, authorize } = require('@/middlewares/auth.middleware');
 
 const router = Router();
+const adminOnly = [protect, authorize('admin')];
 
 router.route('/')
    .get(projectController.getAll)
-   .post(protect, authorize('admin'), projectController.create);
+   .post(adminOnly, projectController.create);
 
 router.route('/:id')
-   .put(protect, authorize('admin'), projectController.update)
-   .patch(protect, authorize('admin'), projectController.update)
-   .delete(protect, authorize('admin'), projectController.delete);
+   .put(adminOnly, projectController.update)
+   .patch(adminOnly, projectController.update)
+   .delete(adminOnly, projectController.delete);
 
 module.exports = router;
