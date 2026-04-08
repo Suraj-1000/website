@@ -1,12 +1,8 @@
 const express = require("express");
-const moduleAlias = require("module-alias");
 
-// Setup module aliases
-moduleAlias.addAliases({ "@": __dirname, });
-
-const { appConfig, envConfig } = require("@/config");
-const { errorHandler } = require("@/middlewares");
-const db = require("@/database/models");
+const { appConfig, envConfig } = require("./config");
+const { errorHandler } = require("./middlewares");
+const db = require("./database/models");
 
 const app = express();
 
@@ -17,7 +13,7 @@ app.set("trust proxy", 1);
 appConfig(app);
 
 //Routes
-app.use("/api", require("@/routes"));
+app.use("/api", require("./routes"));
 
 // Invalid Route
 app.use((req, res) =>
