@@ -1,5 +1,6 @@
-const asyncHandler = require('@/middlewares/asyncHandler');
-const skillService = require('@/services/skill.service');
+const asyncHandler = require('../middlewares/asyncHandler');
+const skillService = require('../services/skill.service');
+const { NotFoundException } = require('../exceptions/error.exception');
 
 class SkillController {
    getAll = asyncHandler(async (req, res) => {
@@ -14,13 +15,13 @@ class SkillController {
 
    update = asyncHandler(async (req, res) => {
       const skill = await skillService.update(req.params.id, req.body);
-      if (!skill) return res.status(404).json({ success: false, error: 'Skill not found' });
+      if (!skill) throw new NotFoundException('Skill not found');
       res.status(200).json({ success: true, data: skill });
    });
 
    delete = asyncHandler(async (req, res) => {
       const result = await skillService.delete(req.params.id);
-      if (!result) return res.status(404).json({ success: false, error: 'Skill not found' });
+      if (!result) throw new NotFoundException('Skill not found');
       res.status(200).json({ success: true, data: {} });
    });
 }
