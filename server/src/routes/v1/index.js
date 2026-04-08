@@ -1,16 +1,28 @@
 const { Router } = require('express');
+const fs = require('fs');
 
 const router = Router();
 
-router.use('/auth',        require('./auth.routes'));
-router.use('/experiences', require('./experience.routes'));
-router.use('/education',   require('./education.routes'));
-router.use('/awards',      require('./award.routes'));
-router.use('/contacts',    require('./contact.routes'));
-router.use('/skills',      require('./skill.routes'));
-router.use('/projects',    require('./project.routes'));
-router.use('/languages',   require('./language.routes'));
-router.use('/references',  require('./reference.routes'));
-router.use('/travel',      require('./travel.routes'));
+/**
+ * Auto-register routes from files named *.routes.js
+ * Maps filename to URL path (with pluralization if needed)
+ */
+const routeMap = {
+   experience: 'experiences',
+   award: 'awards',
+   contact: 'contacts',
+   skill: 'skills',
+   project: 'projects',
+   language: 'languages',
+   reference: 'references',
+};
+
+fs.readdirSync(__dirname).forEach((file) => {
+   if (file.endsWith('.routes.js')) {
+      const name = file.replace('.routes.js', '');
+      const routePath = routeMap[name] || name;
+      router.use(`/${routePath}`, require(`./${file}`));
+   }
+});
 
 module.exports = router;
