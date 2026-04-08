@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./asyncHandler');
-const { User } = require('@/database/models');
+const { User } = require('../database/models');
 
-// Protect routes
-exports.protect = asyncHandler(async (req, res, next) => {
+/**
+ * Check Authentication middleware
+ */
+exports.checkAuth = asyncHandler(async (req, res, next) => {
     let token;
 
     if (

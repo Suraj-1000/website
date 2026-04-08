@@ -1,17 +1,14 @@
-const { Router } = require('express');
-const experienceController = require('@/controllers/experience.controller');
-const { protect, authorize } = require('@/middlewares/auth.middleware');
+const router = require("express").Router();
+const experienceController = require("../../controllers/experience.controller");
+const { checkAuth, authorize } = require("../../middlewares/authMiddleware");
 
-const router = Router();
-const adminOnly = [protect, authorize('admin')];
+const adminOnly = [checkAuth, authorize('admin')];
 
-router.route('/')
-   .get(experienceController.getAll)
-   .post(adminOnly, experienceController.create);
+router.get("/", experienceController.getAll);
+router.post("/", adminOnly, experienceController.create);
 
-router.route('/:id')
-   .put(adminOnly, experienceController.update)
-   .patch(adminOnly, experienceController.update)
-   .delete(adminOnly, experienceController.delete);
+router.put("/:id", adminOnly, experienceController.update);
+router.patch("/:id", adminOnly, experienceController.update);
+router.delete("/:id", adminOnly, experienceController.delete);
 
 module.exports = router;

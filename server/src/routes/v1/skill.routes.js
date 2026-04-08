@@ -1,16 +1,14 @@
-const { Router } = require('express');
-const skillController = require('@/controllers/skill.controller');
-const { protect, authorize } = require('@/middlewares/auth.middleware');
+const router = require("express").Router();
+const skillController = require("../../controllers/skill.controller");
+const { checkAuth, authorize } = require("../../middlewares/authMiddleware");
 
-const router = Router();
+const adminOnly = [checkAuth, authorize('admin')];
 
-router.route('/')
-   .get(skillController.getAll)
-   .post(protect, authorize('admin'), skillController.create);
+router.get("/", skillController.getAll);
+router.post("/", adminOnly, skillController.create);
 
-router.route('/:id')
-   .put(protect, authorize('admin'), skillController.update)
-   .patch(protect, authorize('admin'), skillController.update)
-   .delete(protect, authorize('admin'), skillController.delete);
+router.put("/:id", adminOnly, skillController.update);
+router.patch("/:id", adminOnly, skillController.update);
+router.delete("/:id", adminOnly, skillController.delete);
 
 module.exports = router;

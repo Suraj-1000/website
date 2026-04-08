@@ -1,18 +1,16 @@
-const { Router } = require('express');
-const awardController = require('@/controllers/award.controller');
-const { protect, authorize } = require('@/middlewares/auth.middleware');
-const createUpload = require('@/middlewares/upload.middleware');
+const router = require("express").Router();
+const awardController = require("../../controllers/award.controller");
+const { checkAuth, authorize } = require("../../middlewares/authMiddleware");
+const createUpload = require("../../middlewares/upload.middleware");
 
-const router = Router();
 const upload = createUpload('private/award/');
+const adminOnly = [checkAuth, authorize('admin')];
 
-router.route('/')
-   .get(awardController.getAll)
-   .post(protect, authorize('admin'), upload.array('images', 2), awardController.create);
+router.get("/", awardController.getAll);
+router.post("/", adminOnly, upload.array('images', 2), awardController.create);
 
-router.route('/:id')
-   .put(protect, authorize('admin'), upload.array('images', 2), awardController.update)
-   .patch(protect, authorize('admin'), upload.array('images', 2), awardController.update)
-   .delete(protect, authorize('admin'), awardController.delete);
+router.put("/:id", adminOnly, upload.array('images', 2), awardController.update);
+router.patch("/:id", adminOnly, upload.array('images', 2), awardController.update);
+router.delete("/:id", adminOnly, awardController.delete);
 
 module.exports = router;

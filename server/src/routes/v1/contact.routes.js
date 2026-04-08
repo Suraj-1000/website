@@ -1,9 +1,8 @@
-const { Router } = require('express');
-const contactController = require('@/controllers/contact.controller');
-const { protect, authorize } = require('@/middlewares/auth.middleware');
+const router = require("express").Router();
+const contactController = require("../../controllers/contact.controller");
+const { checkAuth, authorize } = require("../../middlewares/authMiddleware");
 
-const router = Router();
-const adminOnly = [protect, authorize('admin')];
+const adminOnly = [checkAuth, authorize('admin')];
 
 router.post('/', contactController.submitContact);
 router.get('/', adminOnly, contactController.getAllContacts);
