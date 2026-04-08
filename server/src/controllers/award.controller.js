@@ -1,5 +1,6 @@
-const asyncHandler = require('@/middlewares/asyncHandler');
-const awardService = require('@/services/award.service');
+const asyncHandler = require('../middlewares/asyncHandler');
+const awardService = require('../services/award.service');
+const { NotFoundException } = require('../exceptions/error.exception');
 
 class AwardController {
    getAll = asyncHandler(async (req, res) => {
@@ -36,13 +37,13 @@ class AwardController {
       awardData.images = [...currentImages, ...newImages].slice(0, 2);
 
       const award = await awardService.update(req.params.id, awardData);
-      if (!award) return res.status(404).json({ success: false, error: 'Award not found' });
+      if (!award) throw new NotFoundException('Award not found');
       res.status(200).json({ success: true, data: award });
    });
 
    delete = asyncHandler(async (req, res) => {
       const result = await awardService.delete(req.params.id);
-      if (!result) return res.status(404).json({ success: false, error: 'Award not found' });
+      if (!result) throw new NotFoundException('Award not found');
       res.status(200).json({ success: true, data: {} });
    });
 }

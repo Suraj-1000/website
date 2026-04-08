@@ -1,6 +1,7 @@
-const asyncHandler = require('@/middlewares/asyncHandler');
-const authService = require('@/services/auth.service');
+const asyncHandler = require('../middlewares/asyncHandler');
+const authService = require('../services/auth.service');
 const jwt = require('jsonwebtoken');
+const { UnAuthorizedException, BadRequestException, InternalServerException, NotFoundException } = require('../exceptions/error.exception');
 
 class AuthController {
    // @desc    Register user
@@ -11,7 +12,7 @@ class AuthController {
          const user = await authService.create(req.body);
          this.sendTokenResponse(user, 201, res);
       } catch (error) {
-         res.status(500).json({ success: false, error: error.message });
+         throw new InternalServerException(error.message);
       }
    });
 
@@ -22,14 +23,14 @@ class AuthController {
       const { email, password } = req.body;
 
       if (!email || !password) {
-         return res.status(400).json({ success: false, error: 'Please provide an email and password' });
+         throw new BadRequestException('Please provide an email and password');
       }
 
       try {
          const user = await authService.login(email, password);
          this.sendTokenResponse(user, 200, res);
       } catch (error) {
-         res.status(401).json({ success: false, error: error.message });
+         throw new UnAuthorizedException(error.message);
       }
    });
 
@@ -40,18 +41,18 @@ class AuthController {
       const refreshToken = req.cookies.refreshToken;
 
       if (!refreshToken) {
-         return res.status(401).json({ success: false, error: 'Refresh token not found' });
+         throw new UnAuthorizedException('Refresh token not found');
       }
 
       try {
          const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
          const user = await authService.findById(decoded.id);
 
-         if (!user) return res.status(401).json({ success: false, error: 'User not found' });
+         if (!user) throw new UnAuthorizedException('User not found');
 
          this.sendTokenResponse(user, 200, res);
       } catch (error) {
-         return res.status(401).json({ success: false, error: 'Invalid refresh token' });
+         throw new UnAuthorizedException('Invalid refresh token');
       }
    });
 
@@ -60,6 +61,7 @@ class AuthController {
    // @access  Private
    getMe = asyncHandler(async (req, res) => {
       const user = await authService.findById(req.user.id);
+      if (!user) throw new NotFoundException('User not found');
       res.status(200).json({ success: true, data: user });
    });
 
