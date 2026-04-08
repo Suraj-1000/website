@@ -1,5 +1,6 @@
-const asyncHandler = require('@/middlewares/asyncHandler');
-const educationService = require('@/services/education.service');
+const asyncHandler = require('../middlewares/asyncHandler');
+const educationService = require('../services/education.service');
+const { NotFoundException } = require('../exceptions/error.exception');
 
 class EducationController {
    getAll = asyncHandler(async (req, res) => {
@@ -14,13 +15,13 @@ class EducationController {
 
    update = asyncHandler(async (req, res) => {
       const education = await educationService.update(req.params.id, req.body);
-      if (!education) return res.status(404).json({ success: false, error: 'Education not found' });
+      if (!education) throw new NotFoundException('Education not found');
       res.status(200).json({ success: true, data: education });
    });
 
    delete = asyncHandler(async (req, res) => {
       const result = await educationService.delete(req.params.id);
-      if (!result) return res.status(404).json({ success: false, error: 'Education not found' });
+      if (!result) throw new NotFoundException('Education not found');
       res.status(200).json({ success: true, data: {} });
    });
 }

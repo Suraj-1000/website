@@ -1,8 +1,12 @@
 const express = require("express");
+const moduleAlias = require("module-alias");
 
-const { appConfig, envConfig } = require("./config");
-const { errorHandler } = require("./middlewares");
-const db = require("./database/models");
+// Setup module aliases
+moduleAlias.addAliases({ "@": __dirname, });
+
+const { appConfig, envConfig } = require("@/config");
+const { errorHandler } = require("@/middlewares");
+const db = require("@/database/models");
 
 const app = express();
 
@@ -13,7 +17,7 @@ app.set("trust proxy", 1);
 appConfig(app);
 
 //Routes
-app.use("/api", require("./routes"));
+app.use("/api", require("@/routes"));
 
 // Invalid Route
 app.use((req, res) =>
@@ -31,11 +35,11 @@ db.sequelize
    .authenticate()
    .then(() => {
       console.log("Postgres connected successfully");
-      return db.sequelize.sync(); // Removed { alter: true } to support migrations
+      return db.sequelize.sync({ alter: true }); // Automatically create/update tables
    })
    .then(() => console.log("Database synchronized"))
    .catch((err) => console.error("Unable to connect/sync the database:", err));
 // Server Configuration
 app.listen(envConfig.PORT, () =>
-   console.log(`Backend Server running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`)
+   console.log(`App running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`)
 );
