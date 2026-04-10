@@ -1,5 +1,6 @@
-const asyncHandler = require('@/middlewares/asyncHandler');
-const languageService = require('@/services/language.service');
+const asyncHandler = require('../middlewares/asyncHandler');
+const languageService = require('../services/language.service');
+const { NotFoundException } = require('../exceptions/error.exception');
 
 class LanguageController {
    getAll = asyncHandler(async (req, res) => {
@@ -14,13 +15,13 @@ class LanguageController {
 
    update = asyncHandler(async (req, res) => {
       const language = await languageService.update(req.params.id, req.body);
-      if (!language) return res.status(404).json({ success: false, error: 'Language not found' });
+      if (!language) throw new NotFoundException('Language not found');
       res.status(200).json({ success: true, data: language });
    });
 
    delete = asyncHandler(async (req, res) => {
       const result = await languageService.delete(req.params.id);
-      if (!result) return res.status(404).json({ success: false, error: 'Language not found' });
+      if (!result) throw new NotFoundException('Language not found');
       res.status(200).json({ success: true, data: {} });
    });
 }
