@@ -1,4 +1,5 @@
-const { sequelize, Sequelize } = require('../../config/db');
+const { Sequelize } = require('sequelize');
+const { sequelize } = require('../../config/db');
 
 // Import models
 const User = require('./User');
@@ -29,7 +30,7 @@ const db = {
 
 // If any model has associate method, call it
 Object.keys(db).forEach(modelName => {
-    if (db[modelName].associate) {
+    if (db[modelName] && db[modelName].associate) {
         db[modelName].associate(db);
     }
 });
