@@ -71,6 +71,7 @@ const Login = () => {
                                 <Input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
                                     className="pr-10"
                                     required
                                     value={formData.password}
