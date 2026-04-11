@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('@/config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const User = sequelize.define('User', {
     id: {
@@ -28,6 +29,14 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'admin',
+    },
+    resetPasswordToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    resetPasswordExpire: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }
 }, {
     timestamps: true,
@@ -51,9 +60,21 @@ User.prototype.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Instance method to sign JWT implementation inside model or controller? 
-// Mongoose allows methods, Sequelize allows prototype methods.
-// Let's keep JWT signing in controller for separation or here. 
-// I'll keep it simple and just use matchPassword here.
+// Instance method to generate and hash password token
+User.prototype.getResetPasswordToken = function () {
+    // Generate token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // Hash token and set to resetPasswordToken field
+    this.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+    // Set expire (10 minutes)
+    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
+};
 
 module.exports = User;
