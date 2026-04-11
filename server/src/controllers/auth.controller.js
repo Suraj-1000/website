@@ -2,6 +2,7 @@ const asyncHandler = require('../middlewares/asyncHandler');
 const authService = require('../services/auth.service');
 const jwt = require('jsonwebtoken');
 const { UnAuthorizedException, BadRequestException, InternalServerException, NotFoundException } = require('../exceptions/error.exception');
+const sendEmail = require('../utils/emailService');
 
 class AuthController {
    // @desc    Register user
@@ -63,6 +64,62 @@ class AuthController {
       const user = await authService.findById(req.user.id);
       if (!user) throw new NotFoundException('User not found');
       res.status(200).json({ success: true, data: user });
+   });
+
+   // @desc    Forgot password
+   // @route   POST /api/auth/forgot-password
+   // @access  Public
+   forgotPassword = asyncHandler(async (req, res) => {
+      const { email } = req.body;
+
+      if (!email) {
+         throw new BadRequestException('Please provide an email');
+      }
+
+      try {
+         const resetToken = await authService.forgotPassword(email);
+
+         // Create reset url (pointing to frontend)
+         const resetUrl = `${req.protocol}://${req.get('host').replace('5000', '5173')}/admin/reset-password/${resetToken}`;
+
+         const message = `
+            <h1>Password Reset Request</h1>
+            <p>You are receiving this email because you (or someone else) have requested the reset of a password.</p>
+            <p>Please click on the link below to reset your password:</p>
+            <p><a href="${resetUrl}" target="_blank">${resetUrl}</a></p>
+            <p>If you did not request this, please ignore this email.</p>
+            <p>The link will expire in 10 minutes.</p>
+         `;
+
+         await sendEmail({
+            to: email,
+            subject: 'Portfolio Admin - Password Reset',
+            html: message,
+         });
+
+         res.status(200).json({ success: true, data: 'Email sent successfully' });
+      } catch (error) {
+         throw new InternalServerException(error.message);
+      }
+   });
+
+   // @desc    Reset password
+   // @route   PUT /api/auth/reset-password/:resetToken
+   // @access  Public
+   resetPassword = asyncHandler(async (req, res) => {
+      const { password } = req.body;
+      const { resetToken } = req.params;
+
+      if (!password) {
+         throw new BadRequestException('Please provide a new password');
+      }
+
+      try {
+         await authService.resetPassword(resetToken, password);
+         res.status(200).json({ success: true, data: 'Password reset successful' });
+      } catch (error) {
+         throw new InternalServerException(error.message);
+      }
    });
 
    // Helper: create tokens + send response
