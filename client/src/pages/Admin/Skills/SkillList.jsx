@@ -46,47 +46,48 @@ const SkillList = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
-                    <Wrench className="text-primary" /> Manage Skills
-                </h1>
-                <Button asChild className="gap-2 shadow-lg shadow-primary/20">
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+                        Skills
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Organize and manage your technical stack and competencies
+                    </p>
+                </div>
+                <Button asChild size="sm" className="gap-2 shadow-sm">
                     <Link to="/admin/skills/new">
-                        <Plus size={20} /> Add New Category
+                        <Plus size={16} /> Add Category
                     </Link>
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {skills.map((skill) => {
                     const IconComponent = IconMap[skill.icon] || Code;
 
                     return (
-                        <motion.div
-                            key={skill._id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                        >
-                            <Card className="hover:border-primary/50 transition-all shadow-sm relative group">
+                        <div key={skill._id}>
+                            <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
                                 <CardHeader className="flex flex-row items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-primary/10 rounded-xl text-primary shadow-inner">
-                                            <IconComponent size={24} />
+                                        <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                            <IconComponent size={18} />
                                         </div>
-                                        <CardTitle className="text-xl font-bold">{skill.category}</CardTitle>
+                                        <CardTitle className="text-lg font-bold">{skill.category}</CardTitle>
                                     </div>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Button variant="ghost" size="icon" asChild className="h-8 w-8">
+                                        <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
                                             <Link to={`/admin/skills/edit/${skill._id}`}>
                                                 <Edit2 size={14} />
                                             </Link>
                                         </Button>
                                         <Button
-                                            variant="ghost"
+                                            variant="outline"
                                             size="icon"
                                             onClick={() => handleDelete(skill._id)}
-                                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                            className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
                                         </Button>
@@ -98,8 +99,8 @@ const SkillList = () => {
                                         {skill.items.map((item, idx) => (
                                             <Badge
                                                 key={idx}
-                                                variant="outline"
-                                                className="bg-muted/30 border-muted-foreground/20 text-muted-foreground/80 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider"
+                                                variant="secondary"
+                                                className="bg-muted text-muted-foreground px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider rounded-sm"
                                             >
                                                 {item}
                                             </Badge>
@@ -107,11 +108,11 @@ const SkillList = () => {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </div>
                     );
                 })}
             </div>
-        </div>
+        </section>
     );
 };
 
