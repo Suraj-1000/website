@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../../utils/api';
 import { useForm, useFieldArray } from 'react-hook-form';
-import { motion } from 'framer-motion';
 import { Save, ArrowLeft, Plus, X, Globe, Github } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Textarea } from '../../../components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Label } from '../../../components/ui/label';
+import { Link } from 'react-router-dom';
 
 const ProjectForm = () => {
     const { id } = useParams();
@@ -77,133 +76,121 @@ const ProjectForm = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto pb-10">
-            <Button
-                variant="ghost"
-                onClick={() => navigate('/admin/projects')}
-                className="group mb-6 hover:bg-transparent -ml-2"
-            >
-                <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
-                Back to List
-            </Button>
-
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-            >
-                <Card className="shadow-xl">
-                    <CardHeader className="border-b bg-muted/20 pb-8">
-                        <CardTitle className="text-3xl font-bold">
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="max-w-3xl mx-auto space-y-6">
+                <div className="flex items-center gap-4">
+                    <Link to="/admin/projects" className="p-2 hover:bg-muted rounded-full transition-colors">
+                        <ArrowLeft size={18} />
+                    </Link>
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight">
                             {isEditing ? 'Edit Project' : 'Add New Project'}
-                        </CardTitle>
-                        <p className="text-muted-foreground mt-2">
+                        </h1>
+                        <p className="text-sm text-muted-foreground mt-1">
                             Fill details about your latest work to showcase it.
                         </p>
-                    </CardHeader>
+                    </div>
+                </div>
 
-                    <CardContent className="p-8">
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="title" className="text-base">Project Title</Label>
-                                    <Input
-                                        id="title"
-                                        {...register('title', { required: 'Title is required' })}
-                                        placeholder="e.g. Portfolio Website"
-                                        className="h-11"
-                                    />
-                                    {errors.title && <p className="text-destructive text-sm font-medium">{errors.title.message}</p>}
-                                </div>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-background border border-border p-8 rounded-md shadow-sm">
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="title" className="text-sm font-semibold">Project Title</Label>
+                            <Input
+                                id="title"
+                                {...register('title', { required: 'Title is required' })}
+                                placeholder="e.g. Portfolio Website"
+                                className="h-10"
+                            />
+                            {errors.title && <p className="text-red-500 text-xs font-medium">{errors.title.message}</p>}
+                        </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="description" className="text-base">Description</Label>
-                                    <Textarea
-                                        id="description"
-                                        {...register('description', { required: 'Description is required' })}
-                                        className="min-h-[150px] resize-none"
-                                        placeholder="Brief description of the project..."
-                                    />
-                                    {errors.description && <p className="text-destructive text-sm font-medium">{errors.description.message}</p>}
-                                </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="description" className="text-sm font-semibold">Description</Label>
+                            <Textarea
+                                id="description"
+                                {...register('description', { required: 'Description is required' })}
+                                className="min-h-[120px] resize-none"
+                                placeholder="Brief description of the project..."
+                            />
+                            {errors.description && <p className="text-red-500 text-xs font-medium">{errors.description.message}</p>}
+                        </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="repoLink" className="flex items-center gap-2 text-base">
-                                            <Github size={16} /> Repository Link
-                                        </Label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="repoLink" className="flex items-center gap-2 text-sm font-semibold">
+                                    <Github size={14} /> Repository Link
+                                </Label>
+                                <Input
+                                    id="repoLink"
+                                    {...register('repoLink')}
+                                    placeholder="https://github.com/..."
+                                    className="h-10"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="demoLink" className="flex items-center gap-2 text-sm font-semibold">
+                                    <Globe size={14} /> Demo Link
+                                </Label>
+                                <Input
+                                    id="demoLink"
+                                    {...register('demoLink')}
+                                    placeholder="https://..."
+                                    className="h-10"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <Label className="text-sm font-semibold">Tech Stack</Label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {fields.map((field, index) => (
+                                    <div key={field.id} className="flex gap-2">
                                         <Input
-                                            id="repoLink"
-                                            {...register('repoLink')}
-                                            placeholder="https://github.com/..."
-                                            className="h-11"
+                                            {...register(`techStack.${index}.value`)}
+                                            className="flex-1 h-10"
+                                            placeholder="e.g. React"
                                         />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="demoLink" className="flex items-center gap-2 text-base">
-                                            <Globe size={16} /> Demo Link
-                                        </Label>
-                                        <Input
-                                            id="demoLink"
-                                            {...register('demoLink')}
-                                            placeholder="https://..."
-                                            className="h-11"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <Label className="text-base">Tech Stack</Label>
-                                    <div className="space-y-3">
-                                        {fields.map((field, index) => (
-                                            <div key={field.id} className="flex gap-2">
-                                                <Input
-                                                    {...register(`techStack.${index}.value`)}
-                                                    className="flex-1 h-11"
-                                                    placeholder="e.g. React"
-                                                />
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => remove(index)}
-                                                    className="text-destructive hover:bg-destructive/10 h-11 w-11"
-                                                >
-                                                    <X size={20} />
-                                                </Button>
-                                            </div>
-                                        ))}
                                         <Button
                                             type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => append({ value: '' })}
-                                            className="gap-2"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => remove(index)}
+                                            className="text-red-500 hover:bg-red-500/10 hover:text-red-500 h-10 w-10"
                                         >
-                                            <Plus size={16} /> Add Tech
+                                            <X size={18} />
                                         </Button>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-
                             <Button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full h-12 text-lg font-bold shadow-lg shadow-primary/20"
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => append({ value: '' })}
+                                className="gap-2 text-primary border-primary/20 hover:bg-primary/5 rounded-md"
                             >
-                                {loading ? (
-                                    'Saving...'
-                                ) : (
-                                    <>
-                                        <Save size={20} className="mr-2" />
-                                        {isEditing ? 'Update Project' : 'Save Project'}
-                                    </>
-                                )}
+                                <Plus size={14} /> Add Tech
                             </Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            </motion.div>
-        </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-border flex justify-end gap-3">
+                        <Button variant="outline" asChild className="rounded-md">
+                            <Link to="/admin/projects">Cancel</Link>
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="gap-2 rounded-md px-8 shadow-sm"
+                        >
+                            <Save size={18} />
+                            {loading ? 'Saving...' : (isEditing ? 'Update Project' : 'Save Project')}
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </section>
     );
 };
 
