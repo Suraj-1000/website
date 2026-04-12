@@ -106,86 +106,98 @@ const SkillForm = () => {
     if (fetching) return <div>Loading...</div>;
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
-            <div className="flex items-center gap-4">
-                <Link to="/admin/skills" className="p-2 hover:bg-muted rounded-full transition-colors">
-                    <ArrowLeft size={20} />
-                </Link>
-                <h1 className="text-2xl font-bold">{isEdit ? 'Edit Category' : 'Add New Category'}</h1>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6 bg-card border border-border p-6 rounded-xl">
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">Category Name</label>
-                    <input
-                        type="text"
-                        required
-                        className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <label className="text-sm font-medium block">Icon</label>
-                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
-                        {icons.map((item) => (
-                            <button
-                                key={item.name}
-                                type="button"
-                                onClick={() => setFormData({ ...formData, icon: item.name })}
-                                className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${formData.icon === item.name
-                                    ? 'border-primary bg-primary/10 text-primary'
-                                    : 'border-border hover:bg-muted'
-                                    }`}
-                            >
-                                <item.icon size={24} />
-                                <span className="text-xs">{item.name}</span>
-                            </button>
-                        ))}
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="max-w-3xl mx-auto space-y-6">
+                <div className="flex items-center gap-4">
+                    <Link to="/admin/skills" className="p-2 hover:bg-muted rounded-full transition-colors">
+                        <ArrowLeft size={18} />
+                    </Link>
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight">{isEdit ? 'Edit Category' : 'Add New Category'}</h1>
+                        <p className="text-sm text-muted-foreground mt-1">Configure your skill categories and stack</p>
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <label className="text-sm font-medium block">Skills</label>
-                    {formData.items.map((item, index) => (
-                        <div key={index} className="flex gap-2">
-                            <input
-                                type="text"
-                                className="flex-1 px-3 py-2 bg-background border border-border rounded-lg focus:ring-1 focus:ring-primary outline-none"
-                                value={item}
-                                onChange={(e) => handleItemChange(index, e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => removeItem(index)}
-                                className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
-                    ))}
-                    <button
-                        type="button"
-                        onClick={addItem}
-                        className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                    >
-                        <Plus size={16} /> Add Skill
-                    </button>
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-8 bg-background border border-border p-8 rounded-md shadow-sm">
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold">Category Name</label>
+                        <input
+                            type="text"
+                            required
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="e.g. Frontend Development"
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        />
+                    </div>
 
-                <div className="pt-4">
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-                    >
-                        <Save size={20} />
-                        {loading ? 'Saving...' : 'Save Category'}
-                    </button>
-                </div>
-            </form>
-        </div>
+                    <div className="space-y-3">
+                        <label className="text-sm font-semibold block">Category Icon</label>
+                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                            {icons.map((item) => (
+                                <button
+                                    key={item.name}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, icon: item.name })}
+                                    className={`flex flex-col items-center justify-center p-2 rounded-md border transition-all aspect-square ${formData.icon === item.name
+                                        ? 'border-primary bg-primary/5 text-primary'
+                                        : 'border-border hover:bg-muted text-muted-foreground'
+                                        }`}
+                                    title={item.name}
+                                >
+                                    <item.icon size={20} />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="text-sm font-semibold block">Skill Items</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {formData.items.map((item, index) => (
+                                <div key={index} className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        placeholder="e.g. React.js"
+                                        value={item}
+                                        onChange={(e) => handleItemChange(index, e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeItem(index)}
+                                        className="p-2 text-red-500 hover:bg-red-500/10 rounded-md transition-colors"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={addItem}
+                            className="flex items-center gap-2 text-sm font-medium text-primary hover:underline transition-colors"
+                        >
+                            <Plus size={16} /> Add Skill Item
+                        </button>
+                    </div>
+
+                    <div className="pt-6 border-t border-border flex justify-end gap-3">
+                        <Button variant="outline" asChild className="rounded-md">
+                            <Link to="/admin/skills">Cancel</Link>
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="gap-2 rounded-md px-8 shadow-sm"
+                        >
+                            <Save size={18} />
+                            {loading ? 'Saving...' : 'Save Category'}
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </section>
     );
 };
 
