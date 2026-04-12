@@ -15,6 +15,8 @@ import { AuthProvider } from './context/AuthContext';
 // Admin Pages
 import AdminLayout from './layouts/AdminLayout';
 import Login from './pages/Admin/Login';
+import ForgotPassword from './pages/Admin/ForgotPassword';
+import ResetPassword from './pages/Admin/ResetPassword';
 import Dashboard from './pages/Admin/Dashboard';
 import ExperienceList from './pages/Admin/Experience/ExperienceList';
 import ExperienceForm from './pages/Admin/Experience/ExperienceForm';
@@ -69,6 +71,8 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/reset-password/:token" element={<ResetPassword />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
