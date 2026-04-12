@@ -150,9 +150,6 @@ const AdminLayout = () => {
                 </header>
 
                 <main className="flex-1 overflow-y-auto relative">
-                    {/* Decorative background elements (To be removed in next commit, but simplified for now) */}
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/2 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
-                    
                     <div className="p-6 md:p-8 max-w-7xl mx-auto">
                         <Outlet />
                     </div>
