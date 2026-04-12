@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 
 const AwardList = () => {
     const [awards, setAwards] = useState([]);
@@ -37,68 +38,66 @@ const AwardList = () => {
     if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Manage Awards
-                </h1>
-                <Link
-                    to="/admin/awards/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} /> Add New
-                </Link>
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                        Awards
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Manage your honors, certifications, and recognitions
+                    </p>
+                </div>
+                <Button asChild size="sm" className="gap-2 shadow-sm">
+                    <Link to="/admin/awards/new">
+                        <Plus size={16} /> Add Award
+                    </Link>
+                </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AnimatePresence>
-                    {awards.map((award) => (
-                        <motion.div
-                            key={award.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            layout
-                            className="bg-card border border-border/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative group"
-                        >
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Link
-                                    to={`/admin/awards/edit/${award.id}`}
-                                    className="p-2 bg-secondary/10 text-secondary rounded-full hover:bg-secondary/20 transition-colors"
-                                >
-                                    <Edit2 size={16} />
-                                </Link>
-                                <button
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {awards.map((award) => (
+                    <div key={award.id}>
+                        <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
+                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md bg-background">
+                                    <Link to={`/admin/awards/edit/${award.id}`}>
+                                        <Edit2 size={14} />
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
                                     onClick={() => handleDelete(award.id)}
-                                    className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500/20 transition-colors"
+                                    className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10 bg-background"
                                 >
-                                    <Trash2 size={16} />
-                                </button>
+                                    <Trash2 size={14} />
+                                </Button>
                             </div>
 
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                    <Award size={24} />
+                            <CardHeader className="flex flex-row items-center gap-3 pb-4">
+                                <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                    <Award size={18} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-lg line-clamp-1">{award.title}</h3>
-                                    <p className="text-sm text-muted-foreground">{award.issuer}</p>
+                                    <CardTitle className="text-base font-bold line-clamp-1">{award.title}</CardTitle>
+                                    <p className="text-xs text-muted-foreground">{award.issuer}</p>
                                 </div>
-                            </div>
+                            </CardHeader>
 
-                            <div className="space-y-2 text-sm text-muted-foreground">
-                                <p>Date: <span className="text-foreground">{award.date}</span></p>
-                            </div>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                            <CardContent className="space-y-2 text-xs text-muted-foreground">
+                                <p>Date: <span className="text-foreground font-medium">{award.date}</span></p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                ))}
                 {awards.length === 0 && (
-                    <div className="col-span-full text-center py-10 text-muted-foreground">
+                    <div className="col-span-full text-center py-10 text-muted-foreground text-sm">
                         No awards found. Add some!
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 
