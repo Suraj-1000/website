@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -84,6 +84,14 @@ const Login = () => {
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
+                            </div>
+                            <div className="flex justify-end">
+                                <Link
+                                    to="/admin/forgot-password"
+                                    className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                                >
+                                    Forgot Password?
+                                </Link>
                             </div>
                         </div>
 
