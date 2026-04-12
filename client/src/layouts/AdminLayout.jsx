@@ -52,19 +52,19 @@ const AdminLayout = () => {
     const closeSidebar = () => setIsSidebarOpen(false);
 
     return (
-        <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans">
+        <div className="flex h-screen bg-gray-100 dark:bg-zinc-950 text-foreground overflow-hidden font-sans">
             {/* Mobile Header */}
-            <div className="md:hidden fixed top-0 w-full bg-card/80 backdrop-blur-md border-b border-border p-4 flex justify-between items-center z-50">
+            <div className="md:hidden fixed top-0 w-full bg-background border-b border-border p-4 flex justify-between items-center z-50">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold shadow-lg shadow-primary/20">S</div>
-                    <h1 className="text-xl font-bold tracking-tight">Admin</h1>
+                    <div className="size-8 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold">S</div>
+                    <h1 className="text-lg font-semibold tracking-tight">Admin</h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full">
-                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full h-8 w-8">
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={toggleSidebar} className="rounded-full">
-                        {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+                    <Button variant="ghost" size="icon" onClick={toggleSidebar} className="rounded-full h-8 w-8">
+                        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
                     </Button>
                 </div>
             </div>
@@ -80,22 +80,19 @@ const AdminLayout = () => {
             {/* Sidebar */}
             <aside
                 className={`
-                    fixed md:static top-0 left-0 h-full w-72 bg-card border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out
+                    fixed md:static top-0 left-0 h-full w-64 bg-background border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
                 `}
             >
-                <div className="p-8 border-b border-border hidden md:flex items-center justify-between">
+                <div className="h-16 border-b border-border hidden md:flex items-center px-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg shadow-primary/20">S</div>
-                        <h1 className="text-2xl font-bold tracking-tighter">SURADJ</h1>
+                        <div className="size-9 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold text-lg">S</div>
+                        <h1 className="text-lg font-bold tracking-tight">PORTFOLIO</h1>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground hover:text-foreground rounded-xl">
-                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                    </Button>
                 </div>
 
-                <nav className="flex-1 p-6 space-y-1 overflow-y-auto custom-scrollbar">
-                    <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Main Menu</p>
+                <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
+                    <p className="px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Main Menu</p>
                     {navItems.map((item) => {
                         const isActive = location.pathname.startsWith(item.path);
                         return (
@@ -103,47 +100,64 @@ const AdminLayout = () => {
                                 key={item.path}
                                 to={item.path}
                                 onClick={closeSidebar}
-                                className={`flex items-center justify-between px-4 py-3 rounded-xl transition-all group ${isActive
-                                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 font-medium'
+                                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm group ${isActive
+                                    ? 'bg-secondary text-secondary-foreground font-medium'
                                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                     }`}
                             >
-                                <div className="flex items-center gap-3">
-                                    <span className={isActive ? 'text-primary-foreground' : 'group-hover:text-primary transition-colors'}>
-                                        {item.icon}
-                                    </span>
-                                    <span>{item.label}</span>
-                                </div>
-                                {isActive && <ChevronRight size={16} />}
+                                <span className={isActive ? 'text-primary' : 'group-hover:text-primary transition-colors'}>
+                                    {isActive ? <div className="p-0.5">{item.icon}</div> : item.icon}
+                                </span>
+                                <span>{item.label}</span>
                             </Link>
                         );
                     })}
                 </nav>
 
-                <div className="p-6 border-t border-border mt-auto">
+                <div className="p-4 border-t border-border mt-auto">
                     <Button
                         variant="ghost"
                         onClick={logout}
-                        className="flex items-center gap-3 px-4 py-6 w-full rounded-xl text-red-500 hover:bg-red-500/10 hover:text-red-500 transition-all font-semibold group justify-start h-auto"
+                        className="flex items-center gap-3 px-3 py-2 w-full rounded-md text-red-500 hover:bg-red-500/10 hover:text-red-500 transition-all text-sm group justify-start h-auto"
                     >
-                        <div className="p-2 rounded-lg bg-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all">
-                            <LogOut size={20} />
+                        <div className="p-1.5 rounded-md bg-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all">
+                            <LogOut size={16} />
                         </div>
-                        <span>Logout Session</span>
+                        <span className="font-medium">Logout Session</span>
                     </Button>
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <main className="flex-1 overflow-y-auto bg-background/30 backdrop-blur-[2px] transition-all relative">
-                {/* Decorative background elements */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col min-w-0">
+                {/* Desktop Header */}
+                <header className="hidden md:flex h-16 bg-background border-b border-border px-8 items-center justify-between sticky top-0 z-30">
+                    <h2 className="text-sm font-medium text-muted-foreground">Admin / <span className="text-foreground capitalize">{location.pathname.split('/').pop()}</span></h2>
+                    <div className="flex items-center gap-4">
+                        <Button variant="outline" size="icon" onClick={toggleTheme} className="rounded-full h-9 w-9 border-border bg-background">
+                            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                        </Button>
+                        <div className="flex items-center gap-3 pl-4 border-l border-border">
+                            <div className="flex flex-col items-end">
+                                <span className="text-xs font-semibold">{user?.name || 'Admin'}</span>
+                                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.role}</span>
+                            </div>
+                            <div className="size-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold">
+                                {user?.name?.charAt(0) || 'A'}
+                            </div>
+                        </div>
+                    </div>
+                </header>
 
-                <div className="container mx-auto p-6 md:p-12 max-w-7xl pt-24 md:pt-12">
-                    <Outlet />
-                </div>
-            </main>
+                <main className="flex-1 overflow-y-auto relative">
+                    {/* Decorative background elements (To be removed in next commit, but simplified for now) */}
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/2 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+                    
+                    <div className="p-6 md:p-8 max-w-7xl mx-auto">
+                        <Outlet />
+                    </div>
+                </main>
+            </div>
         </div>
     );
 };
