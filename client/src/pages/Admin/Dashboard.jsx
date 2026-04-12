@@ -131,32 +131,46 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {stats.map((stat, index) => (
                     <div key={index} className="h-full">
-                        <Card className="relative overflow-hidden group transition-all h-full border-border bg-background">
-                            <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full group-hover:opacity-[0.08] transition-opacity`}></div>
-                            <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-current/10`}>
-                                    {stat.icon}
+                        <Card className="relative overflow-hidden group transition-all h-full border-border bg-background rounded-md shadow-sm">
+                            <CardContent className="p-6 space-y-4">
+                                <div className="flex flex-row gap-4 items-center">
+                                    <div className="size-10 border border-border bg-secondary/50 rounded-full flex items-center justify-center">
+                                        <span className="text-secondary-foreground">
+                                            {React.cloneElement(stat.icon as React.ReactElement, { size: 18 })}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-xl font-bold text-foreground leading-tight">
+                                            {stat.count}
+                                        </p>
+                                        <h6 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                                            {stat.label}
+                                        </h6>
+                                    </div>
                                 </div>
-                                <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-none">
-                                    <TrendingUp size={12} className="mr-1" />
-                                    +12%
-                                </Badge>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
-                                <div className="flex items-baseline gap-2">
-                                    <h3 className="text-3xl font-bold mt-1 text-foreground">{stat.count}</h3>
-                                    <span className="text-xs text-muted-foreground font-normal">total</span>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex flex-row items-center justify-between">
+                                        <p className="text-xs font-medium text-muted-foreground">
+                                            Progress
+                                        </p>
+                                        <p className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+                                            <TrendingUp size={12} />
+                                            +12%
+                                        </p>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                                        <div className="h-full bg-primary rounded-full" style={{ width: '65%' }}></div>
+                                    </div>
                                 </div>
                                 <Link
                                     to={stat.path}
-                                    className="absolute bottom-4 right-4 text-muted-foreground group-hover:text-primary transition-colors"
+                                    className="absolute top-4 right-4 text-muted-foreground/30 hover:text-primary transition-colors"
                                 >
-                                    <ArrowUpRight size={20} />
+                                    <ArrowUpRight size={18} />
                                 </Link>
                             </CardContent>
                         </Card>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 
@@ -166,8 +180,8 @@ const Dashboard = () => {
                     <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
-                                <BarChart3 className="text-primary" size={20} />
-                                <CardTitle>Project Views</CardTitle>
+                                <BarChart3 className="text-primary" size={18} />
+                                <CardTitle className="text-sm font-semibold">Project Views</CardTitle>
                             </div>
                             <CardDescription>Monthly traffic to your project showcases</CardDescription>
                         </CardHeader>
@@ -202,8 +216,8 @@ const Dashboard = () => {
                     <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
-                                <Activity className="text-emerald-500" size={20} />
-                                <CardTitle>Message Trends</CardTitle>
+                                <Activity className="text-emerald-500" size={18} />
+                                <CardTitle className="text-sm font-semibold">Message Trends</CardTitle>
                             </div>
                             <CardDescription>Inbound inquiries over the last 6 months</CardDescription>
                         </CardHeader>
@@ -249,8 +263,8 @@ const Dashboard = () => {
                     <Card className="border-border">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle className="text-xl">Recent Projects</CardTitle>
-                                <CardDescription>Your most recently updated work</CardDescription>
+                                <CardTitle className="text-lg font-semibold">Recent Projects</CardTitle>
+                                <CardDescription className="text-xs">Your most recently updated work</CardDescription>
                             </div>
                             <Link to="/admin/projects" className="text-sm text-primary hover:underline">View all</Link>
                         </CardHeader>
@@ -299,9 +313,9 @@ const Dashboard = () => {
                         </CardContent>
                     </Card>
 
-                    <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
+                    <div className="bg-white dark:bg-zinc-900 border border-border rounded-md p-6 relative overflow-hidden shadow-sm">
                         <div className="relative z-10">
-                            <h3 className="text-lg font-bold text-foreground">Portfolio Tip</h3>
+                            <h3 className="text-base font-bold text-foreground">Portfolio Tip</h3>
                             <p className="text-sm text-muted-foreground mt-2">
                                 Keeping your projects up to date increases engagement from recruiters by 40%.
                             </p>
@@ -309,7 +323,7 @@ const Dashboard = () => {
                                 Learn More
                             </Button>
                         </div>
-                        <Award className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/5 -rotate-12" />
+                        <Award className="absolute -bottom-4 -right-4 size-20 text-primary/5 -rotate-12" />
                     </div>
                 </div>
             </section>
