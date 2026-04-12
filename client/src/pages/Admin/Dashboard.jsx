@@ -97,48 +97,41 @@ const Dashboard = () => {
     ];
 
     return (
-        <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8 pb-10"
-        >
-            {/* Header Section */}
-            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
-                        {greeting}, <span className="text-primary">Suraj</span>
-                    </h1>
-                    <p className="text-muted-foreground mt-1 flex items-center gap-2">
-                        <Calendar size={16} />
-                        {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                    </p>
+    return (
+        <React.Fragment>
+            <section className="px-6 py-8 space-y-8 min-h-screen">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                            Dashboard Overview
+                        </h1>
+                        <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
+                            <Calendar size={14} />
+                            Today is {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        </p>
+                    </div>
+                    <div className="flex gap-3">
+                        <Button variant="outline" size="sm" className="gap-2 h-9" asChild>
+                            <Link to="/">
+                                <Eye size={16} />
+                                View Live
+                            </Link>
+                        </Button>
+                        <Button size="sm" asChild className="gap-2 h-9 shadow-sm">
+                            <Link to="/admin/projects/new">
+                                <Plus size={16} />
+                                Create New
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
-                <div className="flex gap-3">
-                    <Button variant="outline" className="gap-2" asChild>
-                        <Link to="/">
-                            <Eye size={18} />
-                            View Live
-                        </Link>
-                    </Button>
-                    <Button asChild className="gap-2 shadow-lg shadow-primary/20">
-                        <Link to="/admin/projects/new">
-                            <Plus size={18} />
-                            Create New
-                        </Link>
-                    </Button>
-                </div>
-            </motion.div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {stats.map((stat, index) => (
-                    <motion.div
-                        key={index}
-                        variants={itemVariants}
-                        whileHover={{ y: -5 }}
-                    >
-                        <Card className="relative overflow-hidden group transition-all h-full border-primary/10">
+                    <div key={index} className="h-full">
+                        <Card className="relative overflow-hidden group transition-all h-full border-border bg-background">
                             <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full group-hover:opacity-[0.08] transition-opacity`}></div>
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-current/10`}>
@@ -169,8 +162,8 @@ const Dashboard = () => {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <motion.div variants={itemVariants}>
-                    <Card className="border-primary/10">
+                <div>
+                    <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
                                 <BarChart3 className="text-primary" size={20} />
@@ -205,8 +198,8 @@ const Dashboard = () => {
                     </Card>
                 </motion.div>
 
-                <motion.div variants={itemVariants}>
-                    <Card className="border-primary/10">
+                <div>
+                    <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
                                 <Activity className="text-emerald-500" size={20} />
@@ -252,8 +245,8 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Activity / Content Sections */}
-                <motion.div variants={itemVariants} className="lg:col-span-2 space-y-6">
-                    <Card className="border-primary/10">
+                <div className="lg:col-span-2 space-y-6">
+                    <Card className="border-border">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xl">Recent Projects</CardTitle>
@@ -285,8 +278,8 @@ const Dashboard = () => {
                 </motion.div>
 
                 {/* Quick Actions Sidebar */}
-                <motion.div variants={itemVariants} className="space-y-6">
-                    <Card className="border-primary/10">
+                <div className="space-y-6">
+                    <Card className="border-border">
                         <CardHeader>
                             <CardTitle className="text-xl">Quick Actions</CardTitle>
                         </CardHeader>
@@ -318,9 +311,9 @@ const Dashboard = () => {
                         </div>
                         <Award className="absolute -bottom-4 -right-4 w-24 h-24 text-primary/5 -rotate-12" />
                     </div>
-                </motion.div>
-            </div>
-        </motion.div>
+                </div>
+            </section>
+        </React.Fragment>
     );
 };
 
