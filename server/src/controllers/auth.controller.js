@@ -39,7 +39,7 @@ class AuthController {
    // @route   POST /api/auth/refresh
    // @access  Public
    refresh = asyncHandler(async (req, res) => {
-      const refreshToken = req.cookies.refreshToken;
+      const { refreshToken } = req.cookies;
 
       if (!refreshToken) {
          throw new UnAuthorizedException('Refresh token not found');
