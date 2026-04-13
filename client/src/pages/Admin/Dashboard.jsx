@@ -97,9 +97,13 @@ const Dashboard = () => {
     ];
 
     return (
-    return (
         <React.Fragment>
-            <section className="px-6 py-8 space-y-8 min-h-screen">
+            <motion.section 
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="px-6 py-8 space-y-8 min-h-screen"
+            >
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -136,7 +140,7 @@ const Dashboard = () => {
                                 <div className="flex flex-row gap-4 items-center">
                                     <div className="size-10 border border-border bg-secondary/50 rounded-full flex items-center justify-center">
                                         <span className="text-secondary-foreground">
-                                            {React.cloneElement(stat.icon as React.ReactElement, { size: 18 })}
+                                            {React.cloneElement(stat.icon, { size: 18 })}
                                         </span>
                                     </div>
                                     <div className="flex flex-col">
@@ -176,7 +180,7 @@ const Dashboard = () => {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
+                <motion.div variants={itemVariants}>
                     <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
@@ -212,7 +216,7 @@ const Dashboard = () => {
                     </Card>
                 </motion.div>
 
-                <div>
+                <motion.div variants={itemVariants}>
                     <Card className="border-border">
                         <CardHeader>
                             <div className="flex items-center gap-2">
@@ -259,7 +263,7 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Activity / Content Sections */}
-                <div className="lg:col-span-2 space-y-6">
+                <motion.div className="lg:col-span-2 space-y-6" variants={itemVariants}>
                     <Card className="border-border">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
@@ -292,7 +296,7 @@ const Dashboard = () => {
                 </motion.div>
 
                 {/* Quick Actions Sidebar */}
-                <div className="space-y-6">
+                <motion.div className="space-y-6" variants={itemVariants}>
                     <Card className="border-border">
                         <CardHeader>
                             <CardTitle className="text-xl">Quick Actions</CardTitle>
@@ -325,8 +329,9 @@ const Dashboard = () => {
                         </div>
                         <Award className="absolute -bottom-4 -right-4 size-20 text-primary/5 -rotate-12" />
                     </div>
+                    </motion.div>
                 </div>
-            </section>
+            </motion.section>
         </React.Fragment>
     );
 };
