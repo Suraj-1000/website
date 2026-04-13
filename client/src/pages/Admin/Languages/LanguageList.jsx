@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Languages } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../../components/ui/button';
+import { Card, CardHeader, CardTitle } from '../../../components/ui/card';
+import { Badge } from '../../../components/ui/badge';
 
 const LanguageList = () => {
     const [languages, setLanguages] = useState([]);
@@ -37,64 +39,65 @@ const LanguageList = () => {
     if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Manage Languages
-                </h1>
-                <Link
-                    to="/admin/languages/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} /> Add New
-                </Link>
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+                        Languages
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Manage your linguistic proficiencies and communication skills
+                    </p>
+                </div>
+                <Button asChild size="sm" className="gap-2 shadow-sm">
+                    <Link to="/admin/languages/new">
+                        <Plus size={16} /> Add Language
+                    </Link>
+                </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AnimatePresence>
-                    {languages.map((lang) => (
-                        <motion.div
-                            key={lang.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            layout
-                            className="bg-card border border-border/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative group"
-                        >
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Link
-                                    to={`/admin/languages/edit/${lang.id}`}
-                                    className="p-2 bg-secondary/10 text-secondary rounded-full hover:bg-secondary/20 transition-colors"
-                                >
-                                    <Edit2 size={16} />
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(lang.id)}
-                                    className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500/20 transition-colors"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                    <Languages size={24} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {languages.map((lang) => (
+                    <div key={lang.id}>
+                        <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
+                            <CardHeader className="flex flex-row items-center justify-between pb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                        <Languages size={18} />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-base font-bold">{lang.name}</CardTitle>
+                                        <Badge variant="secondary" className="bg-secondary text-secondary-foreground font-medium text-[10px] rounded-sm mt-1">
+                                            {lang.proficiency}
+                                        </Badge>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">{lang.name}</h3>
-                                    <p className="text-sm text-muted-foreground">{lang.proficiency}</p>
+                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
+                                        <Link to={`/admin/languages/edit/${lang.id}`}>
+                                            <Edit2 size={14} />
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        onClick={() => handleDelete(lang.id)}
+                                        className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
+                                    >
+                                        <Trash2 size={14} />
+                                    </Button>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                            </CardHeader>
+                        </Card>
+                    </div>
+                ))}
                 {languages.length === 0 && (
-                    <div className="col-span-full text-center py-10 text-muted-foreground">
+                    <div className="col-span-full text-center py-10 text-muted-foreground text-sm">
                         No languages found. Add some!
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 
