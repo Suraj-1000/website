@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Edit2, Users } from 'lucide-react';
+import { Plus, Trash2, Edit2, Users, Mail, Phone, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 
 const ReferenceList = () => {
     const [references, setReferences] = useState([]);
@@ -37,70 +38,82 @@ const ReferenceList = () => {
     if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Manage References
-                </h1>
-                <Link
-                    to="/admin/references/new"
-                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} /> Add New
-                </Link>
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+                        Professional References
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Manage your network of professional and academic references
+                    </p>
+                </div>
+                <Button asChild size="sm" className="gap-2 shadow-sm">
+                    <Link to="/admin/references/new">
+                        <Plus size={16} /> Add Reference
+                    </Link>
+                </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AnimatePresence>
-                    {references.map((ref) => (
-                        <motion.div
-                            key={ref.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            layout
-                            className="bg-card border border-border/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow relative group"
-                        >
-                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Link
-                                    to={`/admin/references/edit/${ref.id}`}
-                                    className="p-2 bg-secondary/10 text-secondary rounded-full hover:bg-secondary/20 transition-colors"
-                                >
-                                    <Edit2 size={16} />
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(ref.id)}
-                                    className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500/20 transition-colors"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                    <Users size={24} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {references.map((ref) => (
+                    <div key={ref.id}>
+                        <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md h-full flex flex-col">
+                            <CardHeader className="flex flex-row items-center justify-between pb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                        <Users size={18} />
+                                    </div>
+                                    <CardTitle className="text-base font-bold">{ref.name}</CardTitle>
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg">{ref.name}</h3>
-                                    <p className="text-sm text-primary font-medium">{ref.position} @ {ref.company}</p>
+                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
+                                        <Link to={`/admin/references/edit/${ref.id}`}>
+                                            <Edit2 size={14} />
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        onClick={() => handleDelete(ref.id)}
+                                        className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
+                                    >
+                                        <Trash2 size={14} />
+                                    </Button>
                                 </div>
-                            </div>
+                            </CardHeader>
 
-                            <div className="space-y-1 text-sm text-muted-foreground">
-                                <p>Email: <span className="text-foreground">{ref.email}</span></p>
-                                <p>Phone: <span className="text-foreground">{ref.phone}</span></p>
-                                <p>Relation: <span className="text-foreground">{ref.relationship}</span></p>
-                            </div>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                            <CardContent className="space-y-4 pt-0">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+                                        <Building2 size={12} />
+                                        {ref.position} @ {ref.company}
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 pt-2 border-t border-border/50">
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                                            <Mail size={12} />
+                                            {ref.email}
+                                        </div>
+                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                            <Phone size={12} />
+                                            {ref.phone}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/50 pt-2">
+                                    Relation: {ref.relationship}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                ))}
                 {references.length === 0 && (
-                    <div className="col-span-full text-center py-10 text-muted-foreground">
+                    <div className="col-span-full text-center py-10 text-muted-foreground text-sm">
                         No references found. Add some!
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 
