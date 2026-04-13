@@ -41,36 +41,37 @@ const TravelList = () => {
     if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
-                    <Plane className="text-primary" /> Manage Travels
-                </h1>
-                <Button asChild className="gap-2 shadow-lg shadow-primary/20">
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+                        Travel Adventures
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        Explore and manage your global journeys and experiences
+                    </p>
+                </div>
+                <Button asChild size="sm" className="gap-2 shadow-sm">
                     <Link to="/admin/travel/new">
-                        <Plus size={20} /> Add New
+                        <Plus size={16} /> Add Adventure
                     </Link>
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {travels.map((travel) => (
-                    <motion.div
-                        key={travel.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <Card className="hover:border-primary/50 transition-all shadow-sm relative group overflow-hidden h-full flex flex-col">
+                    <div key={travel.id}>
+                        <Card className="hover:border-primary/30 transition-all shadow-sm relative group overflow-hidden h-full flex flex-col rounded-md">
                             {travel.images && travel.images.length > 0 && (
-                                <div className="h-48 overflow-hidden relative">
+                                <div className="h-40 overflow-hidden relative">
                                     <img
                                         src={travel.images[0]}
                                         alt={travel.title}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
                                     <div className="absolute top-3 left-3">
-                                        <Badge className="bg-black/60 backdrop-blur-md border-none flex items-center gap-1.5">
-                                            <ImageIcon size={12} /> {travel.images.length}
+                                        <Badge className="bg-black/40 backdrop-blur-md border-none flex items-center gap-1.5 text-[10px] py-0 px-2 rounded-sm">
+                                            <ImageIcon size={10} /> {travel.images.length}
                                         </Badge>
                                     </div>
                                 </div>
@@ -78,57 +79,56 @@ const TravelList = () => {
 
                             <CardHeader className="pb-2">
                                 <div className="flex justify-between items-start">
-                                    <CardTitle className="text-xl font-bold line-clamp-1">{travel.title}</CardTitle>
+                                    <CardTitle className="text-lg font-bold line-clamp-1">{travel.title}</CardTitle>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Button variant="ghost" size="icon" asChild className="h-8 w-8">
+                                        <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
                                             <Link to={`/admin/travel/edit/${travel.id}`}>
                                                 <Edit2 size={14} />
                                             </Link>
                                         </Button>
                                         <Button
-                                            variant="ghost"
+                                            variant="outline"
                                             size="icon"
                                             onClick={() => handleDelete(travel.id)}
-                                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                            className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-1.5 text-primary text-sm font-medium">
-                                    <MapPin size={14} />
+                                <div className="flex items-center gap-1.5 text-primary text-xs font-semibold mt-1">
+                                    <MapPin size={12} />
                                     {travel.location}
                                 </div>
                             </CardHeader>
 
-                            <CardContent className="space-y-4 pt-0">
-                                <div className="flex items-center gap-1.5 text-muted-foreground text-xs border-b border-border/50 pb-2">
-                                    <Calendar size={14} />
+                            <CardContent className="space-y-4 pt-0 flex-grow">
+                                <div className="flex items-center gap-1.5 text-muted-foreground text-[10px] font-medium border-b border-border/50 pb-2 uppercase tracking-wider">
+                                    <Calendar size={12} />
                                     {new Date(travel.visitDate).toLocaleDateString(undefined, {
                                         year: 'numeric',
-                                        month: 'long',
+                                        month: 'short',
                                         day: 'numeric'
                                     })}
                                 </div>
-                                <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                                     {travel.description}
                                 </p>
                             </CardContent>
                         </Card>
-                    </motion.div>
+                    </div>
                 ))}
 
                 {travels.length === 0 && (
-                    <Card className="col-span-full flex flex-col items-center justify-center py-20 border-dashed bg-muted/20">
-                        <Plane size={48} className="text-muted-foreground mb-4 opacity-50" />
-                        <p className="text-muted-foreground font-medium text-lg">No travel entries found.</p>
-                        <Button asChild variant="link" className="mt-2">
+                    <Card className="col-span-full flex flex-col items-center justify-center py-20 border-dashed bg-muted/20 rounded-md">
+                        <p className="text-muted-foreground font-medium text-sm">No travel entries found.</p>
+                        <Button asChild variant="link" className="mt-2 text-primary">
                             <Link to="/admin/travel/new">Add your first adventure</Link>
                         </Button>
                     </Card>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 
