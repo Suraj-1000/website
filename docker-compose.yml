@@ -1,65 +1,71 @@
 services:
-   local-business-db:
-      image: postgis/postgis:16-3.4
+  db:
+    image: postgres:16-alpine
+    container_name: portfolio-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: suraj_portfolio
+    volumes:
+      - portfolio-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d suraj_portfolio"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - portfolio-network
 
-      container_name: baalvo-local-business-db
-      restart: unless-stopped
-      ports:
-         - "5008:5432"
-      environment:
-         POSTGRES_USER: ${POSTGRES_USER:-postgres_user}
-         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password}
-         POSTGRES_DB: ${POSTGRES_DB:-baalvo-local-business-platform}
-      volumes:
-         - local-business-db-data:/var/lib/postgresql/data
-      healthcheck:
-         test: [ "CMD-SHELL", "pg_isready -U postgres_user -d baalvo-local-business-platform && PGPASSWORD=postgres_password psql -U postgres_user -d baalvo-local-business-platform -c 'SELECT 1'" ]
-         interval: 5s
-         timeout: 5s
-         retries: 5
-         start_period: 10s
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: portfolio-server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=suraj_portfolio
+      - JWT_SECRET=supersecretaccesstoken
+      - JWT_ACCESS_EXPIRE=15m
+      - JWT_REFRESH_SECRET=evenmoresecretrefreshtoken
+      - JWT_REFRESH_EXPIRE=7d
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USER=dsurajkunwor101@gmail.com
+      - EMAIL_PASS=ndyn dnoi bswq pcss
+      - EMAIL_FROM=noreply@surajportfolio.com
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - portfolio-network
 
-      networks:
-         - baalvo-network
-   server:
-      build:
-         context: ./server
-         dockerfile: Dockerfile
-      container_name: baalvo-local-business-server
-      restart: unless-stopped
-      ports:
-         - "7008:7008"
-      environment:
-         - NODE_ENV=production
-         - DB_HOST=local-business-db
-         - DB_PORT=5432
-         - DB_USER=${POSTGRES_USER:-postgres_user}
-         - DB_PASSWORD=${POSTGRES_PASSWORD:-postgres_password}
-         - DB_NAME=${POSTGRES_DB:-baalvo-local-business-platform}
-         - APP_NAME=Local Business & Industry
-      depends_on:
-         local-business-db:
-            condition: service_healthy
-      networks:
-         - baalvo-network
-
-   frontend:
-      build:
-         context: ./client
-         dockerfile: Dockerfile
-      container_name: baalvo-local-business-client
-      restart: unless-stopped
-      ports:
-         - "5008:8086"
-      depends_on:
-         - server
-      networks:
-         - baalvo-network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: portfolio-client
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - portfolio-network
 
 volumes:
-   local-business-db-data:
-
+  portfolio-db-data:
 
 networks:
-   baalvo-network:
-      driver: bridge
+  portfolio-network:
+    driver: bridge
