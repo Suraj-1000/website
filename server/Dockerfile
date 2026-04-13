@@ -3,8 +3,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy env file
-COPY .env ./
 
 # Copy package files
 COPY package*.json ./
@@ -16,7 +14,7 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 
 # Expose API Port
-EXPOSE 7008
+EXPOSE 5000
 
 # Start the server
-CMD sh -c "npm run migrate && npm run start"
+CMD sh -c "npx sequelize-cli db:migrate && npm start"
