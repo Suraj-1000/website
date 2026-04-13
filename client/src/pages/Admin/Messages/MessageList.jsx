@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
-import { Trash2, CheckCircle, Clock } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Trash2, Clock, Mail, Calendar, User } from 'lucide-react';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent } from '../../../components/ui/card';
+import { Badge } from '../../../components/ui/badge';
 
 const MessageList = () => {
     const [messages, setMessages] = useState([]);
@@ -35,64 +37,78 @@ const MessageList = () => {
     };
 
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold">Messages</h2>
+        <section className="px-6 py-8 space-y-8 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+                        Inquiries & Messages
+                    </h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        View and manage messages from your portfolio contact form
+                    </p>
+                </div>
             </div>
 
-            <div className="grid gap-6">
+            <div className="grid gap-4">
                 {messages.map((msg) => (
-                    <motion.div
-                        key={msg.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className={`bg-card border-l-4 p-6 rounded-r-xl shadow-sm ${msg.status === 'new' ? 'border-primary' : 'border-muted'
-                            }`}
-                    >
-                        <div className="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 className="text-xl font-bold text-foreground">{msg.subject}</h3>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                                    <span className="font-medium text-primary">{msg.name}</span>
-                                    <span>&bull;</span>
-                                    <span>{msg.email}</span>
-                                    <span>&bull;</span>
-                                    <span>{new Date(msg.createdAt).toLocaleString()}</span>
+                    <div key={msg.id}>
+                        <Card className={`hover:border-primary/30 transition-all shadow-sm relative group rounded-md border-l-4 ${msg.status === 'new' ? 'border-l-primary' : 'border-l-muted'}`}>
+                            <div className="p-6">
+                                <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-4">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-lg font-bold text-foreground">{msg.subject}</h3>
+                                            {msg.status === 'new' && (
+                                                <Badge className="bg-primary/10 text-primary border-none text-[10px] font-bold px-2 py-0 rounded-sm">
+                                                    NEW
+                                                </Badge>
+                                            )}
+                                        </div>
+                                        <div className="flex flex-wrap items-center gap-3 text-xs font-medium text-muted-foreground">
+                                            <div className="flex items-center gap-1.5 text-primary">
+                                                <User size={12} />
+                                                {msg.name}
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Mail size={12} />
+                                                {msg.email}
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Calendar size={12} />
+                                                {new Date(msg.createdAt).toLocaleString()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => handleDelete(msg.id)}
+                                            className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
+                                        >
+                                            <Trash2 size={14} />
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="bg-muted/30 p-4 rounded-md text-sm text-foreground/80 whitespace-pre-wrap leading-relaxed border border-border/50">
+                                    {msg.message}
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                {msg.status === 'new' && (
-                                    <span className="flex items-center gap-1 text-xs font-medium bg-primary/20 text-primary px-2 py-1 rounded-full">
-                                        <Clock size={12} /> New
-                                    </span>
-                                )}
-                                {/* Delete button */}
-                                <button
-                                    onClick={() => handleDelete(msg.id)}
-                                    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                                    title="Delete Message"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="bg-muted/30 p-4 rounded-lg text-foreground/90 whitespace-pre-wrap">
-                            {msg.message}
-                        </div>
-                    </motion.div>
+                        </Card>
+                    </div>
                 ))}
 
                 {messages.length === 0 && (
-                    <div className="text-center py-20 bg-card/50 rounded-xl border border-dashed border-border px-4">
-                        <p className="text-muted-foreground">No messages found.</p>
-                    </div>
+                    <Card className="flex flex-col items-center justify-center py-20 border-dashed bg-muted/20 rounded-md">
+                        <p className="text-muted-foreground font-medium text-sm">No messages found.</p>
+                    </Card>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 
