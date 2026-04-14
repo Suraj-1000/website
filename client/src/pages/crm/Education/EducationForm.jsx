@@ -57,7 +57,7 @@ const EducationForm = () => {
             } else {
                 await api.post('/education', data);
             }
-            navigate('/admin/education');
+            navigate('/crm/education');
         } catch (error) {
             console.error('Failed to save education', error);
             alert('Failed to save education');
@@ -72,7 +72,7 @@ const EducationForm = () => {
         <section className="px-6 py-8 space-y-8 min-h-screen">
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/admin/education" className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Link to="/crm/education" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
@@ -160,7 +160,7 @@ const EducationForm = () => {
 
                     <div className="pt-4 border-t border-border flex justify-end gap-3">
                         <Button variant="outline" asChild className="rounded-md">
-                            <Link to="/admin/education">Cancel</Link>
+                            <Link to="/crm/education">Cancel</Link>
                         </Button>
                         <Button type="submit" disabled={loading} className="gap-2 rounded-md px-8 shadow-sm">
                             <Save size={18} />

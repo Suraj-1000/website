@@ -52,7 +52,7 @@ const ExperienceList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/experience/new">
+                    <Link to="/crm/experience/new">
                         <Plus size={16} /> Add Experience
                     </Link>
                 </Button>
@@ -84,7 +84,7 @@ const ExperienceList = () => {
 
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                        <Link to={`/admin/experience/edit/${exp.id}`}>
+                                        <Link to={`/crm/experience/edit/${exp.id}`}>
                                             <Edit2 size={14} />
                                         </Link>
                                     </Button>
@@ -105,8 +105,8 @@ const ExperienceList = () => {
                 {experiences.length === 0 && (
                     <Card className="flex flex-col items-center justify-center py-20 border-dashed bg-muted/20">
                         <p className="text-muted-foreground font-medium text-sm">No experiences found. Add your first one!</p>
-                        <Button asChild variant="link" className="mt-2 text-primary" href="/admin/experience/new">
-                            <Link to="/admin/experience/new">Get Started</Link>
+                        <Button asChild variant="link" className="mt-2 text-primary" href="/crm/experience/new">
+                            <Link to="/crm/experience/new">Get Started</Link>
                         </Button>
                     </Card>
                 )}

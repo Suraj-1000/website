@@ -50,7 +50,7 @@ const EducationList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/education/new">
+                    <Link to="/crm/education/new">
                         <Plus size={16} /> Add Education
                     </Link>
                 </Button>
@@ -62,7 +62,7 @@ const EducationList = () => {
                         <Card className="hover:border-primary/30 transition-all shadow-sm relative group h-full rounded-md">
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                 <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md bg-background">
-                                    <Link to={`/admin/education/edit/${edu.id}`}>
+                                    <Link to={`/crm/education/edit/${edu.id}`}>
                                         <Edit2 size={14} />
                                     </Link>
                                 </Button>

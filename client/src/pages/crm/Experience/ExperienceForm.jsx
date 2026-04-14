@@ -88,7 +88,7 @@ const ExperienceForm = () => {
             } else {
                 await api.post('/experiences', formattedData);
             }
-            navigate('/admin/experience');
+            navigate('/crm/experience');
         } catch (error) {
             console.error('Failed to save experience', error);
             alert('Failed to save experience');
@@ -103,7 +103,7 @@ const ExperienceForm = () => {
         <section className="px-6 py-8 space-y-8 min-h-screen">
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/admin/experience" className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Link to="/crm/experience" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
@@ -218,7 +218,7 @@ const ExperienceForm = () => {
 
                     <div className="pt-4 border-t border-border flex justify-end gap-3">
                         <Button variant="outline" asChild className="rounded-md">
-                            <Link to="/admin/experience">Cancel</Link>
+                            <Link to="/crm/experience">Cancel</Link>
                         </Button>
                         <Button
                             type="submit"
