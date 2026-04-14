@@ -9,7 +9,7 @@ import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { cn } from '../../lib/utils';
 
-const AdminMessages = () => {
+const CRMMessages = () => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [replyingTo, setReplyingTo] = useState(null);
@@ -218,4 +218,4 @@ const AdminMessages = () => {
     );
 };
 
-export default AdminMessages;
+export default CRMMessages;
