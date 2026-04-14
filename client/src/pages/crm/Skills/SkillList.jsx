@@ -57,7 +57,7 @@ const SkillList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/skills/new">
+                    <Link to="/crm/skills/new">
                         <Plus size={16} /> Add Category
                     </Link>
                 </Button>
@@ -79,7 +79,7 @@ const SkillList = () => {
                                     </div>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                            <Link to={`/admin/skills/edit/${skill._id}`}>
+                                            <Link to={`/crm/skills/edit/${skill._id}`}>
                                                 <Edit2 size={14} />
                                             </Link>
                                         </Button>

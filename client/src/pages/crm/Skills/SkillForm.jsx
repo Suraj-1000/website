@@ -94,7 +94,7 @@ const SkillForm = () => {
             } else {
                 await api.post('/skills', formData);
             }
-            navigate('/admin/skills');
+            navigate('/crm/skills');
         } catch (error) {
             console.error('Failed to save skill', error);
             alert('Failed to save skill');
@@ -109,7 +109,7 @@ const SkillForm = () => {
         <section className="px-6 py-8 space-y-8 min-h-screen">
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/admin/skills" className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Link to="/crm/skills" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
@@ -184,7 +184,7 @@ const SkillForm = () => {
 
                     <div className="pt-6 border-t border-border flex justify-end gap-3">
                         <Button variant="outline" asChild className="rounded-md">
-                            <Link to="/admin/skills">Cancel</Link>
+                            <Link to="/crm/skills">Cancel</Link>
                         </Button>
                         <Button
                             type="submit"

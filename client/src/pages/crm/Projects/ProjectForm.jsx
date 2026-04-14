@@ -66,7 +66,7 @@ const ProjectForm = () => {
             } else {
                 await api.post('/projects', formattedData);
             }
-            navigate('/admin/projects');
+            navigate('/crm/projects');
         } catch (error) {
             console.error('Failed to save project', error);
             alert('Failed to save project');
@@ -79,7 +79,7 @@ const ProjectForm = () => {
         <section className="px-6 py-8 space-y-8 min-h-screen">
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/admin/projects" className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Link to="/crm/projects" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
@@ -177,7 +177,7 @@ const ProjectForm = () => {
 
                     <div className="pt-4 border-t border-border flex justify-end gap-3">
                         <Button variant="outline" asChild className="rounded-md">
-                            <Link to="/admin/projects">Cancel</Link>
+                            <Link to="/crm/projects">Cancel</Link>
                         </Button>
                         <Button
                             type="submit"
