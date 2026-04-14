@@ -13,38 +13,38 @@ import { AuthProvider } from './context/AuthContext';
 // Admin Pages
 // Admin Pages
 // Admin Pages
-import AdminLayout from './layouts/AdminLayout';
-import Login from './pages/Admin/Login';
-import ForgotPassword from './pages/Admin/ForgotPassword';
-import ResetPassword from './pages/Admin/ResetPassword';
-import Dashboard from './pages/Admin/Dashboard';
-import ExperienceList from './pages/Admin/Experience/ExperienceList';
-import ExperienceForm from './pages/Admin/Experience/ExperienceForm';
-import SkillList from './pages/Admin/Skills/SkillList';
-import SkillForm from './pages/Admin/Skills/SkillForm';
-import ProjectList from './pages/Admin/Projects/ProjectList';
-import ProjectForm from './pages/Admin/Projects/ProjectForm';
-import EducationList from './pages/Admin/Education/EducationList';
-import EducationForm from './pages/Admin/Education/EducationForm';
+import CRMLayout from './layouts/CRMLayout';
+import Login from './pages/crm/Login';
+import ForgotPassword from './pages/crm/ForgotPassword';
+import ResetPassword from './pages/crm/ResetPassword';
+import Dashboard from './pages/crm/Dashboard';
+import ExperienceList from './pages/crm/Experience/ExperienceList';
+import ExperienceForm from './pages/crm/Experience/ExperienceForm';
+import SkillList from './pages/crm/Skills/SkillList';
+import SkillForm from './pages/crm/Skills/SkillForm';
+import ProjectList from './pages/crm/Projects/ProjectList';
+import ProjectForm from './pages/crm/Projects/ProjectForm';
+import EducationList from './pages/crm/Education/EducationList';
+import EducationForm from './pages/crm/Education/EducationForm';
 
-// Travel Admin
-import TravelList from './pages/Admin/Travel/TravelList';
-import TravelForm from './pages/Admin/Travel/TravelForm';
+// Travel CRM
+import TravelList from './pages/crm/Travel/TravelList';
+import TravelForm from './pages/crm/Travel/TravelForm';
 
-// Awards Admin
-import AwardList from './pages/Admin/Awards/AwardList';
-import AwardForm from './pages/Admin/Awards/AwardForm';
+// Awards CRM
+import AwardList from './pages/crm/Awards/AwardList';
+import AwardForm from './pages/crm/Awards/AwardForm';
 
-// Languages Admin
-import LanguageList from './pages/Admin/Languages/LanguageList';
-import LanguageForm from './pages/Admin/Languages/LanguageForm';
+// Languages CRM
+import LanguageList from './pages/crm/Languages/LanguageList';
+import LanguageForm from './pages/crm/Languages/LanguageForm';
 
-// References Admin
-import ReferenceList from './pages/Admin/References/ReferenceList';
-import ReferenceForm from './pages/Admin/References/ReferenceForm';
+// References CRM
+import ReferenceList from './pages/crm/References/ReferenceList';
+import ReferenceForm from './pages/crm/References/ReferenceForm';
 
-// Messages Admin
-import AdminMessages from './pages/Admin/AdminMessages';
+// Messages CRM
+import CRMMessages from './pages/crm/CRMMessages';
 
 import Skills from './pages/Skills/Skills';
 import Experience from './pages/Experience/Experience';
@@ -69,56 +69,56 @@ function App() {
             <Route path="/contact" element={<Contact />} />
           </Route>
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-          <Route path="/admin/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          {/* CRM Routes */}
+          <Route path="/crm/login" element={<Login />} />
+          <Route path="/crm/forgot-password" element={<ForgotPassword />} />
+          <Route path="/crm/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/crm" element={<CRMLayout />}>
+            <Route index element={<Navigate to="/crm/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
 
-            {/* Experience Admin */}
+            {/* Experience CRM */}
             <Route path="experience" element={<ExperienceList />} />
             <Route path="experience/new" element={<ExperienceForm />} />
             <Route path="experience/edit/:id" element={<ExperienceForm />} />
 
-            {/* Skills Admin */}
+            {/* Skills CRM */}
             <Route path="skills" element={<SkillList />} />
             <Route path="skills/new" element={<SkillForm />} />
             <Route path="skills/edit/:id" element={<SkillForm />} />
 
-            {/* Projects Admin */}
+            {/* Projects CRM */}
             <Route path="projects" element={<ProjectList />} />
             <Route path="projects/new" element={<ProjectForm />} />
             <Route path="projects/edit/:id" element={<ProjectForm />} />
 
-            {/* Education Admin */}
+            {/* Education CRM */}
             <Route path="education" element={<EducationList />} />
             <Route path="education/new" element={<EducationForm />} />
             <Route path="education/edit/:id" element={<EducationForm />} />
 
-            {/* Travel Admin */}
+            {/* Travel CRM */}
             <Route path="travel" element={<TravelList />} />
             <Route path="travel/new" element={<TravelForm />} />
             <Route path="travel/edit/:id" element={<TravelForm />} />
 
-            {/* Awards Admin */}
+            {/* Awards CRM */}
             <Route path="awards" element={<AwardList />} />
             <Route path="awards/new" element={<AwardForm />} />
             <Route path="awards/edit/:id" element={<AwardForm />} />
 
-            {/* Languages Admin */}
+            {/* Languages CRM */}
             <Route path="languages" element={<LanguageList />} />
             <Route path="languages/new" element={<LanguageForm />} />
             <Route path="languages/edit/:id" element={<LanguageForm />} />
 
-            {/* References Admin */}
+            {/* References CRM */}
             <Route path="references" element={<ReferenceList />} />
             <Route path="references/new" element={<ReferenceForm />} />
             <Route path="references/edit/:id" element={<ReferenceForm />} />
 
-            {/* Messages Admin */}
-            <Route path="messages" element={<AdminMessages />} />
+            {/* Messages CRM */}
+            <Route path="messages" element={<CRMMessages />} />
           </Route>
 
           {/* 404 Route */}

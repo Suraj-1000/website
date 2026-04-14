@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
-const AdminLayout = () => {
+const CRMLayout = () => {
     const { isAuthenticated, user, loading, logout } = useAuth();
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -33,19 +33,19 @@ const AdminLayout = () => {
         <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
     </div>;
 
-    if (!isAuthenticated || user?.role !== 'admin') return <Navigate to="/admin/login" />;
+    if (!isAuthenticated || user?.role !== 'admin') return <Navigate to="/crm/login" />;
 
     const navItems = [
-        { path: '/admin/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-        { path: '/admin/experience', icon: <Briefcase size={20} />, label: 'Experience' },
-        { path: '/admin/skills', icon: <Code size={20} />, label: 'Skills' },
-        { path: '/admin/projects', icon: <FolderGit2 size={20} />, label: 'Projects' },
-        { path: '/admin/education', icon: <BookOpen size={20} />, label: 'Education' },
-        { path: '/admin/travel', icon: <Plane size={20} />, label: 'Travel' },
-        { path: '/admin/awards', icon: <Award size={20} />, label: 'Awards' },
-        { path: '/admin/languages', icon: <Languages size={20} />, label: 'Languages' },
-        { path: '/admin/references', icon: <Users size={20} />, label: 'References' },
-        { path: '/admin/messages', icon: <MessageSquare size={20} />, label: 'Messages' },
+        { path: '/crm/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
+        { path: '/crm/experience', icon: <Briefcase size={20} />, label: 'Experience' },
+        { path: '/crm/skills', icon: <Code size={20} />, label: 'Skills' },
+        { path: '/crm/projects', icon: <FolderGit2 size={20} />, label: 'Projects' },
+        { path: '/crm/education', icon: <BookOpen size={20} />, label: 'Education' },
+        { path: '/crm/travel', icon: <Plane size={20} />, label: 'Travel' },
+        { path: '/crm/awards', icon: <Award size={20} />, label: 'Awards' },
+        { path: '/crm/languages', icon: <Languages size={20} />, label: 'Languages' },
+        { path: '/crm/references', icon: <Users size={20} />, label: 'References' },
+        { path: '/crm/messages', icon: <MessageSquare size={20} />, label: 'Messages' },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -56,8 +56,8 @@ const AdminLayout = () => {
             {/* Mobile Header */}
             <div className="md:hidden fixed top-0 w-full bg-background border-b border-border p-4 flex justify-between items-center z-50">
                 <div className="flex items-center gap-2">
-                    <div className="size-8 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold">S</div>
-                    <h1 className="text-lg font-semibold tracking-tight">Admin</h1>
+                    <div className="size-8 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold">C</div>
+                    <h1 className="text-lg font-semibold tracking-tight">CRM</h1>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full h-8 w-8">
@@ -86,8 +86,8 @@ const AdminLayout = () => {
             >
                 <div className="h-16 border-b border-border hidden md:flex items-center px-6">
                     <div className="flex items-center gap-3">
-                        <div className="size-9 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold text-lg">S</div>
-                        <h1 className="text-lg font-bold tracking-tight">PORTFOLIO</h1>
+                        <div className="size-9 bg-primary rounded-md flex items-center justify-center text-primary-foreground font-bold text-lg">C</div>
+                        <h1 className="text-lg font-bold tracking-tight">CRM</h1>
                     </div>
                 </div>
 
@@ -132,7 +132,7 @@ const AdminLayout = () => {
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Desktop Header */}
                 <header className="hidden md:flex h-16 bg-background border-b border-border px-8 items-center justify-between sticky top-0 z-30">
-                    <h2 className="text-sm font-medium text-muted-foreground">Admin / <span className="text-foreground capitalize">{location.pathname.split('/').pop()}</span></h2>
+                    <h2 className="text-sm font-medium text-muted-foreground">CRM / <span className="text-foreground capitalize">{location.pathname.split('/').pop()}</span></h2>
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={toggleTheme} className="rounded-full h-9 w-9 border-border bg-background">
                             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
@@ -159,4 +159,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default CRMLayout;
