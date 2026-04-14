@@ -49,7 +49,7 @@ const ReferenceList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/references/new">
+                    <Link to="/crm/references/new">
                         <Plus size={16} /> Add Reference
                     </Link>
                 </Button>
@@ -68,7 +68,7 @@ const ReferenceList = () => {
                                 </div>
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                        <Link to={`/admin/references/edit/${ref.id}`}>
+                                        <Link to={`/crm/references/edit/${ref.id}`}>
                                             <Edit2 size={14} />
                                         </Link>
                                     </Button>

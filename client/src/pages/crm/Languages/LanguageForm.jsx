@@ -43,7 +43,7 @@ const LanguageForm = () => {
             } else {
                 await api.post('/languages', data);
             }
-            navigate('/admin/languages');
+            navigate('/crm/languages');
         } catch (error) {
             console.error('Failed to save language', error);
             alert('Failed to save language');
@@ -57,7 +57,7 @@ const LanguageForm = () => {
     return (
         <div className="max-w-2xl mx-auto space-y-6">
             <div className="flex items-center gap-4">
-                <Link to="/admin/languages" className="p-2 hover:bg-muted rounded-full transition-colors">
+                <Link to="/crm/languages" className="p-2 hover:bg-muted rounded-full transition-colors">
                     <ArrowLeft size={20} />
                 </Link>
                 <h1 className="text-2xl font-bold">{isEdit ? 'Edit Language' : 'Add New Language'}</h1>

@@ -66,7 +66,7 @@ const TravelForm = () => {
             } else {
                 await api.post('/travel', dataToSend);
             }
-            navigate('/admin/travel');
+            navigate('/crm/travel');
         } catch (error) {
             console.error('Failed to save travel', error);
             alert('Failed to save travel');
@@ -81,7 +81,7 @@ const TravelForm = () => {
         <div className="max-w-3xl mx-auto pb-10">
             <Button
                 variant="ghost"
-                onClick={() => navigate('/admin/travel')}
+                onClick={() => navigate('/crm/travel')}
                 className="group mb-6 hover:bg-transparent -ml-2"
             >
                 <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />

@@ -52,7 +52,7 @@ const TravelList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/travel/new">
+                    <Link to="/crm/travel/new">
                         <Plus size={16} /> Add Adventure
                     </Link>
                 </Button>
@@ -82,7 +82,7 @@ const TravelList = () => {
                                     <CardTitle className="text-lg font-bold line-clamp-1">{travel.title}</CardTitle>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                            <Link to={`/admin/travel/edit/${travel.id}`}>
+                                            <Link to={`/crm/travel/edit/${travel.id}`}>
                                                 <Edit2 size={14} />
                                             </Link>
                                         </Button>
@@ -123,7 +123,7 @@ const TravelList = () => {
                     <Card className="col-span-full flex flex-col items-center justify-center py-20 border-dashed bg-muted/20 rounded-md">
                         <p className="text-muted-foreground font-medium text-sm">No travel entries found.</p>
                         <Button asChild variant="link" className="mt-2 text-primary">
-                            <Link to="/admin/travel/new">Add your first adventure</Link>
+                            <Link to="/crm/travel/new">Add your first adventure</Link>
                         </Button>
                     </Card>
                 )}

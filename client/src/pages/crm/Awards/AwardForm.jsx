@@ -128,7 +128,7 @@ const AwardForm = () => {
             } else {
                 await api.post('/awards', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
-            navigate('/admin/awards');
+            navigate('/crm/awards');
         } catch (error) {
             console.error('Failed to save award', error);
             alert('Failed to save award');
@@ -145,7 +145,7 @@ const AwardForm = () => {
         <section className="px-6 py-8 space-y-8 min-h-screen">
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link to="/admin/awards" className="p-2 hover:bg-muted rounded-full transition-colors">
+                    <Link to="/crm/awards" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
@@ -251,7 +251,7 @@ const AwardForm = () => {
 
                     <div className="pt-4 border-t border-border flex justify-end gap-3">
                         <Button variant="outline" asChild className="rounded-md">
-                            <Link to="/admin/awards">Cancel</Link>
+                            <Link to="/crm/awards">Cancel</Link>
                         </Button>
                         <Button type="submit" disabled={loading} className="gap-2 rounded-md px-8 shadow-sm">
                             <Save size={18} />

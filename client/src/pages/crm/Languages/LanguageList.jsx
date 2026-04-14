@@ -50,7 +50,7 @@ const LanguageList = () => {
                     </p>
                 </div>
                 <Button asChild size="sm" className="gap-2 shadow-sm">
-                    <Link to="/admin/languages/new">
+                    <Link to="/crm/languages/new">
                         <Plus size={16} /> Add Language
                     </Link>
                 </Button>
@@ -74,7 +74,7 @@ const LanguageList = () => {
                                 </div>
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                        <Link to={`/admin/languages/edit/${lang.id}`}>
+                                        <Link to={`/crm/languages/edit/${lang.id}`}>
                                             <Edit2 size={14} />
                                         </Link>
                                     </Button>

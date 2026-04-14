@@ -47,7 +47,7 @@ const ReferenceForm = () => {
             } else {
                 await api.post('/references', data);
             }
-            navigate('/admin/references');
+            navigate('/crm/references');
         } catch (error) {
             console.error('Failed to save reference', error);
             alert('Failed to save reference');
@@ -61,7 +61,7 @@ const ReferenceForm = () => {
     return (
         <div className="max-w-2xl mx-auto space-y-6">
             <div className="flex items-center gap-4">
-                <Link to="/admin/references" className="p-2 hover:bg-muted rounded-full transition-colors">
+                <Link to="/crm/references" className="p-2 hover:bg-muted rounded-full transition-colors">
                     <ArrowLeft size={20} />
                 </Link>
                 <h1 className="text-2xl font-bold">{isEdit ? 'Edit Reference' : 'Add New Reference'}</h1>
