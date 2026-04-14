@@ -1,5 +1,5 @@
 const BaseService = require('./base.service');
-const travelRepository = require('@/repositories/travel.repo');
+const travelRepository = require('@/repository/travel.repo');
 
 class TravelService extends BaseService {
    constructor() {

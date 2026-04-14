@@ -1,6 +1,6 @@
 const asyncHandler = require('@/middlewares/asyncHandler');
 const contactService = require('@/services/contact.service');
-const contactRepository = require('@/repositories/contact.repo');
+const contactRepository = require('@/repository/contact.repo');
 
 class ContactController {
    submitContact = asyncHandler(async (req, res) => {

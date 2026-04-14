@@ -1,5 +1,5 @@
 const BaseService = require('./base.service');
-const userRepository = require('@/repositories/user.repo');
+const userRepository = require('@/repository/user.repo');
 const crypto = require('crypto');
 const { Op } = require('sequelize');
 

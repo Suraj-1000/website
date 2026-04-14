@@ -1,5 +1,5 @@
 const BaseService = require('./base.service');
-const awardRepository = require('@/repositories/award.repo');
+const awardRepository = require('@/repository/award.repo');
 
 class AwardService extends BaseService {
    constructor() {

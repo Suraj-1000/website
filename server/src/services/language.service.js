@@ -1,5 +1,5 @@
 const BaseService = require('./base.service');
-const languageRepository = require('@/repositories/language.repo');
+const languageRepository = require('@/repository/language.repo');
 
 class LanguageService extends BaseService {
    constructor() {
