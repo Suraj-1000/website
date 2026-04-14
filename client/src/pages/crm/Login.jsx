@@ -26,7 +26,7 @@ const Login = () => {
 
         try {
             await login(formData.email, formData.password);
-            navigate('/admin/dashboard');
+            navigate('/crm/dashboard');
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to login');
         } finally {
@@ -87,7 +87,7 @@ const Login = () => {
                             </div>
                             <div className="flex justify-end">
                                 <Link
-                                    to="/admin/forgot-password"
+                                    to="/crm/forgot-password"
                                     className="text-xs text-muted-foreground hover:text-primary transition-colors"
                                 >
                                     Forgot Password?

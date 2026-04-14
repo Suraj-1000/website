@@ -77,7 +77,7 @@ const ForgotPassword = () => {
                     )}
 
                     <div className="mt-6 text-center">
-                        <Link to="/admin/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <Link to="/crm/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
                             <ArrowLeft size={16} className="mr-2" />
                             Back to Login
                         </Link>

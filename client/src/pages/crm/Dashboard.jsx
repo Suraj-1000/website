@@ -83,16 +83,16 @@ const Dashboard = () => {
     };
 
     const stats = [
-        { label: 'Experiences', count: '12', icon: <Briefcase size={20} />, path: '/admin/experience', color: 'from-blue-500 to-cyan-500' },
-        { label: 'Skills', count: '24', icon: <Code size={20} />, path: '/admin/skills', color: 'from-purple-500 to-pink-500' },
-        { label: 'Projects', count: '18', icon: <FolderGit2 size={20} />, path: '/admin/projects', color: 'from-emerald-500 to-teal-500' },
-        { label: 'Travel', count: '8', icon: <Plane size={20} />, path: '/admin/travel', color: 'from-orange-500 to-yellow-500' },
+        { label: 'Experiences', count: '12', icon: <Briefcase size={20} />, path: '/crm/experience', color: 'from-blue-500 to-cyan-500' },
+        { label: 'Skills', count: '24', icon: <Code size={20} />, path: '/crm/skills', color: 'from-purple-500 to-pink-500' },
+        { label: 'Projects', count: '18', icon: <FolderGit2 size={20} />, path: '/crm/projects', color: 'from-emerald-500 to-teal-500' },
+        { label: 'Travel', count: '8', icon: <Plane size={20} />, path: '/crm/travel', color: 'from-orange-500 to-yellow-500' },
     ];
 
     const quickActions = [
-        { label: 'Add New Project', icon: <Plus size={18} />, path: '/admin/projects/new', bg: 'bg-blue-500' },
-        { label: 'New Experience', icon: <Briefcase size={18} />, path: '/admin/experience/new', bg: 'bg-purple-500' },
-        { label: 'Check Messages', icon: <MessageSquare size={18} />, path: '/admin/messages', bg: 'bg-emerald-500' },
+        { label: 'Add New Project', icon: <Plus size={18} />, path: '/crm/projects/new', bg: 'bg-blue-500' },
+        { label: 'New Experience', icon: <Briefcase size={18} />, path: '/crm/experience/new', bg: 'bg-purple-500' },
+        { label: 'Check Messages', icon: <MessageSquare size={18} />, path: '/crm/messages', bg: 'bg-emerald-500' },
         { label: 'View Portfolio', icon: <ExternalLink size={18} />, path: '/', bg: 'bg-slate-700' },
     ];
 
@@ -123,7 +123,7 @@ const Dashboard = () => {
                             </Link>
                         </Button>
                         <Button size="sm" asChild className="gap-2 h-9 shadow-sm">
-                            <Link to="/admin/projects/new">
+                            <Link to="/crm/projects/new">
                                 <Plus size={16} />
                                 Create New
                             </Link>
@@ -270,7 +270,7 @@ const Dashboard = () => {
                                 <CardTitle className="text-lg font-semibold">Recent Projects</CardTitle>
                                 <CardDescription className="text-xs">Your most recently updated work</CardDescription>
                             </div>
-                            <Link to="/admin/projects" className="text-sm text-primary hover:underline">View all</Link>
+                            <Link to="/crm/projects" className="text-sm text-primary hover:underline">View all</Link>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {[1, 2, 3].map((_, i) => (

@@ -37,7 +37,7 @@ const ResetPassword = () => {
             await api.put(`/auth/reset-password/${token}`, { password });
             setMessage('Password has been reset successfully');
             setTimeout(() => {
-                navigate('/admin/login');
+                navigate('/crm/login');
             }, 3000);
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to reset password');
@@ -116,7 +116,7 @@ const ResetPassword = () => {
                     )}
 
                     <div className="mt-6 text-center">
-                        <Link to="/admin/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+                        <Link to="/crm/login" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
                             <ArrowLeft size={16} className="mr-2" />
                             Back to Login
                         </Link>
