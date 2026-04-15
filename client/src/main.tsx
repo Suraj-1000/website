@@ -4,13 +4,4 @@ import "@/assets/styles/global.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { routes } from "@/routes/route.jsx";
 
-const router = createBrowserRouter(routes);
 
-const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error("Root element not found");
-
-createRoot(rootElement).render(
-   <StrictMode>
-      <RouterProvider router={router} />
-   </StrictMode>
-);
