@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
-import CRMLayout from "@/pages/_components/layout/CRMLayout";
-import Login from "@/pages/crm/Login";
+
 
 export const routes = [
    {
