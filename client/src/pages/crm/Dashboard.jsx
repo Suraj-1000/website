@@ -7,14 +7,15 @@ import {
     BarChart3, PieChart, Activity
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card';
-import { Badge } from '../../components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-} from "../../components/ui/chart";
+} from "@/components/ui/chart";
+
 import {
     Bar, BarChart, ResponsiveContainer, XAxis, YAxis,
     CartesianGrid, Tooltip, Area, AreaChart, Pie, PieChart as RePieChart, Cell
