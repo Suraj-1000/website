@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/services/context/AuthContext';
+
 import {
     LayoutDashboard, Briefcase, Code, FolderGit2,
     BookOpen, Plane, MessageSquare, LogOut,
     Menu, X, Award, Languages, Users,
     Sun, Moon, ChevronRight
 } from 'lucide-react';
-import { Button } from '../components/ui/button';
+import { Button } from '@/components/ui/button';
 
 const CRMLayout = () => {
     const { isAuthenticated, user, loading, logout } = useAuth();
