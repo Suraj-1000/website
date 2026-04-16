@@ -40,6 +40,7 @@ db.sequelize
    .then(() => console.log("Database synchronized"))
    .catch((err) => console.error("Unable to connect/sync the database:", err));
 // Server Configuration
-app.listen(envConfig.PORT, () =>
+app.listen(envConfig.PORT, "0.0.0.0", () =>
    console.log(`App running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`)
 );
+
