@@ -3,7 +3,7 @@ const { Education } = require('@/database/models');
 
 class EducationRepository extends BaseRepository {
    constructor() {
-      super(Education, [['startDate', 'DESC']]);
+      super(Education, [['startYear', 'DESC']]);
    }
 }
 
