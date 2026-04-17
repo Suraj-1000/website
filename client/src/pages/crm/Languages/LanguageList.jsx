@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import api from '../../../utils/api';
+import api from '@/utils/api';
 import { Plus, Trash2, Edit2, Languages } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '../../../components/ui/button';
-import { Card, CardHeader, CardTitle } from '../../../components/ui/card';
-import { Badge } from '../../../components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
 
 const LanguageList = () => {
     const [languages, setLanguages] = useState([]);
