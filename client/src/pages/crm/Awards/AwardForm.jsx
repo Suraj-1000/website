@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api, { API_URL as API_BASE } from '../../../utils/api';
+import api, { API_URL as API_BASE } from '@/utils/api';
 import { useForm } from 'react-hook-form';
 import { Save, ArrowLeft, Upload, X } from 'lucide-react';
-import { Button } from '../../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
