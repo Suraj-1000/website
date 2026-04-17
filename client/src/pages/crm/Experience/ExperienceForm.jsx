@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../utils/api';
+import api from '@/utils/api';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { Save, ArrowLeft, Plus, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 
 const ExperienceForm = () => {
     const navigate = useNavigate();
