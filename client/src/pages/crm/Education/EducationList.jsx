@@ -14,7 +14,7 @@ const EducationList = () => {
     const fetchEducations = async () => {
         try {
             const res = await api.get('/education');
-            setEducations(res.data);
+            setEducations(res.data.data || []);
         } catch (error) {
             console.error('Failed to fetch education:', error);
         } finally {
