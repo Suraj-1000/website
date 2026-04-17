@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../utils/api';
+import api from '@/utils/api';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { Save, ArrowLeft, Plus, X, Globe, Github } from 'lucide-react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
-import { Textarea } from '../../../components/ui/textarea';
-import { Label } from '../../../components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { Link } from 'react-router-dom';
+
 
 const ProjectForm = () => {
     const { id } = useParams();
