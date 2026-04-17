@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../../utils/api';
+import api from '@/utils/api';
 import { useForm } from 'react-hook-form';
 import { Save, ArrowLeft, GraduationCap, School, BookOpen } from 'lucide-react';
-import { Button } from '../../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+
 
 const EducationForm = () => {
     const { id } = useParams();
