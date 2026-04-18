@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const ProjectList = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchProjects = async () => {
         try {
@@ -27,12 +29,15 @@ const ProjectList = () => {
         fetchProjects();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/projects/${id}`);
-            setProjects(projects.filter(p => p.id !== id));
+            await api.delete(`/projects/${deleteId}`);
+            setProjects(projects.filter(p => p.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete project:', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -69,7 +74,7 @@ const ProjectList = () => {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    onClick={() => handleDelete(project.id)}
+                                    onClick={() => setDeleteId(project.id)}
                                     className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10 bg-background"
                                 >
                                     <Trash2 size={14} />
@@ -110,6 +115,14 @@ const ProjectList = () => {
                     </div>
                 ))}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Project"
+                description="Are you sure you want to delete this project? This action cannot be undone."
+            />
         </section>
     );
 };
