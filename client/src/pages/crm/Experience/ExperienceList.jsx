@@ -6,11 +6,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const ExperienceList = () => {
     const [experiences, setExperiences] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchExperiences = async () => {
         try {
@@ -27,12 +29,15 @@ const ExperienceList = () => {
         fetchExperiences();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/experiences/${id}`);
-            setExperiences(experiences.filter(exp => exp.id !== id));
+            await api.delete(`/experiences/${deleteId}`);
+            setExperiences(experiences.filter(exp => exp.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete experience', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -89,7 +94,7 @@ const ExperienceList = () => {
                                     <Button
                                         variant="outline"
                                         size="icon"
-                                        onClick={() => handleDelete(exp.id)}
+                                        onClick={() => setDeleteId(exp.id)}
                                         className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                     >
                                         <Trash2 size={14} />
@@ -109,6 +114,14 @@ const ExperienceList = () => {
                     </Card>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Experience"
+                description="Are you sure you want to delete this experience entry? This action cannot be undone."
+            />
         </section>
     );
 };
