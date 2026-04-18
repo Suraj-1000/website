@@ -25,14 +25,11 @@ const MessageList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this message?')) {
-            try {
-                await api.delete(`/contacts/${id}`); // Assumes delete endpoint exists
-                setMessages(messages.filter(m => m.id !== id));
-            } catch (error) {
-                console.error('Failed to delete message', error);
-                // alert('Failed to delete message'); // Suppress if endpoint missing
-            }
+        try {
+            await api.delete(`/contacts/${id}`); // Assumes delete endpoint exists
+            setMessages(messages.filter(m => m.id !== id));
+        } catch (error) {
+            console.error('Failed to delete message', error);
         }
     };
 
