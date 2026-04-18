@@ -28,14 +28,11 @@ const TravelList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this travel entry?')) {
-            try {
-                await api.delete(`/travel/${id}`);
-                setTravels(travels.filter(t => t.id !== id));
-            } catch (error) {
-                console.error('Failed to delete travel', error);
-                alert('Failed to delete travel');
-            }
+        try {
+            await api.delete(`/travel/${id}`);
+            setTravels(travels.filter(t => t.id !== id));
+        } catch (error) {
+            console.error('Failed to delete travel', error);
         }
     };
 
