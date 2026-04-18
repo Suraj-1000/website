@@ -182,6 +182,10 @@ export const routes = [
       element: <Navigate to="/crm/login" />,
    },
    {
+      path: "/admin/reset-password/:token",
+      element: <ResetPassword />,
+   },
+   {
       path: "/admin",
       element: <Navigate to="/crm/dashboard" />,
    },

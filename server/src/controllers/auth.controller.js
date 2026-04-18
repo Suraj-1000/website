@@ -80,7 +80,7 @@ class AuthController {
          const resetToken = await authService.forgotPassword(email);
 
          // Create reset url (pointing to frontend)
-         const resetUrl = `${req.protocol}://${req.get('host').replace('5000', '5173')}/admin/reset-password/${resetToken}`;
+         const resetUrl = `${req.protocol}://${req.get('host').replace('5000', '5173')}/crm/reset-password/${resetToken}`;
 
          const message = `
             <h1>Password Reset Request</h1>
