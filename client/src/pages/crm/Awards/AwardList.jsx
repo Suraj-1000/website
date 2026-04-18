@@ -4,11 +4,13 @@ import { Plus, Trash2, Edit2, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const AwardList = () => {
     const [awards, setAwards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchAwards = async () => {
         try {
@@ -25,12 +27,15 @@ const AwardList = () => {
         fetchAwards();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/awards/${id}`);
-            setAwards(awards.filter(award => award.id !== id));
+            await api.delete(`/awards/${deleteId}`);
+            setAwards(awards.filter(award => award.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete award:', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -67,7 +72,7 @@ const AwardList = () => {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    onClick={() => handleDelete(award.id)}
+                                    onClick={() => setDeleteId(award.id)}
                                     className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10 bg-background"
                                 >
                                     <Trash2 size={14} />
@@ -96,6 +101,14 @@ const AwardList = () => {
                     </div>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Award"
+                description="Are you sure you want to delete this award? This action cannot be undone."
+            />
         </section>
     );
 };
