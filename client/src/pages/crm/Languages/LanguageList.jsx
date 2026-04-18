@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const LanguageList = () => {
     const [languages, setLanguages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchLanguages = async () => {
         try {
@@ -26,12 +28,15 @@ const LanguageList = () => {
         fetchLanguages();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/languages/${id}`);
-            setLanguages(languages.filter(lang => lang.id !== id));
+            await api.delete(`/languages/${deleteId}`);
+            setLanguages(languages.filter(lang => lang.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete language:', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -80,7 +85,7 @@ const LanguageList = () => {
                                     <Button
                                         variant="outline"
                                         size="icon"
-                                        onClick={() => handleDelete(lang.id)}
+                                        onClick={() => setDeleteId(lang.id)}
                                         className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                     >
                                         <Trash2 size={14} />
@@ -96,6 +101,14 @@ const LanguageList = () => {
                     </div>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Language"
+                description="Are you sure you want to delete this language? This action cannot be undone."
+            />
         </section>
     );
 };
