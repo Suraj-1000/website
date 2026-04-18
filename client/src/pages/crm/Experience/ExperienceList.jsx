@@ -28,14 +28,11 @@ const ExperienceList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this experience?')) {
-            try {
-                await api.delete(`/experiences/${id}`);
-                setExperiences(experiences.filter(exp => exp.id !== id));
-            } catch (error) {
-                console.error('Failed to delete experience', error);
-                alert('Failed to delete experience');
-            }
+        try {
+            await api.delete(`/experiences/${id}`);
+            setExperiences(experiences.filter(exp => exp.id !== id));
+        } catch (error) {
+            console.error('Failed to delete experience', error);
         }
     };
 
