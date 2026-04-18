@@ -6,11 +6,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const TravelList = () => {
     const [travels, setTravels] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchTravels = async () => {
         try {
@@ -27,12 +29,15 @@ const TravelList = () => {
         fetchTravels();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/travel/${id}`);
-            setTravels(travels.filter(t => t.id !== id));
+            await api.delete(`/travel/${deleteId}`);
+            setTravels(travels.filter(t => t.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete travel', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -87,7 +92,7 @@ const TravelList = () => {
                                         <Button
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => handleDelete(travel.id)}
+                                            onClick={() => setDeleteId(travel.id)}
                                             className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
@@ -126,6 +131,14 @@ const TravelList = () => {
                     </Card>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Travel Adventure"
+                description="Are you sure you want to delete this travel entry? This action cannot be undone."
+            />
         </section>
     );
 };
