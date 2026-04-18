@@ -4,10 +4,12 @@ import { Trash2, Clock, Mail, Calendar, User } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
-
+import { DeleteConfirmModal } from '../../../components/ui/DeleteConfirmModal';
 const MessageList = () => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
+
 
     const fetchMessages = async () => {
         try {
@@ -24,12 +26,15 @@ const MessageList = () => {
         fetchMessages();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/contacts/${id}`); // Assumes delete endpoint exists
-            setMessages(messages.filter(m => m.id !== id));
+            await api.delete(`/contacts/${deleteId}`); // Assumes delete endpoint exists
+            setMessages(messages.filter(m => m.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete message', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -83,7 +88,7 @@ const MessageList = () => {
                                         <Button
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => handleDelete(msg.id)}
+                                            onClick={() => setDeleteId(msg.id)}
                                             className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
@@ -105,6 +110,14 @@ const MessageList = () => {
                     </Card>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Message"
+                description="Are you sure you want to delete this message? This action cannot be undone."
+            />
         </section>
     );
 };
