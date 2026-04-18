@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const EducationList = () => {
     const [educations, setEducations] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchEducations = async () => {
         try {
@@ -26,12 +28,15 @@ const EducationList = () => {
         fetchEducations();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/education/${id}`);
-            setEducations(educations.filter(edu => edu.id !== id));
+            await api.delete(`/education/${deleteId}`);
+            setEducations(educations.filter(edu => edu.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete education:', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -68,7 +73,7 @@ const EducationList = () => {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    onClick={() => handleDelete(edu.id)}
+                                    onClick={() => setDeleteId(edu.id)}
                                     className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10 bg-background"
                                 >
                                     <Trash2 size={14} />
@@ -106,6 +111,14 @@ const EducationList = () => {
                     </div>
                 ))}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Education"
+                description="Are you sure you want to delete this education entry? This action cannot be undone."
+            />
         </section>
     );
 };
