@@ -27,13 +27,11 @@ const LanguageList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this language?')) return;
         try {
             await api.delete(`/languages/${id}`);
             setLanguages(languages.filter(lang => lang.id !== id));
         } catch (error) {
             console.error('Failed to delete language:', error);
-            alert('Failed to delete language');
         }
     };
 
