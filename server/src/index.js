@@ -44,3 +44,5 @@ app.listen(envConfig.PORT, "0.0.0.0", () =>
    console.log(`App running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`)
 );
 
+// Restarting to ensure .env changes apply
+console.log("App restarted to load new app password.");
