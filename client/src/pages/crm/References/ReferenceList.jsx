@@ -26,13 +26,11 @@ const ReferenceList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this reference?')) return;
         try {
             await api.delete(`/references/${id}`);
             setReferences(references.filter(ref => ref.id !== id));
         } catch (error) {
             console.error('Failed to delete reference:', error);
-            alert('Failed to delete reference');
         }
     };
 
