@@ -27,13 +27,11 @@ const EducationList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this education entry?')) return;
         try {
             await api.delete(`/education/${id}`);
             setEducations(educations.filter(edu => edu.id !== id));
         } catch (error) {
             console.error('Failed to delete education:', error);
-            alert('Failed to delete education');
         }
     };
 
