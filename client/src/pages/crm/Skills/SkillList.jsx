@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 // Mapping string icon names to components
@@ -16,6 +17,7 @@ const IconMap = {
 const SkillList = () => {
     const [skills, setSkills] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchSkills = async () => {
         try {
@@ -32,12 +34,15 @@ const SkillList = () => {
         fetchSkills();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/skills/${id}`);
-            setSkills(skills.filter(s => s._id !== id));
+            await api.delete(`/skills/${deleteId}`);
+            setSkills(skills.filter(s => s._id !== deleteId));
         } catch (error) {
             console.error('Failed to delete skill category', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -84,7 +89,7 @@ const SkillList = () => {
                                         <Button
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => handleDelete(skill._id)}
+                                            onClick={() => setDeleteId(skill._id)}
                                             className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
@@ -110,6 +115,14 @@ const SkillList = () => {
                     );
                 })}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Skill Category"
+                description="Are you sure you want to delete this skill category and all its attached items? This action cannot be undone."
+            />
         </section>
     );
 };
