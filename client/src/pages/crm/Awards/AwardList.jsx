@@ -26,13 +26,11 @@ const AwardList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this award?')) return;
         try {
             await api.delete(`/awards/${id}`);
             setAwards(awards.filter(award => award.id !== id));
         } catch (error) {
             console.error('Failed to delete award:', error);
-            alert('Failed to delete award');
         }
     };
 
