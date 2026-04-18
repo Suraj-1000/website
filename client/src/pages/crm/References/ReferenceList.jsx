@@ -4,11 +4,13 @@ import { Plus, Trash2, Edit2, Users, Mail, Phone, Building2 } from 'lucide-react
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 
 const ReferenceList = () => {
     const [references, setReferences] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
 
     const fetchReferences = async () => {
         try {
@@ -25,12 +27,15 @@ const ReferenceList = () => {
         fetchReferences();
     }, []);
 
-    const handleDelete = async (id) => {
+    const confirmDelete = async () => {
+        if (!deleteId) return;
         try {
-            await api.delete(`/references/${id}`);
-            setReferences(references.filter(ref => ref.id !== id));
+            await api.delete(`/references/${deleteId}`);
+            setReferences(references.filter(ref => ref.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete reference:', error);
+        } finally {
+            setDeleteId(null);
         }
     };
 
@@ -74,7 +79,7 @@ const ReferenceList = () => {
                                     <Button
                                         variant="outline"
                                         size="icon"
-                                        onClick={() => handleDelete(ref.id)}
+                                        onClick={() => setDeleteId(ref.id)}
                                         className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                     >
                                         <Trash2 size={14} />
@@ -112,6 +117,14 @@ const ReferenceList = () => {
                     </div>
                 )}
             </div>
+
+            <DeleteConfirmModal 
+                isOpen={!!deleteId} 
+                onClose={() => setDeleteId(null)} 
+                onConfirm={confirmDelete}
+                title="Delete Reference"
+                description="Are you sure you want to delete this reference? This action cannot be undone."
+            />
         </section>
     );
 };
