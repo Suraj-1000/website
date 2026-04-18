@@ -28,13 +28,11 @@ const ProjectList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this project?')) return;
         try {
             await api.delete(`/projects/${id}`);
             setProjects(projects.filter(p => p.id !== id));
         } catch (error) {
             console.error('Failed to delete project:', error);
-            alert('Failed to delete project');
         }
     };
 
