@@ -33,14 +33,11 @@ const SkillList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this category?')) {
-            try {
-                await api.delete(`/skills/${id}`);
-                setSkills(skills.filter(s => s._id !== id));
-            } catch (error) {
-                console.error('Failed to delete skill category', error);
-                alert('Failed to delete skill category');
-            }
+        try {
+            await api.delete(`/skills/${id}`);
+            setSkills(skills.filter(s => s._id !== id));
+        } catch (error) {
+            console.error('Failed to delete skill category', error);
         }
     };
 
