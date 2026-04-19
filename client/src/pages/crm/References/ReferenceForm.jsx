@@ -60,7 +60,7 @@ const ReferenceForm = () => {
     if (fetching) return <div>Loading...</div>;
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="w-full space-y-6">
             <div className="flex items-center gap-4">
                 <Link to="/crm/references" className="p-2 hover:bg-muted rounded-full transition-colors">
                     <ArrowLeft size={20} />
