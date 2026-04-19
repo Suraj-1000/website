@@ -78,7 +78,7 @@ const ProjectForm = () => {
 
     return (
         <section className="px-6 py-8 space-y-8 min-h-screen">
-            <div className="max-w-3xl mx-auto space-y-6">
+            <div className="w-full space-y-6">
                 <div className="flex items-center gap-4">
                     <Link to="/crm/projects" className="p-2 hover:bg-muted rounded-full transition-colors">
                         <ArrowLeft size={18} />
