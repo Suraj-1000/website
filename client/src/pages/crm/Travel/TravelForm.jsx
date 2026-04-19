@@ -79,7 +79,7 @@ const TravelForm = () => {
     if (fetching) return <div className="text-center p-10">Loading...</div>;
 
     return (
-        <div className="max-w-3xl mx-auto pb-10">
+        <div className="w-full pb-10">
             <Button
                 variant="ghost"
                 onClick={() => navigate('/crm/travel')}
