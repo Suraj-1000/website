@@ -12,7 +12,7 @@ const CtaSection = () => {
                 </p>
                 <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center gap-2 px-10 py-5 rounded-full bg-white text-black font-bold text-lg hover:scale-105 transition-transform shadow-2xl"
+                    className="inline-flex items-center justify-center gap-2 px-10 py-5 rounded-full bg-primary text-white font-bold text-lg hover:bg-primary/90 hover:scale-105 transition-all shadow-2xl shadow-primary/30"
                 >
                     Let's Talk <Mail size={20} />
                 </Link>
