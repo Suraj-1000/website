@@ -2,18 +2,18 @@ import { Navigate } from "react-router-dom";
 
 // Public Layout & Pages
 import Layout from "@/pages/_components/layout/Layout";
-import Home from "@/pages/Home/Home";
-import About from "@/pages/About/About";
-import Projects from "@/pages/Projects/Projects";
-import Skills from "@/pages/Skills/Skills";
-import Contact from "@/pages/Contact/Contact";
-import NotFound from "@/pages/NotFound/NotFound";
+import Home from "@/pages/public/Home/Home";
+import About from "@/pages/public/About/About";
+import Projects from "@/pages/public/Projects/Projects";
+import Skills from "@/pages/public/Skills/Skills";
+import Contact from "@/pages/public/Contact/Contact";
+import NotFound from "@/pages/public/NotFound/NotFound";
 
 // Conditionally import optional public pages
-import ExperiencePage from "@/pages/Experience/Experience";
-import EducationPage from "@/pages/Education/Education";
-import TravelPage from "@/pages/Travel/Travel";
-import Testimonials from "@/pages/Testimonials/Testimonials";
+import ExperiencePage from "@/pages/public/Experience/Experience";
+import EducationPage from "@/pages/public/Education/Education";
+import TravelPage from "@/pages/public/Travel/Travel";
+import Testimonials from "@/pages/public/Testimonials/Testimonials";
 
 // CRM Layout & Auth
 import CRMLayout from "@/pages/_components/layout/crm-layout";
