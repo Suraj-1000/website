@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import api from '../../utils/api';
+import api from '@/utils/api';
 import { Send, Mail, MapPin, Linkedin, Github, Twitter, Instagram } from 'lucide-react';
 
 const Contact = () => {
