@@ -42,7 +42,7 @@ const FeaturedProjectsSection = () => {
                         <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured <span className="text-secondary">Work</span></h2>
                         <p className="text-muted-foreground">A glimpse into my recent development.</p>
                     </div>
-                    <Link to="/projects" className="hidden md:flex items-center gap-2 text-primary hover:text-white transition-colors">
+                    <Link to="/projects" className="hidden md:flex items-center gap-2 text-primary hover:text-foreground transition-colors">
                         View All <ArrowRight size={16} />
                     </Link>
                 </div>
@@ -54,7 +54,7 @@ const FeaturedProjectsSection = () => {
                 </div>
 
                 <div className="mt-12 text-center md:hidden">
-                    <Link to="/projects" className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors">
+                    <Link to="/projects" className="inline-flex items-center gap-2 text-primary hover:text-foreground transition-colors">
                         View All Projects <ArrowRight size={16} />
                     </Link>
                 </div>
