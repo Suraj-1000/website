@@ -54,7 +54,7 @@ const ProjectCard = ({ project, index }) => {
                             href={project.repoLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors"
+                            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                         >
                             <Github size={16} /> Code
                         </a>
