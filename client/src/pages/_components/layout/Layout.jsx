@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from '../components/molecules/Navbar';
-import Footer from '../components/molecules/Footer';
+import Navbar from '@/components/molecules/Navbar';
+import Footer from '@/components/molecules/Footer';
 
 // Lazy load the heavy 3D background
-const ThreeBackground = lazy(() => import('../components/organisms/ThreeBackground/ThreeBackground'));
+const ThreeBackground = lazy(() => import('@/components/organisms/ThreeBackground/ThreeBackground'));
 
 const Layout = () => {
     return (
