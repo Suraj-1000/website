@@ -1,52 +1,80 @@
 import { Navigate } from "react-router-dom";
+
+// Public Layout & Pages
+import Layout from "@/pages/_components/layout/Layout";
+import Home from "@/pages/Home/Home";
+import About from "@/pages/About/About";
+import Projects from "@/pages/Projects/Projects";
+import Skills from "@/pages/Skills/Skills";
+import Contact from "@/pages/Contact/Contact";
+import NotFound from "@/pages/NotFound/NotFound";
+
+// Conditionally import optional public pages
+import ExperiencePage from "@/pages/Experience/Experience";
+import EducationPage from "@/pages/Education/Education";
+import TravelPage from "@/pages/Travel/Travel";
+import Testimonials from "@/pages/Testimonials/Testimonials";
+
+// CRM Layout & Auth
 import CRMLayout from "@/pages/_components/layout/crm-layout";
 import Login from "@/pages/crm/login";
 import Dashboard from "@/pages/crm/Dashboard";
 import CRMMessages from "@/pages/crm/CRMMessages";
 
-// Experience
+// CRM Experience
 import ExperienceList from "@/pages/crm/Experience/ExperienceList";
 import ExperienceForm from "@/pages/crm/Experience/ExperienceForm";
 
-// Skills
+// CRM Skills
 import SkillList from "@/pages/crm/Skills/SkillList";
 import SkillForm from "@/pages/crm/Skills/SkillForm";
 
-// Projects
+// CRM Projects
 import ProjectList from "@/pages/crm/Projects/ProjectList";
 import ProjectForm from "@/pages/crm/Projects/ProjectForm";
 
-// Education
+// CRM Education
 import EducationList from "@/pages/crm/Education/EducationList";
 import EducationForm from "@/pages/crm/Education/EducationForm";
 
-// Travel
+// CRM Travel
 import TravelList from "@/pages/crm/Travel/TravelList";
 import TravelForm from "@/pages/crm/Travel/TravelForm";
 
-// Awards
+// CRM Awards
 import AwardList from "@/pages/crm/Awards/AwardList";
 import AwardForm from "@/pages/crm/Awards/AwardForm";
 
-// Languages
+// CRM Languages
 import LanguageList from "@/pages/crm/Languages/LanguageList";
 import LanguageForm from "@/pages/crm/Languages/LanguageForm";
 
-// References
+// CRM References
 import ReferenceList from "@/pages/crm/References/ReferenceList";
 import ReferenceForm from "@/pages/crm/References/ReferenceForm";
 
-// Auth
+// CRM Auth
 import ForgotPassword from "@/pages/crm/ForgotPassword";
 import ResetPassword from "@/pages/crm/ResetPassword";
 
 
-
-
 export const routes = [
+   // ─── Public Portfolio ──────────────────────────────────────────────────────
    {
       path: "/",
-      element: <Navigate to="/crm/dashboard" />,
+      element: <Layout />,
+      children: [
+         { index: true,         element: <Home /> },
+         { path: "about",       element: <About /> },
+         { path: "projects",    element: <Projects /> },
+         { path: "skills",      element: <Skills /> },
+         { path: "experience",  element: <ExperiencePage /> },
+         { path: "education",   element: <EducationPage /> },
+         { path: "travel",      element: <TravelPage /> },
+         { path: "testimonials",element: <Testimonials /> },
+         { path: "contact",     element: <Contact /> },
+         { path: "*",           element: <NotFound /> },
+      ],
    },
    {
       path: "/crm",
