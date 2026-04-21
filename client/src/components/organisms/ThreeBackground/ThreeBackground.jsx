@@ -2,9 +2,11 @@ import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as random from 'maath/random/dist/maath-random.esm';
+import { useTheme } from 'next-themes';
 
 const ParticleSystem = (props) => {
     const ref = useRef();
+    const { theme } = useTheme();
 
     // Generate random points in a sphere
     const sphere = useMemo(() => {
@@ -23,7 +25,7 @@ const ParticleSystem = (props) => {
             <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
                 <PointMaterial
                     transparent
-                    color={localStorage.getItem('theme') === 'dark' ? "#7c3aed" : "#000000"} // Purple in dark, Black in light
+                    color={theme === 'dark' ? "#7c3aed" : "#000000"} // Purple in dark, Black in light
                     size={0.002}
                     sizeAttenuation={true}
                     depthWrite={false}

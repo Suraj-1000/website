@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Rocket, Sun, Moon } from 'lucide-react';
+import { Menu, X, Rocket } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion } from 'framer-motion';
+import { ThemeSwitcher } from '../theme/ThemeSwitcher';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
     const location = useLocation();
 
     useEffect(() => {
@@ -17,19 +17,6 @@ const Navbar = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    useEffect(() => {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        localStorage.setItem('theme', theme);
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme(theme === 'dark' ? 'light' : 'dark');
-    };
 
     const navLinks = [
         { name: 'Home', path: '/' },
@@ -77,13 +64,7 @@ const Navbar = () => {
                         </Link>
                     ))}
 
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2 rounded-full border border-border/50 text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
-                        aria-label="Toggle Theme"
-                    >
-                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                    </button>
+                    <ThemeSwitcher />
 
                     <button className="px-5 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-300 text-sm font-semibold shadow-[0_0_10px_rgba(124,58,237,0.2)] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]">
                         Resume
@@ -92,12 +73,7 @@ const Navbar = () => {
 
                 {/* Mobile Toggle */}
                 <div className="flex items-center gap-4 md:hidden">
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2 text-foreground"
-                    >
-                        {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
-                    </button>
+                        <ThemeSwitcher />
                     <button
                         className="text-foreground"
                         onClick={() => setIsOpen(!isOpen)}

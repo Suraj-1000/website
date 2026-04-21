@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/services/context/AuthContext';
 
@@ -15,16 +16,7 @@ const CRMLayout = () => {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // Theme Logic
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
-    useEffect(() => {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+    const { theme, setTheme } = useTheme();
 
     const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
