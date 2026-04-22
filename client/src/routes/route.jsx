@@ -75,6 +75,7 @@ export const routes = [
          { path: "travel",      element: <TravelPage /> },
          { path: "testimonials",element: <Testimonials /> },
          { path: "contact",     element: <Contact /> },
+         { path: "resume",      element: <ResumePage /> },
          { path: "*",           element: <NotFound /> },
       ],
    },
