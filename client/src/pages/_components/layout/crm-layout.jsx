@@ -7,7 +7,7 @@ import {
     LayoutDashboard, Briefcase, Code, FolderGit2,
     BookOpen, Plane, MessageSquare, LogOut,
     Menu, X, Award, Languages, Users,
-    Sun, Moon, ChevronRight
+    Sun, Moon, ChevronRight, User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -16,10 +16,10 @@ const CRMLayout = () => {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const { theme, setTheme } = useTheme();
+    const { setTheme, resolvedTheme } = useTheme();
 
     const toggleTheme = () => {
-        setTheme(theme === 'dark' ? 'light' : 'dark');
+        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
@@ -39,6 +39,7 @@ const CRMLayout = () => {
         { path: '/crm/languages', icon: <Languages size={20} />, label: 'Languages' },
         { path: '/crm/references', icon: <Users size={20} />, label: 'References' },
         { path: '/crm/messages', icon: <MessageSquare size={20} />, label: 'Messages' },
+        { path: '/crm/profile', icon: <User size={20} />, label: 'Resume Profile' },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -54,7 +55,7 @@ const CRMLayout = () => {
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-full h-8 w-8">
-                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                        {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </Button>
                     <Button variant="ghost" size="icon" onClick={toggleSidebar} className="rounded-full h-8 w-8">
                         {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -128,7 +129,7 @@ const CRMLayout = () => {
                     <h2 className="text-sm font-medium text-muted-foreground">CRM / <span className="text-foreground capitalize">{location.pathname.split('/').pop()}</span></h2>
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={toggleTheme} className="rounded-full h-9 w-9 border-border bg-background">
-                            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                            {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                         </Button>
                         <div className="flex items-center gap-3 pl-4 border-l border-border">
                             <div className="flex flex-col items-end">
