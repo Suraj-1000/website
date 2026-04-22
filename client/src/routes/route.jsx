@@ -14,6 +14,7 @@ import ExperiencePage from "@/pages/public/Experience/Experience";
 import EducationPage from "@/pages/public/Education/Education";
 import TravelPage from "@/pages/public/Travel/Travel";
 import Testimonials from "@/pages/public/Testimonials/Testimonials";
+import ResumePage from "@/pages/public/Resume/Resume";
 
 // CRM Layout & Auth
 import CRMLayout from "@/pages/_components/layout/crm-layout";
@@ -52,6 +53,7 @@ import LanguageForm from "@/pages/crm/Languages/LanguageForm";
 // CRM References
 import ReferenceList from "@/pages/crm/References/ReferenceList";
 import ReferenceForm from "@/pages/crm/References/ReferenceForm";
+import ProfileForm from "@/pages/crm/Profile/ProfileForm";
 
 // CRM Auth
 import ForgotPassword from "@/pages/crm/ForgotPassword";
@@ -183,6 +185,10 @@ export const routes = [
          {
             path: "messages",
             element: <CRMMessages />,
+         },
+         {
+            path: "profile",
+            element: <ProfileForm />,
          },
 
       ],
