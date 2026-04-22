@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/services/context/AuthContext";
 
-export const Providers = ({ children }) => {
+export const Providers = ({ children }: { children: React.ReactNode }) => {
    return (
       <ThemeProvider
          attribute="class"
