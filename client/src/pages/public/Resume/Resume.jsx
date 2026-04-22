@@ -254,6 +254,52 @@ const Resume = () => {
                 </footer>
             </motion.div>
 
+            {/* Custom Print Styles */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                @media print {
+                    @page {
+                        margin: 20mm;
+                    }
+                    body {
+                        background: white !important;
+                        color: black !important;
+                    }
+                    .bg-background, .bg-zinc-50, .bg-zinc-950 {
+                        background: white !important;
+                    }
+                    .text-zinc-50, .text-zinc-100, .text-zinc-300, .dark\\:text-zinc-50, .dark\\:text-zinc-300 {
+                        color: black !important;
+                    }
+                    .text-zinc-400, .text-zinc-500, .text-muted-foreground {
+                        color: #666 !important;
+                    }
+                    .text-primary {
+                        color: #7c3aed !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                    .bg-primary {
+                        background-color: #7c3aed !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                    .bg-primary\\/5 {
+                        background-color: #f5f3ff !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                    .border-primary {
+                        border-color: #7c3aed !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                    .rounded-full, .rounded, .rounded-md, .rounded-xl {
+                        border-radius: 4px !important;
+                    }
+                    .shadow-2xl, .shadow-none {
+                        box-shadow: none !important;
+                    }
+                    nav, button, div.print\\:hidden, .print\\:hidden {
+                        display: none !important;
+                    }
+                }
+            `}} />
         </div>
     );
 };

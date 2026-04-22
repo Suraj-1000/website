@@ -66,9 +66,13 @@ const Navbar = () => {
 
                     <ThemeSwitcher />
 
-                    <button className="px-5 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-300 text-sm font-semibold shadow-[0_0_10px_rgba(124,58,237,0.2)] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]">
+                    <Link 
+                        to="/resume" 
+                        target="_blank"
+                        className="px-5 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-300 text-sm font-semibold shadow-[0_0_10px_rgba(124,58,237,0.2)] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
+                    >
                         Resume
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Mobile Toggle */}
