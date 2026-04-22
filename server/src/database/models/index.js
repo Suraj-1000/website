@@ -12,6 +12,7 @@ const Experience = require('./Experience');
 const Education = require('./Education');
 const Contact = require('./Contact');
 const Award = require('./Award');
+const Profile = require('./Profile');
 
 const db = {
     sequelize,
@@ -25,7 +26,8 @@ const db = {
     Experience,
     Education,
     Contact,
-    Award
+    Award,
+    Profile
 };
 
 // If any model has associate method, call it
