@@ -19,7 +19,7 @@ const Education = () => {
         const fetchEducation = async () => {
             try {
                 const res = await api.get('/education');
-                setEducationData(res.data);
+                setEducationData(res.data.data || []);
             } catch (error) {
                 console.error('Failed to fetch education', error);
             } finally {
