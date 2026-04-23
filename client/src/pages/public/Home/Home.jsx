@@ -9,9 +9,7 @@ const Home = () => {
         <div className="flex flex-col min-h-screen">
             <div className="relative">
                 <HeroSection />
-                <div className="mt-[-80px] md:mt-[-100px] relative z-20">
-                    <StatsSection />
-                </div>
+                <StatsSection />
             </div>
             <ExpertiseSection />
             <FeaturedProjectsSection />
