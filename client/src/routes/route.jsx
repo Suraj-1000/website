@@ -13,7 +13,7 @@ import NotFound from "@/pages/public/NotFound/NotFound";
 import ExperiencePage from "@/pages/public/Experience/Experience";
 import EducationPage from "@/pages/public/Education/Education";
 import TravelPage from "@/pages/public/Travel/Travel";
-import Testimonials from "@/pages/public/Testimonials/Testimonials";
+import References from "@/pages/public/References/References";
 import ResumePage from "@/pages/public/Resume/Resume";
 
 // CRM Layout & Auth
@@ -73,7 +73,7 @@ export const routes = [
          { path: "experience",  element: <ExperiencePage /> },
          { path: "education",   element: <EducationPage /> },
          { path: "travel",      element: <TravelPage /> },
-         { path: "testimonials",element: <Testimonials /> },
+         { path: "references", element: <References /> },
          { path: "contact",     element: <Contact /> },
          { path: "resume",      element: <ResumePage /> },
          { path: "*",           element: <NotFound /> },
