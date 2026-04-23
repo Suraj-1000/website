@@ -34,7 +34,7 @@ const Contact = () => {
     ];
 
     return (
-        <div className="container mx-auto px-6 py-20 min-h-screen">
+        <div className="container mx-auto px-6 pb-24 pt-12 min-h-screen">
             <div className="max-w-5xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
