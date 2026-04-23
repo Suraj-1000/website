@@ -10,5 +10,6 @@ router.use('/projects',    require('./project.routes'));
 router.use('/languages',   require('./language.routes'));
 router.use('/references',  require('./reference.routes'));
 router.use('/travel',      require('./travel.routes'));
+router.use('/profile',     require('./profile.routes'));
 
 module.exports = router;
