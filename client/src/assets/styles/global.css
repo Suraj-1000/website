@@ -40,7 +40,7 @@
     --destructive-foreground: oklch(0.985 0 0);
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --ring: oklch(0.488 0.243 264.376);
     --radius: 0.625rem;
   }
 
