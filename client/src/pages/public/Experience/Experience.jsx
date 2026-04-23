@@ -27,7 +27,7 @@ const Experience = () => {
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <div className="container mx-auto px-6 py-20 min-h-screen">
+        <div className="container mx-auto px-6 pb-24 pt-12 min-h-screen">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
