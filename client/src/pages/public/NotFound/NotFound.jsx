@@ -1,45 +1,82 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Home, ArrowLeft, Ghost } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const NotFound = () => {
+    const navigate = useNavigate();
+
     return (
-        <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full text-center">
+        <div className="min-h-[80vh] flex items-center justify-center px-6">
+            <div className="max-w-2xl w-full text-center space-y-8">
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
+                    className="relative"
                 >
-                    <h1 className="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+                    <div className="absolute inset-0 flex items-center justify-center blur-3xl opacity-20 bg-primary/30 rounded-full" />
+                    <Ghost className="mx-auto text-primary animate-bounce mb-4" size={120} />
+                    <h1 className="text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-primary to-secondary">
                         404
                     </h1>
-                    <h2 className="mt-4 text-3xl font-bold text-white tracking-tight">
-                        Page Not Found
-                    </h2>
-                    <p className="mt-4 text-lg text-slate-400">
-                        Sorry, the page you are looking for doesn't exist or has been moved.
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-4"
+                >
+                    <h2 className="text-4xl font-bold tracking-tight">Lost in Space?</h2>
+                    <p className="text-xl text-muted-foreground max-w-md mx-auto">
+                        The page you're looking for has vanished into the digital void.
                     </p>
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="mt-10"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8"
                 >
-                    <Link
-                        to="/"
-                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => navigate(-1)}
+                        className="w-full sm:w-auto gap-2 rounded-full px-8 h-12 text-lg hover:bg-primary/5 border-primary/20"
                     >
-                        Back to Home
-                    </Link>
+                        <ArrowLeft size={20} />
+                        Go Back
+                    </Button>
+                    <Button
+                        asChild
+                        size="lg"
+                        className="w-full sm:w-auto gap-2 rounded-full px-8 h-12 text-lg shadow-lg shadow-primary/20"
+                    >
+                        <Link to="/">
+                            <Home size={20} />
+                            Back to Home
+                        </Link>
+                    </Button>
                 </motion.div>
 
-                {/* Decorative elements */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                {/* Stars Background effect */}
+                <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden opacity-30">
+                    {[...Array(20)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute bg-foreground rounded-full animate-pulse"
+                            style={{
+                                top: `${Math.random() * 100}%`,
+                                left: `${Math.random() * 100}%`,
+                                width: `${Math.random() * 3}px`,
+                                height: `${Math.random() * 3}px`,
+                                animationDelay: `${Math.random() * 5}s`,
+                                animationDuration: `${2 + Math.random() * 3}s`
+                            }}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
