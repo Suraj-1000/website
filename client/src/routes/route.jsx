@@ -15,6 +15,8 @@ import EducationPage from "@/pages/public/Education/Education";
 import TravelPage from "@/pages/public/Travel/Travel";
 import References from "@/pages/public/References/References";
 import ResumePage from "@/pages/public/Resume/Resume";
+import Awards from "@/pages/public/Awards/Awards";
+import Languages from "@/pages/public/Languages/Languages";
 
 // CRM Layout & Auth
 import CRMLayout from "@/pages/_components/layout/crm-layout";
@@ -74,6 +76,8 @@ export const routes = [
          { path: "education",   element: <EducationPage /> },
          { path: "travel",      element: <TravelPage /> },
          { path: "references", element: <References /> },
+         { path: "awards",      element: <Awards /> },
+         { path: "languages",   element: <Languages /> },
          { path: "contact",     element: <Contact /> },
          { path: "resume",      element: <ResumePage /> },
          { path: "*",           element: <NotFound /> },
