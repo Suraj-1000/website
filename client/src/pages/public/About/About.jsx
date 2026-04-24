@@ -105,7 +105,7 @@ const About = () => {
                 variants={container}
                 initial="hidden"
                 animate={loading ? "hidden" : "show"}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto auto-rows-[minmax(180px,auto)]"
+                className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto auto-rows-[minmax(180px,auto)]"
             >
                 {/* 1. Who I Am (Large Block - 2x2) */}
                 <motion.div variants={item} className="md:col-span-2 md:row-span-2 bg-card/40 border border-border/50 rounded-3xl p-8 backdrop-blur-sm hover:bg-card/60 transition-colors group relative overflow-hidden flex flex-col justify-center">
