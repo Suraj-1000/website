@@ -32,8 +32,8 @@ const ProjectForm = () => {
         if (isEditing) {
             const fetchProject = async () => {
                 try {
-                    const res = await api.get('/projects');
-                    const project = res.data.data.find(p => p.id === id);
+                    const res = await api.get(`/projects/${id}`);
+                    const project = res.data.data;
                     if (project) {
                         setValue('title', project.title);
                         setValue('description', project.description);

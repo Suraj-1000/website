@@ -51,9 +51,8 @@ const SkillForm = () => {
         if (isEdit) {
             const fetchSkill = async () => {
                 try {
-                    const res = await api.get(`/skills`);
-                    const allSkills = res.data.data;
-                    const skill = allSkills.find(s => s._id === id);
+                    const res = await api.get(`/skills/${id}`);
+                    const skill = res.data.data;
                     if (skill) {
                         setFormData({
                             category: skill.category,

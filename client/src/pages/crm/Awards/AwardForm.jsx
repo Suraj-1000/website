@@ -30,9 +30,8 @@ const AwardForm = () => {
         if (isEdit) {
             const fetchAward = async () => {
                 try {
-                    const res = await api.get(`/awards`);
-                    const allAwards = res.data.data;
-                    const award = allAwards.find(a => a.id === id);
+                    const res = await api.get(`/awards/${id}`);
+                    const award = res.data.data;
                     if (award) {
                         setValue('title', award.title);
                         setValue('issuer', award.issuer);

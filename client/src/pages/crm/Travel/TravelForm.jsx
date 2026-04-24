@@ -29,9 +29,8 @@ const TravelForm = () => {
         if (isEdit) {
             const fetchTravel = async () => {
                 try {
-                    const res = await api.get('/travel');
-                    const allTravels = res.data.data;
-                    const travel = allTravels.find(t => t.id === id);
+                    const res = await api.get(`/travel/${id}`);
+                    const travel = res.data.data;
 
                     if (travel) {
                         setFormData({

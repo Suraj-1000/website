@@ -19,9 +19,8 @@ const ReferenceForm = () => {
         if (isEdit) {
             const fetchReference = async () => {
                 try {
-                    const res = await api.get(`/references`);
-                    const allRefs = res.data.data;
-                    const ref = allRefs.find(r => r.id === id);
+                    const res = await api.get(`/references/${id}`);
+                    const ref = res.data.data;
                     if (ref) {
                         setValue('name', ref.name);
                         setValue('position', ref.position);

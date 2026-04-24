@@ -18,18 +18,8 @@ const EducationForm = () => {
         if (isEditing) {
             const fetchEducation = async () => {
                 try {
-                    const res = await api.get('/education');
-                    // Since get all returns array, find locally or implement getById backend
-                    // My backend does NOT have getById public route, only protected Update.
-                    // Actually, I didn't verify if GET /:id exists in route file I made.
-                    // I checked controller: updateEducation uses req.params.id.
-                    // But I need to fetch data to populate form.
-                    // The route file I wrote: router.get('/', educationController.getEducations);
-                    // It does NOT have router.get('/:id').
-                    // So I must filter from the list or fix backend.
-                    // For now, I'll filter from list to avoid more backend context switches, assume list is small.
-                    // Wait, that's inefficient but acceptable for admin panel of portfolio.
-                    const edu = res.data.find(e => e.id === id);
+                    const res = await api.get(`/education/${id}`);
+                    const edu = res.data.data;
                     if (edu) {
                         setValue('degree', edu.degree);
                         setValue('level', edu.level);

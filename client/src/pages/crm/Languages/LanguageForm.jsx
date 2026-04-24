@@ -19,9 +19,8 @@ const LanguageForm = () => {
         if (isEdit) {
             const fetchLanguage = async () => {
                 try {
-                    const res = await api.get(`/languages`);
-                    const allLangs = res.data.data;
-                    const lang = allLangs.find(l => l.id === id);
+                    const res = await api.get(`/languages/${id}`);
+                    const lang = res.data.data;
                     if (lang) {
                         setValue('name', lang.name);
                         setValue('proficiency', lang.proficiency);

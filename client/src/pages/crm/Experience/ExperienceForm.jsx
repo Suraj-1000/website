@@ -38,9 +38,8 @@ const ExperienceForm = () => {
         if (isEdit) {
             const fetchExperience = async () => {
                 try {
-                    const res = await api.get(`/experiences`);
-                    const allExp = res.data.data;
-                    const exp = allExp.find(e => e.id === id); // Fix: use .id instead of ._id
+                    const res = await api.get(`/experiences/${id}`);
+                    const exp = res.data.data;
                     if (exp) {
                         setValue('role', exp.role);
                         setValue('company', exp.company);
