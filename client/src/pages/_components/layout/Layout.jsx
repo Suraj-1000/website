@@ -2,6 +2,8 @@ import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '@/components/molecules/Navbar';
 import Footer from '@/components/molecules/Footer';
+import { ScrollProgress } from '@/components/atoms/ScrollProgress';
+import { ScrollToTop } from '@/components/atoms/ScrollToTop';
 
 // Lazy load the heavy 3D background
 const ThreeBackground = lazy(() => import('@/components/organisms/ThreeBackground/ThreeBackground'));
@@ -9,6 +11,8 @@ const ThreeBackground = lazy(() => import('@/components/organisms/ThreeBackgroun
 const Layout = () => {
     return (
         <div className="min-h-screen flex flex-col bg-background text-foreground font-sans selection:bg-primary selection:text-white relative z-0">
+            <ScrollProgress />
+            <ScrollToTop />
             <Suspense fallback={<div className="fixed inset-0 bg-background z-[-1]" />}>
                 <ThreeBackground />
             </Suspense>
