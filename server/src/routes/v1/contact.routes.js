@@ -6,6 +6,7 @@ const adminOnly = [checkAuth, authorize('admin')];
 
 router.post('/', contactController.submitContact);
 router.get('/', adminOnly, contactController.getAllContacts);
+router.get('/:id', adminOnly, contactController.getById);
 router.post('/:id/reply', adminOnly, contactController.replyToContact);
 
 module.exports = router;

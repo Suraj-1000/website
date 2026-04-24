@@ -5,6 +5,7 @@ const { checkAuth, authorize } = require("../../middlewares/authMiddleware");
 const adminOnly = [checkAuth, authorize('admin')];
 
 router.get("/", projectController.getAll);
+router.get("/:id", projectController.getById);
 router.post("/", adminOnly, projectController.create);
 
 router.put("/:id", adminOnly, projectController.update);

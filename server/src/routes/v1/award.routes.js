@@ -7,6 +7,7 @@ const upload = createUpload('private/award/');
 const adminOnly = [checkAuth, authorize('admin')];
 
 router.get("/", awardController.getAll);
+router.get("/:id", awardController.getById);
 router.post("/", adminOnly, upload.array('images', 2), awardController.create);
 
 router.put("/:id", adminOnly, upload.array('images', 2), awardController.update);
