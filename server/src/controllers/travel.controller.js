@@ -8,6 +8,12 @@ class TravelController {
       res.status(200).json({ success: true, count: travels.length, data: travels });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const travel = await travelService.findById(req.params.id);
+      if (!travel) return res.status(404).json({ success: false, error: 'Travel record not found' });
+      res.status(200).json({ success: true, data: travel });
+   });
+
    create = asyncHandler(async (req, res) => {
       const travel = await travelService.create(req.body);
       res.status(201).json({ success: true, data: travel });

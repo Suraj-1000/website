@@ -7,6 +7,12 @@ class ProjectController {
       res.status(200).json({ success: true, count: projects.length, data: projects });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const project = await projectService.findById(req.params.id);
+      if (!project) return res.status(404).json({ success: false, error: 'Project not found' });
+      res.status(200).json({ success: true, data: project });
+   });
+
    create = asyncHandler(async (req, res) => {
       const project = await projectService.create(req.body);
       res.status(201).json({ success: true, data: project });

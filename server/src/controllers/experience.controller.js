@@ -8,6 +8,12 @@ class ExperienceController {
       res.status(200).json({ success: true, count: experiences.length, data: experiences });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const experience = await experienceService.findById(req.params.id);
+      if (!experience) return res.status(404).json({ success: false, error: 'Experience not found' });
+      res.status(200).json({ success: true, data: experience });
+   });
+
    create = asyncHandler(async (req, res) => {
       const experience = await experienceService.create(req.body);
       res.status(201).json({ success: true, data: experience });

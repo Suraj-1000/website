@@ -8,6 +8,12 @@ class AwardController {
       res.status(200).json({ success: true, count: awards.length, data: awards });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const award = await awardService.findById(req.params.id);
+      if (!award) return res.status(404).json({ success: false, error: 'Award not found' });
+      res.status(200).json({ success: true, data: award });
+   });
+
    create = asyncHandler(async (req, res) => {
       const awardData = { ...req.body };
       if (req.files && req.files.length > 0) {

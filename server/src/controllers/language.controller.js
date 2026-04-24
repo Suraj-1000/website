@@ -8,6 +8,12 @@ class LanguageController {
       res.status(200).json({ success: true, count: languages.length, data: languages });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const language = await languageService.findById(req.params.id);
+      if (!language) return res.status(404).json({ success: false, error: 'Language not found' });
+      res.status(200).json({ success: true, data: language });
+   });
+
    create = asyncHandler(async (req, res) => {
       const language = await languageService.create(req.body);
       res.status(201).json({ success: true, data: language });

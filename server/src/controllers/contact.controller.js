@@ -19,6 +19,12 @@ class ContactController {
       res.status(200).json({ success: true, count: contacts.length, data: contacts });
    });
 
+   getById = asyncHandler(async (req, res) => {
+      const contact = await contactService.findById(req.params.id);
+      if (!contact) return res.status(404).json({ success: false, error: 'Contact message not found' });
+      res.status(200).json({ success: true, data: contact });
+   });
+
    replyToContact = asyncHandler(async (req, res) => {
       const { id } = req.params;
       const { replyMessage } = req.body;
