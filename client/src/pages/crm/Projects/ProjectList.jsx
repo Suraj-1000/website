@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '@/utils/api';
+import api, { API_URL as API_BASE } from '@/utils/api';
 import { Plus, Trash2, Edit2, Github, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -65,6 +65,22 @@ const ProjectList = () => {
                 {projects.map((project) => (
                     <div key={project.id}>
                         <Card className="hover:border-primary/30 transition-all shadow-sm relative group flex flex-col h-full rounded-md">
+                            {/* Image Section */}
+                            {project.imageUrl && (
+                                <div className="relative h-40 overflow-hidden border-b border-border">
+                                    <img
+                                        src={project.imageUrl.startsWith('http') ? project.imageUrl : `${API_BASE.replace('/api/v1', '')}${project.imageUrl}`}
+                                        alt={project.title}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = 'https://placehold.co/600x400?text=Project+Image';
+                                        }}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                                </div>
+                            )}
+
                             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                 <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md bg-background">
                                     <Link to={`/crm/projects/edit/${project.id}`}>
