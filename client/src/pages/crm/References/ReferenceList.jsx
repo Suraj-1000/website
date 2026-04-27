@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '@/utils/api';
+import api, { API_URL as API_BASE } from '@/utils/api';
 import { Plus, Trash2, Edit2, Users, Mail, Phone, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -65,8 +65,16 @@ const ReferenceList = () => {
                         <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md h-full flex flex-col">
                             <CardHeader className="flex flex-row items-center justify-between pb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
-                                        <Users size={18} />
+                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-primary overflow-hidden">
+                                        {ref.imageUrl ? (
+                                            <img
+                                                src={ref.imageUrl.startsWith('http') ? ref.imageUrl : `${API_BASE.replace('/api/v1', '')}${ref.imageUrl}`}
+                                                alt={ref.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <Users size={18} />
+                                        )}
                                     </div>
                                     <CardTitle className="text-base font-bold">{ref.name}</CardTitle>
                                 </div>
