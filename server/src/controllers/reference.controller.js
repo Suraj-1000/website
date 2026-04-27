@@ -14,12 +14,20 @@ class ReferenceController {
    });
 
    create = asyncHandler(async (req, res) => {
-      const reference = await referenceService.create(req.body);
+      const referenceData = { ...req.body };
+      if (req.file) {
+         referenceData.imageUrl = `/public/references/${req.file.filename}`;
+      }
+      const reference = await referenceService.create(referenceData);
       res.status(201).json({ success: true, data: reference });
    });
 
    update = asyncHandler(async (req, res) => {
-      const reference = await referenceService.update(req.params.id, req.body);
+      const referenceData = { ...req.body };
+      if (req.file) {
+         referenceData.imageUrl = `/public/references/${req.file.filename}`;
+      }
+      const reference = await referenceService.update(req.params.id, referenceData);
       if (!reference) return res.status(404).json({ success: false, error: 'Reference not found' });
       res.status(200).json({ success: true, data: reference });
    });
