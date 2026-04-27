@@ -14,12 +14,20 @@ class ProjectController {
    });
 
    create = asyncHandler(async (req, res) => {
-      const project = await projectService.create(req.body);
+      const projectData = { ...req.body };
+      if (req.file) {
+         projectData.imageUrl = `/public/projects/${req.file.filename}`;
+      }
+      const project = await projectService.create(projectData);
       res.status(201).json({ success: true, data: project });
    });
 
    update = asyncHandler(async (req, res) => {
-      const project = await projectService.update(req.params.id, req.body);
+      const projectData = { ...req.body };
+      if (req.file) {
+         projectData.imageUrl = `/public/projects/${req.file.filename}`;
+      }
+      const project = await projectService.update(req.params.id, projectData);
       if (!project) return res.status(404).json({ success: false, error: 'Project not found' });
       res.status(200).json({ success: true, data: project });
    });
