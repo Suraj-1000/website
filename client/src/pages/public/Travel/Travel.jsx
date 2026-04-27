@@ -29,7 +29,7 @@ const Travel = () => {
             title: t.title,
             location: t.location,
             desc: t.description,
-            url: img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`,
+            url: img.startsWith('http') ? img : `${API_BASE.replace('/api/v1', '')}${img}`,
             // Simple logic for varying sizes
             size: idx % 3 === 0 ? "large" : idx % 2 === 0 ? "medium" : "small"
         }))

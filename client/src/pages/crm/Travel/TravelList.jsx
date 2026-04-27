@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '@/utils/api';
+import api, { API_URL as API_BASE } from '@/utils/api';
 import { Plus, Edit2, Trash2, Plane, MapPin, Calendar, Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -68,8 +68,12 @@ const TravelList = () => {
                             {travel.images && travel.images.length > 0 && (
                                 <div className="h-40 overflow-hidden relative">
                                     <img
-                                        src={travel.images[0]}
+                                        src={travel.images[0].startsWith('http') ? travel.images[0] : `${API_BASE.replace('/api/v1', '')}${travel.images[0]}`}
                                         alt={travel.title}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = 'https://placehold.co/600x400?text=No+Image';
+                                        }}
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
                                     <div className="absolute top-3 left-3">
@@ -80,25 +84,24 @@ const TravelList = () => {
                                 </div>
                             )}
 
+                            <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md bg-background/80 backdrop-blur-sm border-border/50">
+                                    <Link to={`/crm/travel/edit/${travel.id}`}>
+                                        <Edit2 size={14} />
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => setDeleteId(travel.id)}
+                                    className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10 bg-background/80 backdrop-blur-sm border-border/50"
+                                >
+                                    <Trash2 size={14} />
+                                </Button>
+                            </div>
+
                             <CardHeader className="pb-2">
-                                <div className="flex justify-between items-start">
-                                    <CardTitle className="text-lg font-bold line-clamp-1">{travel.title}</CardTitle>
-                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                            <Link to={`/crm/travel/edit/${travel.id}`}>
-                                                <Edit2 size={14} />
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            onClick={() => setDeleteId(travel.id)}
-                                            className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
-                                        >
-                                            <Trash2 size={14} />
-                                        </Button>
-                                    </div>
-                                </div>
+                                <CardTitle className="text-lg font-bold line-clamp-1 pr-16">{travel.title}</CardTitle>
                                 <div className="flex items-center gap-1.5 text-primary text-xs font-semibold mt-1">
                                     <MapPin size={12} />
                                     {travel.location}
