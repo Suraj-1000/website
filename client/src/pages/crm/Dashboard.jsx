@@ -20,8 +20,16 @@ import {
     Bar, BarChart, ResponsiveContainer, XAxis, YAxis,
     CartesianGrid, Tooltip, Area, AreaChart, Pie, PieChart as RePieChart, Cell
 } from "recharts";
+import api from '@/utils/api';
 
 const Dashboard = () => {
+    const [counts, setCounts] = React.useState({
+        experiences: 0,
+        skills: 0,
+        projects: 0,
+        travel: 0
+    });
+    const [loading, setLoading] = React.useState(true);
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return 'Good Morning';
@@ -57,6 +65,31 @@ const Dashboard = () => {
         { name: "Others", value: 10, color: "#6366f1" },
     ];
 
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const [expRes, skillRes, projRes, travelRes] = await Promise.all([
+                    api.get('/experiences'),
+                    api.get('/skills'),
+                    api.get('/projects'),
+                    api.get('/travel')
+                ]);
+
+                setCounts({
+                    experiences: expRes.data.data.length,
+                    skills: skillRes.data.data.length,
+                    projects: projRes.data.data.length,
+                    travel: travelRes.data.data.length
+                });
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
+
     const chartConfig = {
         views: {
             label: "Views",
@@ -84,10 +117,10 @@ const Dashboard = () => {
     };
 
     const stats = [
-        { label: 'Experiences', count: '12', icon: <Briefcase size={20} />, path: '/crm/experience', color: 'from-blue-500 to-cyan-500' },
-        { label: 'Skills', count: '24', icon: <Code size={20} />, path: '/crm/skills', color: 'from-purple-500 to-pink-500' },
-        { label: 'Projects', count: '18', icon: <FolderGit2 size={20} />, path: '/crm/projects', color: 'from-emerald-500 to-teal-500' },
-        { label: 'Travel', count: '8', icon: <Plane size={20} />, path: '/crm/travel', color: 'from-orange-500 to-yellow-500' },
+        { label: 'Experiences', count: counts.experiences, icon: <Briefcase size={20} />, path: '/crm/experience', color: 'from-blue-500 to-cyan-500' },
+        { label: 'Skills', count: counts.skills, icon: <Code size={20} />, path: '/crm/skills', color: 'from-purple-500 to-pink-500' },
+        { label: 'Projects', count: counts.projects, icon: <FolderGit2 size={20} />, path: '/crm/projects', color: 'from-emerald-500 to-teal-500' },
+        { label: 'Travel', count: counts.travel, icon: <Plane size={20} />, path: '/crm/travel', color: 'from-orange-500 to-yellow-500' },
     ];
 
     const quickActions = [
@@ -139,10 +172,8 @@ const Dashboard = () => {
                         <Card className="relative overflow-hidden group transition-all h-full border-border bg-background rounded-md shadow-sm">
                             <CardContent className="p-6 space-y-4">
                                 <div className="flex flex-row gap-4 items-center">
-                                    <div className="size-10 border border-border bg-secondary/50 rounded-full flex items-center justify-center">
-                                        <span className="text-secondary-foreground">
-                                            {React.cloneElement(stat.icon, { size: 18 })}
-                                        </span>
+                                    <div className="size-10 border border-border bg-secondary/50 rounded-full flex items-center justify-center text-primary">
+                                        {React.cloneElement(stat.icon, { size: 18 })}
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-xl font-bold text-foreground leading-tight">
