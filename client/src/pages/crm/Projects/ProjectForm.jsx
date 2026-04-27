@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '@/utils/api';
+import api, { API_URL as API_BASE } from '@/utils/api';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { Save, ArrowLeft, Plus, X, Globe, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,8 @@ const ProjectForm = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
 
     useEffect(() => {
         if (isEditing) {
@@ -39,7 +41,11 @@ const ProjectForm = () => {
                         setValue('description', project.description);
                         setValue('repoLink', project.repoLink);
                         setValue('demoLink', project.demoLink);
-                        setValue('imageUrl', project.imageUrl);
+                        setValue('demoLink', project.demoLink);
+                        if (project.imageUrl) {
+                            const fullUrl = project.imageUrl.startsWith('http') ? project.imageUrl : `${API_BASE.replace('/api/v1', '')}${project.imageUrl}`;
+                            setPreviewUrl(fullUrl);
+                        }
 
                         // Populate tech stack
                         if (project.techStack && project.techStack.length > 0) {
@@ -57,15 +63,27 @@ const ProjectForm = () => {
     const onSubmit = async (data) => {
         setLoading(true);
         try {
-            const formattedData = {
-                ...data,
-                techStack: data.techStack.map(item => item.value).filter(val => val.trim() !== '')
-            };
+            const formData = new FormData();
+            formData.append('title', data.title);
+            formData.append('description', data.description);
+            if (data.repoLink) formData.append('repoLink', data.repoLink);
+            if (data.demoLink) formData.append('demoLink', data.demoLink);
+
+            const techStack = data.techStack.map(item => item.value).filter(val => val.trim() !== '');
+            techStack.forEach(tech => formData.append('techStack[]', tech));
+
+            if (imageFile) {
+                formData.append('imageUrl', imageFile);
+            }
 
             if (isEditing) {
-                await api.put(`/projects/${id}`, formattedData);
+                await api.put(`/projects/${id}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
             } else {
-                await api.post('/projects', formattedData);
+                await api.post('/projects', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
             }
             navigate('/crm/projects');
         } catch (error) {
@@ -73,6 +91,14 @@ const ProjectForm = () => {
             alert('Failed to save project');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
         }
     };
 
@@ -139,6 +165,37 @@ const ProjectForm = () => {
                                     placeholder="https://..."
                                     className="h-10"
                                 />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold">Project Image</Label>
+                            <div className="flex flex-col gap-4">
+                                {previewUrl && (
+                                    <div className="relative w-full aspect-video md:w-64 rounded-lg overflow-hidden border border-border">
+                                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                                            onClick={() => {
+                                                setPreviewUrl('');
+                                                setImageFile(null);
+                                            }}
+                                        >
+                                            <X size={12} />
+                                        </Button>
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-4">
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="h-10 text-xs flex-1"
+                                    />
+                                </div>
                             </div>
                         </div>
 
