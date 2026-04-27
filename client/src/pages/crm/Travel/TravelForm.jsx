@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '@/utils/api';
-import { Save, ArrowLeft, Plane, MapPin, Calendar, Globe, Info } from 'lucide-react';
+import api, { API_URL as API_BASE } from '@/utils/api';
+import { useForm } from 'react-hook-form';
+import { Save, ArrowLeft, Plane, MapPin, Calendar, Globe, Info, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,21 +10,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
-
 const TravelForm = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const isEdit = !!id;
 
-    const [formData, setFormData] = useState({
-        title: '',
-        location: '',
-        visitDate: '',
-        description: '',
-        images: ''
-    });
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEdit);
+
+    // Image State
+    const [existingImages, setExistingImages] = useState([]); // URLs from server
+    const [newImages, setNewImages] = useState([]); // File objects
+    const [newImagePreviews, setNewImagePreviews] = useState([]); // Preview URLs for new files
 
     useEffect(() => {
         if (isEdit) {
@@ -33,13 +32,18 @@ const TravelForm = () => {
                     const travel = res.data.data;
 
                     if (travel) {
-                        setFormData({
-                            title: travel.title,
-                            location: travel.location,
-                            visitDate: travel.visitDate ? travel.visitDate.split('T')[0] : '',
-                            description: travel.description,
-                            images: travel.images ? travel.images.join(', ') : ''
-                        });
+                        setValue('title', travel.title);
+                        setValue('location', travel.location);
+                        setValue('visitDate', travel.visitDate ? travel.visitDate.split('T')[0] : '');
+                        setValue('description', travel.description);
+
+                        // Handle images
+                        if (travel.images && Array.isArray(travel.images)) {
+                            const completeUrls = travel.images.map(img =>
+                                img.startsWith('http') ? img : `${API_BASE.replace('/api/v1', '')}${img}`
+                            );
+                            setExistingImages(completeUrls);
+                        }
                     }
                 } catch (error) {
                     console.error('Failed to fetch travel', error);
@@ -49,22 +53,53 @@ const TravelForm = () => {
             };
             fetchTravel();
         }
-    }, [id, isEdit]);
+    }, [id, isEdit, setValue]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        const validFiles = files.filter(file => file.type.startsWith('image/'));
+        const filePreviews = validFiles.map(file => URL.createObjectURL(file));
+
+        setNewImages([...newImages, ...validFiles]);
+        setNewImagePreviews([...newImagePreviews, ...filePreviews]);
+    };
+
+    const removeExistingImage = (index) => {
+        setExistingImages(existingImages.filter((_, i) => i !== index));
+    };
+
+    const removeNewImage = (index) => {
+        const updatedNewImages = newImages.filter((_, i) => i !== index);
+        const updatedPreviews = newImagePreviews.filter((_, i) => i !== index);
+        URL.revokeObjectURL(newImagePreviews[index]);
+        setNewImages(updatedNewImages);
+        setNewImagePreviews(updatedPreviews);
+    };
+
+    const onSubmit = async (data) => {
         setLoading(true);
-
-        const dataToSend = {
-            ...formData,
-            images: formData.images.split(',').map(url => url.trim()).filter(url => url)
-        };
-
         try {
+            const formData = new FormData();
+            formData.append('title', data.title);
+            formData.append('location', data.location);
+            formData.append('visitDate', data.visitDate);
+            formData.append('description', data.description);
+
+            // Append Existing Images
+            existingImages.forEach(img => {
+                const relativePath = img.replace(API_BASE.replace('/api/v1', ''), '');
+                formData.append('existingImages', relativePath);
+            });
+
+            // Append New Images
+            newImages.forEach(file => {
+                formData.append('images', file);
+            });
+
             if (isEdit) {
-                await api.put(`/travel/${id}`, dataToSend);
+                await api.patch(`/travel/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             } else {
-                await api.post('/travel', dataToSend);
+                await api.post('/travel', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
             navigate('/crm/travel');
         } catch (error) {
@@ -108,73 +143,107 @@ const TravelForm = () => {
                     </CardHeader>
 
                     <CardContent className="p-8">
-                        <form onSubmit={handleSubmit} className="space-y-8">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="title" className="text-base">Adventure Title</Label>
+                                    <Label htmlFor="title" className="text-base font-semibold">Adventure Title</Label>
                                     <Input
                                         id="title"
-                                        required
+                                        {...register('title', { required: 'Title is required' })}
                                         placeholder="e.g. Sunset at Phewa Lake"
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                         className="h-11"
                                     />
+                                    {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="location" className="text-base flex items-center gap-2">
+                                    <Label htmlFor="location" className="text-base flex items-center gap-2 font-semibold">
                                         <MapPin size={16} /> Location
                                     </Label>
                                     <Input
                                         id="location"
-                                        required
+                                        {...register('location', { required: 'Location is required' })}
                                         placeholder="e.g. Pokhara, Nepal"
-                                        value={formData.location}
-                                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                                         className="h-11"
                                     />
+                                    {errors.location && <p className="text-red-500 text-xs">{errors.location.message}</p>}
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="visitDate" className="text-base flex items-center gap-2">
+                                    <Label htmlFor="visitDate" className="text-base flex items-center gap-2 font-semibold">
                                         <Calendar size={16} /> Date of Visit
                                     </Label>
                                     <Input
                                         id="visitDate"
                                         type="date"
-                                        value={formData.visitDate}
-                                        onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
+                                        max={new Date().toISOString().split('T')[0]}
+                                        {...register('visitDate', { required: 'Date is required' })}
                                         className="h-11"
                                     />
+                                    {errors.visitDate && <p className="text-red-500 text-xs">{errors.visitDate.message}</p>}
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="images" className="text-base flex items-center gap-2">
-                                        <Globe size={16} /> Images (Comma URLs)
+                                    <Label className="text-base flex items-center gap-2 font-semibold">
+                                        <Globe size={16} /> Upload Photos
                                     </Label>
-                                    <Input
-                                        id="images"
-                                        placeholder="URL1, URL2, ..."
-                                        value={formData.images}
-                                        onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-                                        className="h-11"
-                                    />
+                                    <div className="flex items-center gap-4">
+                                        <label className="flex-1 relative h-11 border border-input rounded-md flex items-center justify-center gap-2 hover:bg-muted/50 transition-colors cursor-pointer text-sm font-medium">
+                                            <Upload size={18} />
+                                            Select Images
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                onChange={handleFileChange}
+                                                className="hidden"
+                                            />
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
+                            {/* Image Previews */}
+                            {(existingImages.length > 0 || newImagePreviews.length > 0) && (
+                                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                    {existingImages.map((img, index) => (
+                                        <div key={`existing-${index}`} className="relative aspect-square bg-muted rounded-lg overflow-hidden border border-border group">
+                                            <img src={img} alt="Existing" className="w-full h-full object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeExistingImage(index)}
+                                                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {newImagePreviews.map((img, index) => (
+                                        <div key={`new-${index}`} className="relative aspect-square bg-muted rounded-lg overflow-hidden border border-border group">
+                                            <img src={img} alt="New Preview" className="w-full h-full object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeNewImage(index)}
+                                                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             <div className="space-y-2">
-                                <Label htmlFor="description" className="text-base flex items-center gap-2">
+                                <Label htmlFor="description" className="text-base flex items-center gap-2 font-semibold">
                                     <Info size={16} /> Description
                                 </Label>
                                 <Textarea
                                     id="description"
-                                    required
+                                    {...register('description', { required: 'Description is required' })}
                                     placeholder="Tell the story of your trip..."
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     className="min-h-[150px] resize-none"
                                 />
+                                {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
                             </div>
 
                             <Button
