@@ -75,7 +75,7 @@ const SkillList = () => {
                             <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
                                 <CardHeader className="flex flex-row items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                        <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-primary">
                                             <IconComponent size={18} />
                                         </div>
                                         <CardTitle className="text-lg font-bold">{skill.category}</CardTitle>

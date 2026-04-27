@@ -66,7 +66,7 @@ const LanguageList = () => {
                         <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
                             <CardHeader className="flex flex-row items-center justify-between pb-6">
                                 <div className="flex items-center gap-3">
-                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                    <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-primary">
                                         <Languages size={18} />
                                     </div>
                                     <div>
