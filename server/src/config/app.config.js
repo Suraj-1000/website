@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 
 const appConfig = (app) => {
     app.use(express.json());
@@ -14,6 +15,10 @@ const appConfig = (app) => {
     app.use(helmet({ crossOriginResourcePolicy: false }));
     app.use(morgan('dev'));
     app.use(cookieParser());
+    
+    // Static Files
+    app.use('/public', express.static(path.join(__dirname, '../../public')));
+    app.use('/private', express.static(path.join(__dirname, '../../private')));
 };
 
 module.exports = { appConfig };

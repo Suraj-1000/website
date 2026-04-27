@@ -48,7 +48,7 @@ const AwardForm = () => {
 
                         // Ensure URLs are complete
                         const completeUrls = imgs.map(img =>
-                            img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`
+                            img.startsWith('http') ? img : `${API_BASE.replace('/api/v1', '')}${img}`
                         );
                         setExistingImages(completeUrls);
                     }
@@ -114,7 +114,7 @@ const AwardForm = () => {
             // Let's rely on what we have. Ideally we strip the base URL before sending.
 
             existingImages.forEach(img => {
-                const relativePath = img.replace(API_BASE.replace('/api', ''), '');
+                const relativePath = img.replace(API_BASE.replace('/api/v1', ''), '');
                 formData.append('existingImages', relativePath);
             });
 

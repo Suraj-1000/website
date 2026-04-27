@@ -110,10 +110,10 @@ const Awards = () => {
                                             <div
                                                 key={idx}
                                                 className="rounded-xl overflow-hidden border border-border/50 h-48 cursor-zoom-in group relative"
-                                                onClick={() => openLightbox(selectedAward.images.map(i => i.startsWith('http') ? i : `${API_BASE.replace('/api', '')}${i}`), idx)}
+                                                onClick={() => openLightbox(selectedAward.images.map(i => i.startsWith('http') ? i : `${API_BASE.replace('/api/v1', '')}${i}`), idx)}
                                             >
                                                 <img
-                                                    src={img.startsWith('http') ? img : `${API_BASE.replace('/api', '')}${img}`}
+                                                    src={img.startsWith('http') ? img : `${API_BASE.replace('/api/v1', '')}${img}`}
                                                     alt={selectedAward.title}
                                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                                                 />
