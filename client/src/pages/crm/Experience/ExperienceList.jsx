@@ -101,6 +101,22 @@ const ExperienceList = () => {
                                     </Button>
                                 </div>
                             </CardHeader>
+
+                            {exp.description && exp.description.length > 0 && (
+                                <CardContent className="pt-0 pb-6">
+                                    <div className="space-y-2 border-t border-border/50 pt-4">
+                                        <h5 className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/50 mb-2">Key Achievements</h5>
+                                        <ul className="space-y-1.5">
+                                            {exp.description.map((point, idx) => (
+                                                <li key={idx} className="text-xs text-muted-foreground flex gap-2">
+                                                    <span className="text-primary mt-1">•</span>
+                                                    {point}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </CardContent>
+                            )}
                         </Card>
                     </div>
                 ))}

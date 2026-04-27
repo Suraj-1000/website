@@ -81,7 +81,7 @@ const EducationList = () => {
                             </div>
 
                             <CardHeader className="flex flex-row items-center gap-4 pb-4">
-                                <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-secondary-foreground">
+                                <div className="size-10 flex items-center justify-center bg-secondary/50 border border-border rounded-full text-primary">
                                     {edu.icon === 'GraduationCap' ? <GraduationCap size={18} /> :
                                         edu.icon === 'School' ? <School size={18} /> : <BookOpen size={18} />}
                                 </div>
