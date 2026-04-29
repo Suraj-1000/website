@@ -4,3 +4,4 @@ Bug fix 3
 Bug fix 4
 Bug fix 5
 Bug fix 6
+Bug fix 7
