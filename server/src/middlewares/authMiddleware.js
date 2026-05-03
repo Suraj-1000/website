@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./asyncHandler');
 const { User } = require('../database/models');
+const ApiResponse = require('../utils/response.util');
+const { envConfig } = require('../config');
 
 /**
- * Check Authentication middleware
+ * Middleware to check if the user is authenticated via JWT.
  */
 exports.checkAuth = asyncHandler(async (req, res, next) => {
     let token;
@@ -16,32 +18,32 @@ exports.checkAuth = asyncHandler(async (req, res, next) => {
     }
 
     if (!token) {
-        return res.status(401).json({ success: false, error: 'Not authorized to access this route' });
+        return ApiResponse.error(res, 'Not authorized to access this route', 401);
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, envConfig.JWT.SECRET);
 
         req.user = await User.findByPk(decoded.id);
 
         if (!req.user) {
-            return res.status(401).json({ success: false, error: 'User not found' });
+            return ApiResponse.error(res, 'User not found', 401);
         }
 
         next();
     } catch (err) {
-        return res.status(401).json({ success: false, error: 'Not authorized to access this route' });
+        return ApiResponse.error(res, 'Not authorized to access this route', 401);
     }
 });
 
-// Grant access to specific roles
+/**
+ * Middleware to restrict access to specific roles.
+ * @param {...string} roles - Allowed roles
+ */
 exports.authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
-            return res.status(403).json({
-                success: false,
-                error: `User role ${req.user.role} is not authorized to access this route`
-            });
+            return ApiResponse.error(res, `User role ${req.user.role} is not authorized to access this route`, 403);
         }
         next();
     };
