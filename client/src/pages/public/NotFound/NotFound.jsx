@@ -1,22 +1,18 @@
-import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Ghost } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+const INITIAL_STARS = [...Array(20)].map(() => ({
+    top: `${Math.random() * 100}%`,
+    left: `${Math.random() * 100}%`,
+    width: `${Math.random() * 3}px`,
+    height: `${Math.random() * 3}px`,
+    delay: `${Math.random() * 5}s`,
+    duration: `${2 + Math.random() * 3}s`
+}));
 
 const NotFound = () => {
     const navigate = useNavigate();
-
-    const stars = useMemo(() => {
-        return [...Array(20)].map(() => ({
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            width: `${Math.random() * 3}px`,
-            height: `${Math.random() * 3}px`,
-            delay: `${Math.random() * 5}s`,
-            duration: `${2 + Math.random() * 3}s`
-        }));
-    }, []);
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center px-6">
@@ -75,7 +71,7 @@ const NotFound = () => {
 
                 {/* Stars Background effect */}
                 <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden opacity-30">
-                    {stars.map((star, i) => (
+                    {INITIAL_STARS.map((star, i) => (
                         <div
                             key={i}
                             className="absolute bg-foreground rounded-full animate-pulse"

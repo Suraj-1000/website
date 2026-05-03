@@ -8,6 +8,7 @@ export function ThemeSwitcher() {
    const { setTheme, resolvedTheme } = useTheme();
 
    useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMounted(true);
    }, []);
 

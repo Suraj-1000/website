@@ -29,15 +29,6 @@ const Dashboard = () => {
         projects: 0,
         travel: 0
     });
-    const [loading, setLoading] = React.useState(true);
-    const getGreeting = () => {
-        const hour = new Date().getHours();
-        if (hour < 12) return 'Good Morning';
-        if (hour < 18) return 'Good Afternoon';
-        return 'Good Evening';
-    };
-
-    const greeting = getGreeting();
 
     // Mock data for charts
     const projectViewsData = [
@@ -58,13 +49,6 @@ const Dashboard = () => {
         { month: "Jun", messages: 32 },
     ];
 
-    const skillsData = [
-        { name: "Frontend", value: 40, color: "#3b82f6" },
-        { name: "Backend", value: 30, color: "#10b981" },
-        { name: "UI/UX", value: 20, color: "#f59e0b" },
-        { name: "Others", value: 10, color: "#6366f1" },
-    ];
-
     React.useEffect(() => {
         const fetchStats = async () => {
             try {
@@ -83,8 +67,6 @@ const Dashboard = () => {
                 });
             } catch (error) {
                 console.error('Failed to fetch dashboard stats', error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchStats();
