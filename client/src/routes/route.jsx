@@ -23,43 +23,27 @@ import CRMLayout from "@/pages/_components/layout/crm-layout";
 import Login from "@/pages/crm/login";
 import Dashboard from "@/pages/crm/Dashboard";
 import CRMMessages from "@/pages/crm/CRMMessages";
+import ForgotPassword from "@/pages/crm/ForgotPassword";
+import ResetPassword from "@/pages/crm/ResetPassword";
 
-// CRM Experience
+// CRM Content Modules
 import ExperienceList from "@/pages/crm/Experience/ExperienceList";
 import ExperienceForm from "@/pages/crm/Experience/ExperienceForm";
-
-// CRM Skills
 import SkillList from "@/pages/crm/Skills/SkillList";
 import SkillForm from "@/pages/crm/Skills/SkillForm";
-
-// CRM Projects
 import ProjectList from "@/pages/crm/Projects/ProjectList";
 import ProjectForm from "@/pages/crm/Projects/ProjectForm";
-
-// CRM Education
 import EducationList from "@/pages/crm/Education/EducationList";
 import EducationForm from "@/pages/crm/Education/EducationForm";
-
-// CRM Travel
 import TravelList from "@/pages/crm/Travel/TravelList";
 import TravelForm from "@/pages/crm/Travel/TravelForm";
-
-// CRM Awards
 import AwardList from "@/pages/crm/Awards/AwardList";
 import AwardForm from "@/pages/crm/Awards/AwardForm";
-
-// CRM Languages
 import LanguageList from "@/pages/crm/Languages/LanguageList";
 import LanguageForm from "@/pages/crm/Languages/LanguageForm";
-
-// CRM References
 import ReferenceList from "@/pages/crm/References/ReferenceList";
 import ReferenceForm from "@/pages/crm/References/ReferenceForm";
 import ProfileForm from "@/pages/crm/Profile/ProfileForm";
-
-// CRM Auth
-import ForgotPassword from "@/pages/crm/ForgotPassword";
-import ResetPassword from "@/pages/crm/ResetPassword";
 
 
 export const routes = [
