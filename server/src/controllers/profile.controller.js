@@ -1,5 +1,6 @@
 const asyncHandler = require('../middlewares/asyncHandler');
 const profileService = require('../services/profile.service');
+const ApiResponse = require('../utils/response.util');
 
 /**
  * Controller for managing user profile information.
@@ -13,7 +14,7 @@ class ProfileController {
      */
     get = asyncHandler(async (req, res) => {
         const profile = await profileService.getProfile();
-        res.status(200).json({ success: true, data: profile });
+        return ApiResponse.success(res, profile);
     });
 
     /**
@@ -23,7 +24,7 @@ class ProfileController {
      */
     upsert = asyncHandler(async (req, res) => {
         const profile = await profileService.upsertProfile(req.body);
-        res.status(200).json({ success: true, data: profile });
+        return ApiResponse.success(res, profile, 'Profile updated successfully');
     });
 }
 
