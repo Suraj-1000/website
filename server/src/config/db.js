@@ -1,12 +1,12 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const { envConfig } = require('./index');
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
+    envConfig.DB.NAME,
+    envConfig.DB.USER,
+    envConfig.DB.PASSWORD,
     {
-        host: process.env.DB_HOST,
+        host: envConfig.DB.HOST,
         dialect: 'postgres',
         logging: false,
     }
