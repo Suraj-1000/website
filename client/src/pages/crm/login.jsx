@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@/services/context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';

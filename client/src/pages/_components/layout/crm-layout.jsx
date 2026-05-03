@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/services/context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 import {
     LayoutDashboard, Briefcase, Code, FolderGit2,
