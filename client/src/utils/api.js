@@ -33,24 +33,54 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         
-        // If 401 and not already retried, try refreshing the token
-        if (error.response?.status === 401 && !originalRequest._retry && 
-            originalRequest.url !== '/auth/refresh' && originalRequest.url !== '/auth/login') {
+        // Handle specific error codes
+        if (error.response) {
+            const { status, data } = error.response;
             
-            originalRequest._retry = true;
-            try {
-                const res = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
-                const { accessToken } = res.data;
-                
-                localStorage.setItem('token', accessToken);
-                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-                
-                return axios(originalRequest);
-            } catch (refreshError) {
-                // If refresh fails, the user is likely unauthenticated
-                return Promise.reject(refreshError);
+            switch (status) {
+                case 401:
+                    // If 401 and not already retried, try refreshing the token
+                    if (!originalRequest._retry && 
+                        originalRequest.url !== '/auth/refresh' && 
+                        originalRequest.url !== '/auth/login') {
+                        
+                        originalRequest._retry = true;
+                        try {
+                            const res = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
+                            const { accessToken } = res.data;
+                            
+                            localStorage.setItem('token', accessToken);
+                            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                            
+                            return axios(originalRequest);
+                        } catch (refreshError) {
+                            // If refresh fails, clear token and redirect to login if necessary
+                            localStorage.removeItem('token');
+                            return Promise.reject(refreshError);
+                        }
+                    }
+                    break;
+                case 403:
+                    console.error('Forbidden: You do not have permission for this action.');
+                    break;
+                case 404:
+                    console.error('Not Found: The requested resource does not exist.');
+                    break;
+                case 422:
+                    console.error('Validation Error:', data.error || 'Invalid data provided');
+                    break;
+                case 500:
+                    console.error('Server Error: Something went wrong on the backend.');
+                    break;
+                default:
+                    console.error(`API Error (${status}):`, data.error || error.message);
             }
+        } else if (error.request) {
+            console.error('Network Error: No response received from server.');
+        } else {
+            console.error('Error:', error.message);
         }
+        
         return Promise.reject(error);
     }
 );
