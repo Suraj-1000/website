@@ -8,11 +8,31 @@ const path = require('path');
 const appConfig = (app) => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(cors({
-        origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
-        credentials: true
+    
+    // Security Middlewares
+    app.use(helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+        contentSecurityPolicy: false, // Set to false if using external CDN assets
     }));
-    app.use(helmet({ crossOriginResourcePolicy: false }));
+    
+    app.use(cors({
+        origin: (origin, callback) => {
+            const allowedOrigins = [
+                'http://localhost:5173', 
+                'http://127.0.0.1:5173',
+                'http://localhost:3000'
+            ];
+            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    }));
+
     app.use(morgan('dev'));
     app.use(cookieParser());
     
