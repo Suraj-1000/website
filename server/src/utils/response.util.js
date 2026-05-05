@@ -1,3 +1,5 @@
+const { version } = require('../../package.json');
+
 /**
  * Consistent API response formatter
  */
@@ -12,6 +14,7 @@ class ApiResponse {
     static success(res, data = null, message = 'Success', statusCode = 200) {
         return res.status(statusCode).json({
             success: true,
+            apiVersion: version,
             message,
             data,
             timestamp: new Date().toISOString()
@@ -27,6 +30,7 @@ class ApiResponse {
     static error(res, error = 'Internal Server Error', statusCode = 500) {
         return res.status(statusCode).json({
             success: false,
+            apiVersion: version,
             error,
             timestamp: new Date().toISOString()
         });
