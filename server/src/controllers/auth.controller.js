@@ -4,10 +4,18 @@ const jwt = require('jsonwebtoken');
 const { UnAuthorizedException, BadRequestException, InternalServerException, NotFoundException } = require('../exceptions/error.exception');
 const sendEmail = require('../utils/emailService');
 
+/**
+ * Controller for handling authentication-related operations.
+ * Manages user registration, login, token refresh, and password recovery.
+ */
 class AuthController {
-   // @desc    Register user
-   // @route   POST /api/auth/register
-   // @access  Public
+   /**
+    * @desc    Register a new user
+    * @route   POST /api/auth/register
+    * @access  Public
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    register = asyncHandler(async (req, res) => {
       try {
          const user = await authService.create(req.body);
@@ -17,9 +25,13 @@ class AuthController {
       }
    });
 
-   // @desc    Login user
-   // @route   POST /api/auth/login
-   // @access  Public
+   /**
+    * @desc    Authenticate user and get tokens
+    * @route   POST /api/auth/login
+    * @access  Public
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    login = asyncHandler(async (req, res) => {
       const { email, password } = req.body;
 
@@ -35,9 +47,13 @@ class AuthController {
       }
    });
 
-   // @desc    Refresh token
-   // @route   POST /api/auth/refresh
-   // @access  Public
+   /**
+    * @desc    Get a new access token using a refresh token
+    * @route   POST /api/auth/refresh
+    * @access  Public
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    refresh = asyncHandler(async (req, res) => {
       const { refreshToken } = req.cookies;
 
@@ -57,18 +73,26 @@ class AuthController {
       }
    });
 
-   // @desc    Get current logged in user
-   // @route   GET /api/auth/me
-   // @access  Private
+   /**
+    * @desc    Get current authenticated user details
+    * @route   GET /api/auth/me
+    * @access  Private
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    getMe = asyncHandler(async (req, res) => {
       const user = await authService.findById(req.user.id);
       if (!user) throw new NotFoundException('User not found');
       res.status(200).json({ success: true, data: user });
    });
 
-   // @desc    Forgot password
-   // @route   POST /api/auth/forgot-password
-   // @access  Public
+   /**
+    * @desc    Request password reset email
+    * @route   POST /api/auth/forgot-password
+    * @access  Public
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    forgotPassword = asyncHandler(async (req, res) => {
       const { email } = req.body;
 
@@ -103,9 +127,13 @@ class AuthController {
       }
    });
 
-   // @desc    Reset password
-   // @route   PUT /api/auth/reset-password/:resetToken
-   // @access  Public
+   /**
+    * @desc    Reset password with token
+    * @route   PUT /api/auth/reset-password/:resetToken
+    * @access  Public
+    * @param {Object} req - Express request object
+    * @param {Object} res - Express response object
+    */
    resetPassword = asyncHandler(async (req, res) => {
       const { password } = req.body;
       const { resetToken } = req.params;
@@ -122,7 +150,13 @@ class AuthController {
       }
    });
 
-   // Helper: create tokens + send response
+   /**
+    * Helper method to generate tokens and send standardized response.
+    * Sets refresh token as an HttpOnly cookie.
+    * @param {Object} user - User model instance
+    * @param {number} statusCode - HTTP status code
+    * @param {Object} res - Express response object
+    */
    sendTokenResponse = (user, statusCode, res) => {
       const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
          expiresIn: process.env.JWT_ACCESS_EXPIRE,
