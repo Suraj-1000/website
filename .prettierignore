@@ -3,14 +3,21 @@ build
 dist
 coverage
 node_modules
+package-lock.json
 
+# Environment
 .env
 .env.*
 
-uploads
+# Uploads and assets
+uploads/
+public/
 
-docs
+# IDE and Tools
+.vscode/
+.dockerignore
+Dockerfile
 
-
-
-
+# Others
+docs/
+*.md
