@@ -2,6 +2,7 @@ const BaseService = require('./base.service');
 const userRepository = require('@/repository/user.repo');
 const crypto = require('crypto');
 const { Op } = require('sequelize');
+const { UnAuthorizedException, NotFoundException, BadRequestException } = require('../exceptions/error.exception');
 
 class AuthService extends BaseService {
    constructor() {
@@ -10,10 +11,10 @@ class AuthService extends BaseService {
 
    login = async (email, password) => {
       const user = await this.repository.findByEmail(email);
-      if (!user) throw new Error('Invalid credentials');
+      if (!user) throw new UnAuthorizedException('Invalid credentials');
 
       const isMatch = await user.matchPassword(password);
-      if (!isMatch) throw new Error('Invalid credentials');
+      if (!isMatch) throw new UnAuthorizedException('Invalid credentials');
 
       return user;
    };
@@ -24,7 +25,7 @@ class AuthService extends BaseService {
 
    forgotPassword = async (email) => {
       const user = await this.repository.findByEmail(email);
-      if (!user) throw new Error('User with this email not found');
+      if (!user) throw new NotFoundException('User with this email not found');
 
       const resetToken = user.getResetPasswordToken();
       await user.save();
@@ -40,7 +41,7 @@ class AuthService extends BaseService {
          resetPasswordExpire: { [Op.gt]: Date.now() }
       });
 
-      if (!user) throw new Error('Invalid or expired reset token');
+      if (!user) throw new BadRequestException('Invalid or expired reset token');
 
       // Set new password
       user.password = password;
