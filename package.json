@@ -26,7 +26,16 @@
       "tailwindcss": "^4.1.18"
    },
    "lint-staged": {
-      "**/*.{js,jsx,ts,tsx,json,html,css,md}": "prettier --write"
+      "client/src/**/*.{js,jsx,ts,tsx}": [
+         "prettier --write",
+         "eslint --fix"
+      ],
+      "server/src/**/*.{js,jsx}": [
+         "prettier --write"
+      ],
+      "**/*.{json,md,html,css}": [
+         "prettier --write"
+      ]
    },
    "dependencies": {
       "axios": "^1.13.2",
