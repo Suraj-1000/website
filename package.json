@@ -12,7 +12,8 @@
       "client:dev": "npm run dev --prefix client",
       "client:build": "npm run build --prefix client",
       "server:dev": "npm run dev --prefix server",
-      "server:start": "npm run start --prefix server"
+      "server:start": "npm run start --prefix server",
+      "build:all": "npm run client:build && echo 'Client built' && npm run server:start"
    },
    "keywords": [],
    "author": "",
