@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '@/utils/api';
-import { Plus, Edit2, Trash2, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Wrench } from 'lucide-react';
+import { 
+    Plus, Edit2, Trash2, Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain, Wrench,
+    Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package, Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +13,8 @@ import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 
 // Mapping string icon names to components
 const IconMap = {
-    Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain
+    Code, Database, Layout, Terminal, Bot, Settings, Globe, Users, Brain,
+    Server, Cloud, Smartphone, PenTool, Cpu, Shield, GitBranch, Package, Monitor, Tablet, HardDrive, Wifi, Zap, BarChart, Layers, Command
 };
 
 const SkillList = () => {
