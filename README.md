@@ -19,6 +19,14 @@ This repository contains the source code for my professional portfolio, featurin
 - **Secure Authentication:** JWT-based auth with refresh token rotation.
 - **Optimized Deployment:** Fully containerized using Docker.
 - **Responsive Design:** Premium aesthetics across all device sizes.
+- **Improved Stability:** Enhanced error handling and standardized UI feedback.
+
+## Recent Stability Improvements
+
+- **Global Error Handling:** Refined API interceptors for more descriptive error logging.
+- **UI Consistency:** Standardized loading states and component-wide button styles.
+- **Flexible Configuration:** Implemented dynamic CORS origins via environment variables.
+- **Bug Fixes:** Resolved icon mapping inconsistencies and data model field mismatches.
 
 ## Getting Started
 
