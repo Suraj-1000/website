@@ -37,17 +37,14 @@ app.use(errorHandler);
 db.sequelize
    .authenticate()
    .then(() => {
-      console.log("-----------------------------------------");
       console.log("Postgres connected successfully");
-      return db.sequelize.sync({ alter: true }); // Automatically create/update tables
+      return db.sequelize.sync({ alter: true });
    })
    .then(() => {
       console.log("Database synchronized");
-      console.log("-----------------------------------------");
       
       app.listen(envConfig.PORT, "0.0.0.0", () => {
          console.log(`App running on port ${envConfig.PORT} in ${envConfig.NODE_ENV} mode`);
-         console.log("App restarted to load configurations.");
       });
    })
    .catch((err) => {
