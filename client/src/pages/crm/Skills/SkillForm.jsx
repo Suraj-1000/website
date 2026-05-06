@@ -104,7 +104,7 @@ const SkillForm = () => {
         }
     };
 
-    if (fetching) return <div>Loading...</div>;
+    if (fetching) return <div className="text-center p-10">Loading...</div>;
 
     return (
         <section className="px-6 py-8 space-y-8 min-h-screen">
