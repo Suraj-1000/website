@@ -37,7 +37,7 @@ const SkillList = () => {
         if (!deleteId) return;
         try {
             await api.delete(`/skills/${deleteId}`);
-            setSkills(skills.filter(s => s._id !== deleteId));
+            setSkills(skills.filter(s => s.id !== deleteId));
         } catch (error) {
             console.error('Failed to delete skill category', error);
         } finally {
@@ -70,7 +70,7 @@ const SkillList = () => {
                     const IconComponent = IconMap[skill.icon] || Code;
 
                     return (
-                        <div key={skill._id}>
+                        <div key={skill.id}>
                             <Card className="hover:border-primary/30 transition-all shadow-sm relative group rounded-md">
                                 <CardHeader className="flex flex-row items-center justify-between">
                                     <div className="flex items-center gap-3">
@@ -81,14 +81,14 @@ const SkillList = () => {
                                     </div>
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button variant="outline" size="icon" asChild className="h-8 w-8 rounded-md">
-                                            <Link to={`/crm/skills/edit/${skill._id}`}>
+                                            <Link to={`/crm/skills/edit/${skill.id}`}>
                                                 <Edit2 size={14} />
                                             </Link>
                                         </Button>
                                         <Button
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => setDeleteId(skill._id)}
+                                            onClick={() => setDeleteId(skill.id)}
                                             className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
