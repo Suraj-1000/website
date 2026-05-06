@@ -123,7 +123,7 @@ const ExperienceList = () => {
                 {experiences.length === 0 && (
                     <Card className="flex flex-col items-center justify-center py-20 border-dashed bg-muted/20">
                         <p className="text-muted-foreground font-medium text-sm">No experiences found. Add your first one!</p>
-                        <Button asChild variant="link" className="mt-2 text-primary" href="/crm/experience/new">
+                        <Button asChild variant="link" className="mt-2 text-primary">
                             <Link to="/crm/experience/new">Get Started</Link>
                         </Button>
                     </Card>
