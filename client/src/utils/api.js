@@ -61,19 +61,19 @@ api.interceptors.response.use(
                     }
                     break;
                 case 403:
-                    console.error('Forbidden: You do not have permission for this action.');
+                    console.error('Access Denied: You do not have sufficient permissions to perform this action.');
                     break;
                 case 404:
-                    console.error('Not Found: The requested resource does not exist.');
+                    console.error('Resource Not Found: The requested endpoint or data does not exist.');
                     break;
                 case 422:
-                    console.error('Validation Error:', data.error || 'Invalid data provided');
+                    console.error('Validation Error: The data provided is invalid.', data.errors || data.message || '');
                     break;
                 case 500:
-                    console.error('Server Error: Something went wrong on the backend.');
+                    console.error('Internal Server Error: An unexpected error occurred on the server.');
                     break;
                 default:
-                    console.error(`API Error (${status}):`, data.error || error.message);
+                    console.error(`API Error [${status}]:`, data.message || error.message);
             }
         } else if (error.request) {
             console.error('Network Error: No response received from server.');
