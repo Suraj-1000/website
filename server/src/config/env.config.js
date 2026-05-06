@@ -35,5 +35,6 @@ module.exports = {
     EMAIL: {
         USER: getEnv("GMAIL_USER"),
         PASS: getEnv("GMAIL_PASS"),
-    }
+    },
+    CLIENT_URL: getEnv("CLIENT_URL", "http://localhost:5173")
 };
