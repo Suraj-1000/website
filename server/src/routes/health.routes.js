@@ -7,6 +7,8 @@ router.get('/', async (req, res) => {
         uptime: process.uptime(),
         message: 'OK',
         timestamp: Date.now(),
+        environment: process.env.NODE_ENV || 'development',
+        node_version: process.version,
         services: {
             database: 'UNKNOWN'
         }
