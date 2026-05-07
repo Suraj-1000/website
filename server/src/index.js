@@ -13,6 +13,16 @@ const app = express();
 // Trust proxy for production (correctly handle X-Forwarded-Proto, IP, etc.)
 app.set("trust proxy", 1);
 
+// Track response time for performance monitoring
+app.use((req, res, next) => {
+   const start = Date.now();
+   res.on("finish", () => {
+      const duration = Date.now() - start;
+      console.log(`${req.method} ${req.path} - ${duration}ms`);
+   });
+   next();
+});
+
 // Initialize application middleware and security configurations
 appConfig(app);
 
