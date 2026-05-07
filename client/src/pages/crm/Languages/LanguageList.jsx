@@ -11,14 +11,18 @@ import { DeleteConfirmModal } from '@/components/ui/DeleteConfirmModal';
 const LanguageList = () => {
     const [languages, setLanguages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
-
+    
     const fetchLanguages = async () => {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get('/languages');
             setLanguages(res.data.data);
         } catch (error) {
             console.error('Failed to fetch languages:', error);
+            setError('Failed to load languages. Please try again later.');
         } finally {
             setLoading(false);
         }
@@ -41,6 +45,13 @@ const LanguageList = () => {
     };
 
     if (loading) return <div className="text-center p-10">Loading...</div>;
+
+    if (error) return (
+        <div className="text-center p-10 space-y-4">
+            <p className="text-red-500 text-sm font-medium">{error}</p>
+            <Button onClick={fetchLanguages} size="sm" variant="outline">Retry</Button>
+        </div>
+    );
 
     return (
         <section className="px-6 py-8 space-y-8 min-h-screen">
