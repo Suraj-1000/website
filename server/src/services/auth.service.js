@@ -25,7 +25,7 @@ class AuthService extends BaseService {
 
    forgotPassword = async (email) => {
       const user = await this.repository.findByEmail(email);
-      if (!user) throw new NotFoundException('User with this email not found');
+      if (!user) return null;
 
       const resetToken = user.getResetPasswordToken();
       await user.save();
