@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import {
     LayoutDashboard, Briefcase, Code, FolderGit2,
     BookOpen, Plane, MessageSquare, LogOut,
-    Menu, X, Award, Languages, Users,
+    Menu, X, Award, Languages, Users, Globe,
     Sun, Moon, ChevronRight, User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -108,7 +108,19 @@ const CRMLayout = () => {
                     })}
                 </nav>
 
-                <div className="p-4 border-t border-border mt-auto">
+                <div className="p-4 border-t border-border mt-auto space-y-2">
+                    <Button
+                        variant="ghost"
+                        asChild
+                        className="flex items-center gap-3 px-3 py-2 w-full rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all text-sm justify-start h-auto"
+                    >
+                        <Link to="/">
+                            <div className="p-1.5 rounded-md bg-primary/10 text-primary">
+                                <Globe size={16} />
+                            </div>
+                            <span className="font-medium">View Website</span>
+                        </Link>
+                    </Button>
                     <Button
                         variant="ghost"
                         onClick={logout}
