@@ -21,7 +21,7 @@ const SkillList = () => {
     const [skills, setSkills] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [deleteId, setDeleteId] = useState(null);
+    const [deleteItem, setDeleteItem] = useState(null);
 
     const fetchSkills = async () => {
         try {
@@ -43,14 +43,14 @@ const SkillList = () => {
     }, []);
 
     const confirmDelete = async () => {
-        if (!deleteId) return;
+        if (!deleteItem) return;
         try {
-            await api.delete(`/skills/${deleteId}`);
-            setSkills(skills.filter(s => s.id !== deleteId));
+            await api.delete(`/skills/${deleteItem.id}`);
+            setSkills(skills.filter(s => s.id !== deleteItem.id));
         } catch (error) {
             console.error('Failed to delete skill category', error);
         } finally {
-            setDeleteId(null);
+            setDeleteItem(null);
         }
     };
 
@@ -104,7 +104,7 @@ const SkillList = () => {
                                         <Button
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => setDeleteId(skill.id)}
+                                            onClick={() => setDeleteItem(skill)}
                                             className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                         >
                                             <Trash2 size={14} />
@@ -132,11 +132,11 @@ const SkillList = () => {
             </div>
 
             <DeleteConfirmModal 
-                isOpen={!!deleteId} 
-                onClose={() => setDeleteId(null)} 
+                isOpen={!!deleteItem} 
+                onClose={() => setDeleteItem(null)} 
                 onConfirm={confirmDelete}
                 title="Delete Skill Category"
-                description="Are you sure you want to delete this skill category and all its attached items? This action cannot be undone."
+                description={`Are you sure you want to delete "${deleteItem?.category}" and all its attached items? This action cannot be undone.`}
             />
         </section>
     );
