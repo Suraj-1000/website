@@ -147,11 +147,11 @@ const CRMLayout = () => {
                         </Button>
                         <div className="flex items-center gap-3 pl-4 border-l border-border">
                             <div className="flex flex-col items-end">
-                                <span className="text-xs font-semibold">{user?.name || 'Admin'}</span>
-                                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.role}</span>
+                                <span className="text-xs font-semibold">{user?.name ?? 'Administrator'}</span>
+                                <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.role ?? 'User'}</span>
                             </div>
                             <div className="size-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold">
-                                {user?.name?.charAt(0) || 'A'}
+                                {user?.name?.charAt(0) ?? 'A'}
                             </div>
                         </div>
                     </div>
