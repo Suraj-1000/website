@@ -21,12 +21,19 @@ This repository contains the source code for my professional portfolio, featurin
 - **Responsive Design:** Premium aesthetics across all device sizes.
 - **Improved Stability:** Enhanced error handling and standardized UI feedback.
 
-## Recent Stability Improvements
-
-- **Global Error Handling:** Refined API interceptors for more descriptive error logging.
-- **UI Consistency:** Standardized loading states and component-wide button styles.
-- **Flexible Configuration:** Implemented dynamic CORS origins via environment variables.
-- **Bug Fixes:** Resolved icon mapping inconsistencies and data model field mismatches.
+## Recent Stability & UX Improvements
+- **Phase 3: Robustness and SEO Enhancements** (Recent)
+  - **Dynamic Page Titles:** Implemented document title updates across CRM and Public pages for improved SEO and browser tab management.
+  - **Enhanced UI Feedback:** Added error states and retry logic to Skill and Language management lists.
+  - **Improved Delete Workflows:** Standardized delete confirmation modals to show the name of the entity being removed.
+  - **Breadcrumb Navigation:** Refined breadcrumb formatting in CRM layout for better readability.
+  - **Security Hardening:** Updated authentication service to prevent email enumeration during password resets.
+  - **Navigation Ease:** Integrated a direct "View Website" link within the CRM sidebar.
+- **Phase 2: Infrastructure and Security Refinement**
+  - **Global Error Handling:** Refined API interceptors for more descriptive error logging.
+  - **UI Consistency:** Standardized loading states and component-wide button styles.
+  - **Flexible Configuration:** Implemented dynamic CORS origins via environment variables.
+  - **Bug Fixes:** Resolved icon mapping inconsistencies and data model field mismatches.
 
 ## Getting Started
 
