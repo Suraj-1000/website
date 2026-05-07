@@ -38,6 +38,7 @@ const SkillList = () => {
     };
 
     useEffect(() => {
+        document.title = 'Skills Management | CRM';
         fetchSkills();
     }, []);
 
