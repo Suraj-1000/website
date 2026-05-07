@@ -12,7 +12,7 @@ const LanguageList = () => {
     const [languages, setLanguages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [deleteId, setDeleteId] = useState(null);
+    const [deleteItem, setDeleteItem] = useState(null);
     
     const fetchLanguages = async () => {
         try {
@@ -34,14 +34,14 @@ const LanguageList = () => {
     }, []);
 
     const confirmDelete = async () => {
-        if (!deleteId) return;
+        if (!deleteItem) return;
         try {
-            await api.delete(`/languages/${deleteId}`);
-            setLanguages(languages.filter(lang => lang.id !== deleteId));
+            await api.delete(`/languages/${deleteItem.id}`);
+            setLanguages(languages.filter(lang => lang.id !== deleteItem.id));
         } catch (error) {
             console.error('Failed to delete language:', error);
         } finally {
-            setDeleteId(null);
+            setDeleteItem(null);
         }
     };
 
@@ -97,7 +97,7 @@ const LanguageList = () => {
                                     <Button
                                         variant="outline"
                                         size="icon"
-                                        onClick={() => setDeleteId(lang.id)}
+                                        onClick={() => setDeleteItem(lang)}
                                         className="h-8 w-8 rounded-md text-red-500 hover:text-red-500 hover:bg-red-500/10"
                                     >
                                         <Trash2 size={14} />
@@ -115,11 +115,11 @@ const LanguageList = () => {
             </div>
 
             <DeleteConfirmModal 
-                isOpen={!!deleteId} 
-                onClose={() => setDeleteId(null)} 
+                isOpen={!!deleteItem} 
+                onClose={() => setDeleteItem(null)} 
                 onConfirm={confirmDelete}
                 title="Delete Language"
-                description="Are you sure you want to delete this language? This action cannot be undone."
+                description={`Are you sure you want to delete "${deleteItem?.name}"? This action cannot be undone.`}
             />
         </section>
     );
