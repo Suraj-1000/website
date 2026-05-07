@@ -126,7 +126,9 @@ const CRMLayout = () => {
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Desktop Header */}
                 <header className="hidden md:flex h-16 bg-background border-b border-border px-8 items-center justify-between sticky top-0 z-30">
-                    <h2 className="text-sm font-medium text-muted-foreground">CRM / <span className="text-foreground capitalize">{location.pathname.split('/').pop()}</span></h2>
+                    <h2 className="text-sm font-medium text-muted-foreground">
+                        CRM / <span className="text-foreground capitalize">{location.pathname.split('/').filter(Boolean).pop()?.replace(/-/g, ' ')}</span>
+                    </h2>
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="icon" onClick={toggleTheme} className="rounded-full h-9 w-9 border-border bg-background">
                             {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
