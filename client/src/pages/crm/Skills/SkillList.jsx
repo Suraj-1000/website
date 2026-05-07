@@ -20,14 +20,18 @@ const IconMap = {
 const SkillList = () => {
     const [skills, setSkills] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
 
     const fetchSkills = async () => {
         try {
+            setLoading(true);
+            setError(null);
             const res = await api.get('/skills');
             setSkills(res.data.data);
         } catch (error) {
             console.error('Failed to fetch skills', error);
+            setError('Failed to load skills. Please try again later.');
         } finally {
             setLoading(false);
         }
@@ -50,6 +54,13 @@ const SkillList = () => {
     };
 
     if (loading) return <div className="text-center p-10">Loading...</div>;
+
+    if (error) return (
+        <div className="text-center p-10 space-y-4">
+            <p className="text-red-500">{error}</p>
+            <Button onClick={fetchSkills}>Retry</Button>
+        </div>
+    );
 
     return (
         <section className="px-6 py-8 space-y-8 min-h-screen">
