@@ -29,6 +29,7 @@ const LanguageList = () => {
     };
 
     useEffect(() => {
+        document.title = 'Language Proficiencies | CRM';
         fetchLanguages();
     }, []);
 
