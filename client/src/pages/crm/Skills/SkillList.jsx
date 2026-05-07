@@ -83,7 +83,7 @@ const SkillList = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {skills.map((skill) => {
-                    const IconComponent = IconMap[skill.icon] || Code;
+                    const IconComponent = IconMap[skill.icon] || IconMap.Code || Code;
 
                     return (
                         <div key={skill.id}>
