@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Ghost } from 'lucide-react';
@@ -13,6 +14,10 @@ const INITIAL_STARS = [...Array(20)].map(() => ({
 
 const NotFound = () => {
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        document.title = 'Page Not Found | Suraj Portfolio';
+    }, []);
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center px-6">
