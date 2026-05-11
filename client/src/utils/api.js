@@ -8,7 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000/api/v1';
 
 const api = axios.create({
     baseURL: API_URL,
-    withCredentials: true
+    withCredentials: true,
+    timeout: 10000, // 10 seconds
 });
 
 /**
