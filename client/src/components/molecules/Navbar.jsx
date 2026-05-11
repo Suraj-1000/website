@@ -71,6 +71,7 @@ const Navbar = () => {
                     <Link 
                         to="/resume" 
                         target="_blank"
+                        aria-label="Open Resume in a new tab"
                         className="px-5 py-2 rounded-full border border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-300 text-sm font-semibold shadow-[0_0_10px_rgba(124,58,237,0.2)] hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]"
                     >
                         Resume
@@ -83,6 +84,7 @@ const Navbar = () => {
                     <button
                         className="text-foreground"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? "Close mobile menu" : "Open mobile menu"}
                     >
                         {isOpen ? <X size={28} /> : <Menu size={28} />}
                     </button>
