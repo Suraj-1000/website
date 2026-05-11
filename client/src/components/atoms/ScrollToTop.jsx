@@ -38,6 +38,7 @@ export const ScrollToTop = () => {
                     <Button
                         size="icon"
                         onClick={scrollToTop}
+                        aria-label="Scroll back to top of the page"
                         className="rounded-full h-12 w-12 shadow-2xl shadow-primary/20 hover:scale-110 active:scale-95 transition-all"
                     >
                         <ChevronUp size={24} />
