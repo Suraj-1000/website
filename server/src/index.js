@@ -11,6 +11,7 @@ const db = require("@/database/models");
 const app = express();
 
 // Trust proxy for production (correctly handle X-Forwarded-Proto, IP, etc.)
+// This is essential for secure cookie handling behind Load Balancers (e.g., Nginx, Heroku, AWS)
 app.set("trust proxy", 1);
 
 // Track response time for performance monitoring
