@@ -40,7 +40,7 @@ const Navbar = () => {
             )}
         >
             <div className="container mx-auto px-6 flex justify-between items-center">
-                <Link to="/" className="text-2xl font-bold flex items-center gap-2 group">
+                <Link to="/" aria-label="Go to Suraj Portfolio home" className="text-2xl font-bold flex items-center gap-2 group">
                     <Rocket className="text-primary group-hover:rotate-45 transition-transform duration-300" />
                     <span className="tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
                         Suraj<span className="text-foreground">Kanwar</span>
